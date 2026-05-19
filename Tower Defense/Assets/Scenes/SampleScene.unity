@@ -1056,10 +1056,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac7dc5af9963264489c65d208954ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allWaves:
+  - {fileID: 11400000, guid: 4093c2cb4583194489811f045f922fa4, type: 2}
   enemySpawner: {fileID: 4302228386561435835}
-  spawnCooldown: 3
-  spawnTimer: 0
-  basicEnemy: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
+  spawnCooldown: 1
 --- !u!4 &859457217
 Transform:
   m_ObjectHideFlags: 0
