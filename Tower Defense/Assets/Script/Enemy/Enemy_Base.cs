@@ -29,6 +29,8 @@ public class Enemy_Base : MonoBehaviour
 
     private void Start()
     {
+        waypoints = WaypointManager.Instance.GetWaypoints();
+
         SetNextDestination();
     }
 
