@@ -4,13 +4,30 @@ using UnityEngine;
 
 public class Player_TowerCrossbow : Player_TowerBase
 {
-    void LateUpdate()
+    [Header("Crossbow Tower Setting")]
+    [SerializeField]
+    private Transform gunPoint;
+
+    private VisualEffect_CrossbowTower visualEffect;
+
+    protected override void Awake()
     {
-        RotateTowerHeadToEnemy();
+        base.Awake();
+
+        visualEffect = GetComponent<VisualEffect_CrossbowTower>();
     }
 
     protected override void Attack()
     {
-        base.Attack();
+        Vector3 directionToEnemy = GetDirectionToEnemy(gunPoint);
+
+        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity))
+        {
+            towerHead.forward = directionToEnemy;
+
+            Debug.Log(hitInfo.collider.gameObject.name + " was attacked!!!");
+
+            visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point);
+        }
     }
 }

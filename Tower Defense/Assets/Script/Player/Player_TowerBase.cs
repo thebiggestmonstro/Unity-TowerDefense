@@ -19,6 +19,12 @@ public class Player_TowerBase : MonoBehaviour
     protected float lastAttackTime;
     protected Transform currentEnemy = null;
     private readonly Collider[] enemiesToAttack = new Collider[10];
+    private bool canRotate = true;
+
+    protected virtual void Awake()
+    { 
+        
+    }
 
     protected virtual void Update()
     {
@@ -26,11 +32,6 @@ public class Player_TowerBase : MonoBehaviour
         {
             currentEnemy = FindRandomEnemy();
             return;
-        }
-
-        if (CanAttack())
-        {
-            Attack();
         }
 
         if (currentEnemy != null)
@@ -41,6 +42,16 @@ public class Player_TowerBase : MonoBehaviour
             {
                 currentEnemy = null;
             }
+        }
+    }
+
+    protected virtual void LateUpdate()
+    {
+        RotateTowerHeadToEnemy();
+
+        if (CanAttack())
+        {
+            Attack();
         }
     }
 
@@ -59,7 +70,7 @@ public class Player_TowerBase : MonoBehaviour
 
     protected bool CanAttack()
     {
-        if (Time.time > lastAttackTime + attackCooldown)
+        if (currentEnemy && Time.time > lastAttackTime + attackCooldown)
         {
             lastAttackTime = Time.time;
             return true;
@@ -70,12 +81,12 @@ public class Player_TowerBase : MonoBehaviour
 
     protected virtual void Attack()
     {
-        Debug.Log("Attack performed at " + Time.time);
+
     }
 
     protected virtual void RotateTowerHeadToEnemy()
     {
-        if (currentEnemy == null)
+        if (currentEnemy == null || !canRotate)
         {
             return;
         }
@@ -89,5 +100,20 @@ public class Player_TowerBase : MonoBehaviour
 
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         towerHead.rotation = Quaternion.Slerp(towerHead.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    protected Vector3 GetDirectionToEnemy(Transform startPoint)
+    {
+        if (currentEnemy == null)
+        {
+            return Vector3.zero;
+        }
+
+        return (currentEnemy.position - startPoint.position).normalized;
+    }
+
+    public void EnableRotation(bool isRotationEnable)
+    {
+        canRotate = isRotationEnable;
     }
 }
