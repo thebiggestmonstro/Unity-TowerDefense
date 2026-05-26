@@ -21,20 +21,76 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
     [SerializeField]
     private Color endColor;
 
+    [Space]
+    [Header("Setting for Front String")]
+    [SerializeField]
+    private LineRenderer frontString_L;
+    [SerializeField]
+    private LineRenderer frontString_R;
+    [SerializeField]
+    private Transform frontStartPoint_L;
+    [SerializeField]
+    private Transform frontStartPoint_R;
+    [SerializeField]
+    private Transform frontEndPoint_L;
+    [SerializeField]
+    private Transform frontEndPoint_R;
+
+    [Space]
+    [Header("Setting for Back String")]
+    [SerializeField]
+    private LineRenderer backString_L;
+    [SerializeField]
+    private LineRenderer backString_R;
+    [SerializeField]
+    private Transform backStartPoint_L;
+    [SerializeField]
+    private Transform backStartPoint_R;
+    [SerializeField]
+    private Transform backEndPoint_L;
+    [SerializeField]
+    private Transform backEndPoint_R;
+
+    [Space]
+    [Header("Setting for Rotor Effects")]
+    [SerializeField]
+    private Transform rotor;
+    [SerializeField]
+    private Transform unloadedRotor;
+    [SerializeField]
+    private Transform loadedRotor;
+
     private float currentMaterialIntensity;
     private Material material;
     private Player_TowerCrossbow crossbowTower;
+    private LineRenderer[] stringLineRenderers;
 
     private void Awake()
     {
         crossbowTower = GetComponent<Player_TowerCrossbow>();
         material = meshRenderer.material;
+
+        stringLineRenderers = new LineRenderer[]
+        {
+            frontString_L,
+            frontString_R,
+            backString_L,
+            backString_R
+        };
+        UpdateStringMaterials();
+
         StartCoroutine(CoChangeEmissionOfMaterial(1));
     }
 
     private void Update()
     {
         UpdateEmissionColor();
+
+        UpdateStringsEffect(frontString_L, frontStartPoint_L, frontEndPoint_L);
+        UpdateStringsEffect(frontString_R, frontStartPoint_R, frontEndPoint_R);
+
+        UpdateStringsEffect(backString_L, backStartPoint_L, backEndPoint_L);
+        UpdateStringsEffect(backString_R, backStartPoint_R, backEndPoint_R);
     }
 
     public void EnableVisualEffect(Vector3 startPoint, Vector3 endPoint)
@@ -76,8 +132,39 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
         material.SetColor("_EmissionColor", emissionColor);
     }
 
+    private void UpdateStringsEffect(LineRenderer lineRenderer, Transform startPoint, Transform endPoint)
+    {
+        lineRenderer.SetPosition(0, startPoint.position);
+        lineRenderer.SetPosition(1, endPoint.position);
+    }
+
     public void PlayReloadVFX(float duration)
     {
-        StartCoroutine(CoChangeEmissionOfMaterial(duration / 2));
+        float halfDuration = duration / 2;
+
+        StartCoroutine(CoChangeEmissionOfMaterial(halfDuration));
+        StartCoroutine(CoLoadRotor(halfDuration));
+    }
+
+    private IEnumerator CoLoadRotor(float duration)
+    { 
+        float startLoadTime = Time.time;
+
+        while (Time.time - startLoadTime < duration)
+        { 
+            float factor = (Time.time - startLoadTime) / duration;
+            rotor.position = Vector3.Lerp(unloadedRotor.position, loadedRotor.position, factor);
+            yield return null;
+        }
+
+        rotor.position = loadedRotor.position;
+    }
+
+    private void UpdateStringMaterials()
+    {
+        foreach (LineRenderer lr in stringLineRenderers)
+        {
+            lr.material = material;
+        }
     }
 }
