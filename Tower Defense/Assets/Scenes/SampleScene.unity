@@ -1423,6 +1423,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffect: {fileID: 2109334361}
   visualEffectDuration: 0.1
+  meshRenderer: {fileID: 2267769448198216412}
+  maxMaterialIntensity: 150
+  startColor: {r: 0, g: 0, b: 0, a: 1}
+  endColor: {r: 0.047058824, g: 0.7607843, b: 0.7921569, a: 1}
 --- !u!1 &2068808351
 GameObject:
   m_ObjectHideFlags: 0

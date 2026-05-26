@@ -28,6 +28,7 @@ public class Player_TowerCrossbow : Player_TowerBase
             Debug.Log(hitInfo.collider.gameObject.name + " was attacked!!!");
 
             visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point);
+            visualEffect.PlayReloadVFX(attackCooldown);
         }
     }
 }
