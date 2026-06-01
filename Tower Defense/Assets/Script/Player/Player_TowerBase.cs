@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -30,7 +32,7 @@ public class Player_TowerBase : MonoBehaviour
     {
         if (currentEnemy == null)
         {
-            currentEnemy = FindRandomEnemy();
+            currentEnemy = FindAdvancedEnemy();
             return;
         }
 
@@ -55,7 +57,7 @@ public class Player_TowerBase : MonoBehaviour
         }
     }
 
-    protected virtual Transform FindRandomEnemy()
+    protected virtual Transform FindAdvancedEnemy()
     {
         int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemiesToAttack, enemyLayerMask);
 
@@ -64,8 +66,31 @@ public class Player_TowerBase : MonoBehaviour
             return null;
         }
 
-        int randomIndex = UnityEngine.Random.Range(0, count);
-        return enemiesToAttack[randomIndex].transform;
+        Enemy_Base mostAdvancedEnemy = null;
+        float minRemainingDistance = float.MaxValue;
+
+        for (int i = 0; i < count; i++)
+        {
+            Collider enemyCollider = enemiesToAttack[i];
+
+            if (enemyCollider == null)
+            {
+                continue;
+            }
+
+            if (enemyCollider.TryGetComponent<Enemy_Base>(out Enemy_Base enemy))
+            {
+                float remainingDistance = enemy.GetDistanceToEndPoint();
+
+                if (remainingDistance < minRemainingDistance)
+                {
+                    minRemainingDistance = remainingDistance;
+                    mostAdvancedEnemy = enemy;
+                }
+            }
+        }
+
+        return mostAdvancedEnemy != null ? mostAdvancedEnemy.transform : null;
     }
 
     protected bool CanAttack()

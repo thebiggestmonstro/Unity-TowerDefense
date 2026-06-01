@@ -201,6 +201,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  healthPoints: 30
 --- !u!65 &4560257708560526139
 BoxCollider:
   m_ObjectHideFlags: 0

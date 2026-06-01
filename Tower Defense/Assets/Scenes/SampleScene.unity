@@ -2113,6 +2113,7 @@ MonoBehaviour:
   attackCooldown: 2
   towerHead: {fileID: 1277621705708089552}
   gunPoint: {fileID: 311790115}
+  damageAmount: 10
 --- !u!114 &1727594891
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,18 +3,25 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class Enemy_Base : MonoBehaviour
+public class Enemy_Base : MonoBehaviour, IDamageable
 {
     [Header("Movement Settings")]
     [SerializeField]
     private Transform[] waypoints;
-    [SerializeField] 
+    [SerializeField]
     private float arrivalDistance = 0.5f;
     [SerializeField]
     private float turnSpeed = 5.0f;
+    [SerializeField]
+    private float totalDistance;
 
+    [Space]
     [Header("Events")]
-    public UnityEvent OnDestinationReached; 
+    public UnityEvent OnDestinationReached;
+
+    [Space]
+    [Header("Enemy Stats")]
+    public int healthPoints = 10;
 
     private int waypointIndex = 0;
     private NavMeshAgent agent;
@@ -30,6 +37,8 @@ public class Enemy_Base : MonoBehaviour
     private void Start()
     {
         waypoints = WaypointManager.Instance.GetWaypoints();
+
+        CollectTotalDistanceToEndPoint();
 
         SetNextDestination();
     }
@@ -50,6 +59,11 @@ public class Enemy_Base : MonoBehaviour
         {
             SetNextDestination();
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnDestinationReached.RemoveAllListeners();
     }
 
     private void FaceToTarget(Vector3 newTarget)
@@ -81,7 +95,36 @@ public class Enemy_Base : MonoBehaviour
             return;
         }
 
-        agent.SetDestination(waypoints[waypointIndex].position);
+        Vector3 targetPoint = waypoints[waypointIndex].position;
+
+        if (waypointIndex > 0)
+        {
+            float distance = Vector3.Distance(waypoints[waypointIndex].position, waypoints[waypointIndex - 1].position);
+            totalDistance -= distance;
+        }
+
+        agent.SetDestination(targetPoint);
         waypointIndex++;
     }
+
+    public void TakeDamage(int damage)
+    {
+        healthPoints -= damage;
+
+        if (healthPoints <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void CollectTotalDistanceToEndPoint()
+    {
+        for (int i = 0; i < waypoints.Length - 1; i++)
+        {
+            float distanceBetweenWaypoints = Vector3.Distance(waypoints[i].position, waypoints[i + 1].position);
+            totalDistance += distanceBetweenWaypoints;
+        }
+    }
+
+    public float GetDistanceToEndPoint() => totalDistance + agent.remainingDistance;
 }

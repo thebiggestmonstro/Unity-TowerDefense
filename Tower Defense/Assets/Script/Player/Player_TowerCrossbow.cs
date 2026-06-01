@@ -7,6 +7,8 @@ public class Player_TowerCrossbow : Player_TowerBase
     [Header("Crossbow Tower Setting")]
     [SerializeField]
     private Transform gunPoint;
+    [SerializeField]
+    private int damageAmount;
 
     private VisualEffect_CrossbowTower visualEffect;
 
@@ -29,6 +31,11 @@ public class Player_TowerCrossbow : Player_TowerBase
 
             visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point);
             visualEffect.PlayReloadVFX(attackCooldown);
+
+            if (hitInfo.transform.TryGetComponent<IDamageable>(out var damagedTarget))
+            {
+                damagedTarget.TakeDamage(damageAmount);
+            }
         }
     }
 }
