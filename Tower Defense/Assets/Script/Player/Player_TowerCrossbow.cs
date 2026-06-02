@@ -29,14 +29,13 @@ public class Player_TowerCrossbow : Player_TowerBase
         {
             towerHead.forward = directionToEnemy;
 
-            Debug.Log(hitInfo.collider.gameObject.name + " was attacked!!!");
-
-            visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point);
-            visualEffect.PlayReloadVFX(attackCooldown);
-
             if (hitInfo.transform.TryGetComponent<IDamageable>(out var damagedTarget))
             {
                 damagedTarget.TakeDamage(damageAmount);
+                Enemy_Base enemyTarget = damagedTarget as Enemy_Base;
+
+                visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point, enemyTarget);
+                visualEffect.PlayReloadVFX(attackCooldown);
             }
         }
     }

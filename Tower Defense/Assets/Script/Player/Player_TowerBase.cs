@@ -21,6 +21,8 @@ public class Player_TowerBase : MonoBehaviour
     protected Transform towerHead;
     [SerializeField]
     protected EnemyType primaryTargetType = EnemyType.None;
+    [SerializeField]
+    private bool dynamicTargetChange;
 
     protected float lastAttackTime;
     protected Enemy_Base currentEnemy = null;
@@ -28,6 +30,8 @@ public class Player_TowerBase : MonoBehaviour
     private bool canRotate = true;
     private readonly List<Enemy_Base> priorityTargets = new List<Enemy_Base>();
     private readonly List<Enemy_Base> possibleTargets = new List<Enemy_Base>();
+    private float targetCheckInterval = 0.1f;
+    private float lastTimeCheckedTarget;
 
     protected virtual void Awake()
     { 
@@ -36,6 +40,8 @@ public class Player_TowerBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        UpdateTargetInAttacking();
+
         if (currentEnemy == null)
         {
             currentEnemy = FindEnemyWithinRange();
@@ -182,5 +188,17 @@ public class Player_TowerBase : MonoBehaviour
         canRotate = isRotationEnable;
     }
 
-    public Enemy_Base GetCurrentEnemy() => currentEnemy;
+    private void UpdateTargetInAttacking()
+    {
+        if (!dynamicTargetChange)
+        {
+            return;
+        }
+
+        if (Time.time > lastTimeCheckedTarget + targetCheckInterval)
+        { 
+            lastTimeCheckedTarget = Time.time;
+            currentEnemy = FindEnemyWithinRange();
+        }
+    }
 }

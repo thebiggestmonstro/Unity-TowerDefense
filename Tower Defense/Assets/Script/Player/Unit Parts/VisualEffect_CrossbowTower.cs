@@ -93,20 +93,20 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
         UpdateStringsEffect(backString_L, backStartPoint_L, backEndPoint_L);
         UpdateStringsEffect(backString_R, backStartPoint_R, backEndPoint_R);
 
-        if (visualEffect.enabled && currentEenmy)
+        if (visualEffect.enabled && currentEenmy != null)
         {
             visualEffect.SetPosition(1, currentEenmy.GetCenterPoint());
         }
     }
 
-    public void EnableVisualEffect(Vector3 startPoint, Vector3 endPoint)
+    public void EnableVisualEffect(Vector3 startPoint, Vector3 endPoint, Enemy_Base newEnemy)
     {
-        StartCoroutine(CoDisableVisualEffect(startPoint, endPoint));
+        StartCoroutine(CoEnableVisualEffect(startPoint, endPoint, newEnemy));
     }
 
-    private IEnumerator CoDisableVisualEffect(Vector3 startPoint, Vector3 endPoint)
+    private IEnumerator CoEnableVisualEffect(Vector3 startPoint, Vector3 endPoint, Enemy_Base newEnemy)
     {
-        currentEenmy = crossbowTower.GetCurrentEnemy();
+        currentEenmy = newEnemy;
         visualEffect.enabled = true;
 
         visualEffect.SetPosition(0, startPoint);
