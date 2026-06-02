@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player_TowerBase : MonoBehaviour
 {
@@ -17,28 +19,32 @@ public class Player_TowerBase : MonoBehaviour
     protected float attackCooldown = 1;
     [SerializeField]
     protected Transform towerHead;
+    [SerializeField]
+    protected EnemyType primaryTargetType = EnemyType.None;
 
     protected float lastAttackTime;
-    protected Transform currentEnemy = null;
+    protected Enemy_Base currentEnemy = null;
     private readonly Collider[] enemiesToAttack = new Collider[10];
     private bool canRotate = true;
+    private readonly List<Enemy_Base> priorityTargets = new List<Enemy_Base>();
+    private readonly List<Enemy_Base> possibleTargets = new List<Enemy_Base>();
 
     protected virtual void Awake()
     { 
-        
+
     }
 
     protected virtual void Update()
     {
         if (currentEnemy == null)
         {
-            currentEnemy = FindAdvancedEnemy();
+            currentEnemy = FindEnemyWithinRange();
             return;
         }
 
         if (currentEnemy != null)
         {
-            float enemyDistance = (currentEnemy.position - transform.position).sqrMagnitude;
+            float enemyDistance = (currentEnemy.GetCenterPoint() - transform.position).sqrMagnitude;
 
             if (enemyDistance > attackRange * attackRange)
             {
@@ -57,40 +63,74 @@ public class Player_TowerBase : MonoBehaviour
         }
     }
 
-    protected virtual Transform FindAdvancedEnemy()
+    protected virtual Enemy_Base FindEnemyWithinRange()
     {
-        int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemiesToAttack, enemyLayerMask);
+        priorityTargets.Clear();
+        possibleTargets.Clear();
 
-        if (count == 0)
+        int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemiesToAttack, enemyLayerMask);
+        int loopCount = Mathf.Min(count, enemiesToAttack.Length);
+
+        if (loopCount == 0)
         {
             return null;
         }
 
-        Enemy_Base mostAdvancedEnemy = null;
-        float minRemainingDistance = float.MaxValue;
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < loopCount; i++)
         {
-            Collider enemyCollider = enemiesToAttack[i];
-
-            if (enemyCollider == null)
+            Enemy_Base newEnemy = enemiesToAttack[i].GetComponent<Enemy_Base>();
+            if (newEnemy == null)
             {
                 continue;
             }
 
-            if (enemyCollider.TryGetComponent<Enemy_Base>(out Enemy_Base enemy))
-            {
-                float remainingDistance = enemy.GetDistanceToEndPoint();
+            EnemyType newEnemyType = newEnemy.GetEnemyType();
 
-                if (remainingDistance < minRemainingDistance)
-                {
-                    minRemainingDistance = remainingDistance;
-                    mostAdvancedEnemy = enemy;
-                }
+            if (newEnemyType == primaryTargetType)
+            {
+                priorityTargets.Add(newEnemy);
+            }
+            else
+            {
+                possibleTargets.Add(newEnemy);
             }
         }
 
-        return mostAdvancedEnemy != null ? mostAdvancedEnemy.transform : null;
+        if (priorityTargets.Count > 0)
+        {
+            return FindAdvancedEnemy(priorityTargets);
+        }
+
+        if (possibleTargets.Count > 0)
+        {
+            return FindAdvancedEnemy(possibleTargets);
+        }
+
+        return null;
+    }
+
+    protected virtual Enemy_Base FindAdvancedEnemy(List<Enemy_Base> enemies)
+    {
+        Enemy_Base mostAdvancedEnemy = null;
+        float minRemainingDistance = float.MaxValue;
+
+        foreach (Enemy_Base enemy in enemies)
+        {
+            if (enemy == null)
+            {
+                continue;
+            }
+
+            float remainingDistance = enemy.GetDistanceToEndPoint();
+
+            if (remainingDistance < minRemainingDistance)
+            {
+                minRemainingDistance = remainingDistance;
+                mostAdvancedEnemy = enemy;
+            }
+        }
+
+        return mostAdvancedEnemy;
     }
 
     protected bool CanAttack()
@@ -116,7 +156,7 @@ public class Player_TowerBase : MonoBehaviour
             return;
         }
 
-        Vector3 direction = currentEnemy.position - towerHead.position;
+        Vector3 direction = GetDirectionToEnemy(towerHead);
 
         if (direction.sqrMagnitude < 0.001f)
         {
@@ -134,11 +174,13 @@ public class Player_TowerBase : MonoBehaviour
             return Vector3.zero;
         }
 
-        return (currentEnemy.position - startPoint.position).normalized;
+        return (currentEnemy.GetCenterPoint() - startPoint.position).normalized;
     }
 
     public void EnableRotation(bool isRotationEnable)
     {
         canRotate = isRotationEnable;
     }
+
+    public Enemy_Base GetCurrentEnemy() => currentEnemy;
 }

@@ -16,6 +16,8 @@ public class Player_TowerCrossbow : Player_TowerBase
     {
         base.Awake();
 
+        EnableRotation(true);
+        
         visualEffect = GetComponent<VisualEffect_CrossbowTower>();
     }
 

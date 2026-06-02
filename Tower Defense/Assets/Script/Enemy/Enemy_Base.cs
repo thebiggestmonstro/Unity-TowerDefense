@@ -3,6 +3,13 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
+public enum EnemyType
+{ 
+    Basic,
+    Fast,
+    None
+}
+
 public class Enemy_Base : MonoBehaviour, IDamageable
 {
     [Header("Movement Settings")]
@@ -14,14 +21,18 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private float turnSpeed = 5.0f;
     [SerializeField]
     private float totalDistance;
+    [SerializeField]
+    private Transform centerPoint;
 
     [Space]
     [Header("Events")]
     public UnityEvent OnDestinationReached;
 
     [Space]
-    [Header("Enemy Stats")]
+    [Header("Enemy Status")]
     public int healthPoints = 10;
+    [SerializeField]
+    EnemyType enemyType = EnemyType.None;
 
     private int waypointIndex = 0;
     private NavMeshAgent agent;
@@ -127,4 +138,8 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     }
 
     public float GetDistanceToEndPoint() => totalDistance + agent.remainingDistance;
+
+    public Vector3 GetCenterPoint() => centerPoint.position;
+
+    public EnemyType GetEnemyType() => enemyType;
 }

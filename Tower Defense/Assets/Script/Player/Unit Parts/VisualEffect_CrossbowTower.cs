@@ -64,6 +64,7 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
     private Material material;
     private Player_TowerCrossbow crossbowTower;
     private LineRenderer[] stringLineRenderers;
+    private Enemy_Base currentEenmy;
 
     private void Awake()
     {
@@ -91,6 +92,11 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
 
         UpdateStringsEffect(backString_L, backStartPoint_L, backEndPoint_L);
         UpdateStringsEffect(backString_R, backStartPoint_R, backEndPoint_R);
+
+        if (visualEffect.enabled && currentEenmy)
+        {
+            visualEffect.SetPosition(1, currentEenmy.GetCenterPoint());
+        }
     }
 
     public void EnableVisualEffect(Vector3 startPoint, Vector3 endPoint)
@@ -100,7 +106,7 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
 
     private IEnumerator CoDisableVisualEffect(Vector3 startPoint, Vector3 endPoint)
     {
-        crossbowTower.EnableRotation(false);
+        currentEenmy = crossbowTower.GetCurrentEnemy();
         visualEffect.enabled = true;
 
         visualEffect.SetPosition(0, startPoint);
@@ -109,7 +115,6 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
         yield return new WaitForSeconds(visualEffectDuration);
 
         visualEffect.enabled = false;
-        crossbowTower.EnableRotation(true);
     }
 
     private IEnumerator CoChangeEmissionOfMaterial(float changeDuration)
