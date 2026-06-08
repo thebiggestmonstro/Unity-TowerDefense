@@ -151,6 +151,14 @@ MonoBehaviour:
   tileField: {fileID: 1477721996872542843, guid: 70c1c9a1fa0e4d54f8be0f19d72bdc72, type: 3}
   tileRoad: {fileID: 5829570908194696560, guid: 05c777da352234e45b8b26ab9938605e, type: 3}
   tileSideway: {fileID: 8206279040901527156, guid: 9858a03a3d706f54abef9bf8338c8cae, type: 3}
+  tileInnerCorner: {fileID: 1687743631568988360, guid: 5f4c2564540d61a43aece69cdccf8630, type: 3}
+  tileOuterCorner: {fileID: 3458383064190007996, guid: 5ad2c9339ac84524bae1442bf90f0c93, type: 3}
+  tileHill_1: {fileID: 7729033073010869470, guid: 564cb7d2fd783684b878cd040bdb14b0, type: 3}
+  tileHill_2: {fileID: 7073458849470943511, guid: 809f2abbab07a9b42a643f9299fadf09, type: 3}
+  tileHill_3: {fileID: 3511936785871390393, guid: bdff311d6fe220442baebb9964489bbd, type: 3}
+  tileBridgeField: {fileID: 7178413792554067265, guid: bf6e8dec27d440044b560ad4ef08188e, type: 3}
+  tileBridgeRoad: {fileID: 3190857306625448385, guid: 6f895f23bcbc39448a9961f3be1cbccc, type: 3}
+  tileBridgeSideway: {fileID: 2895357942220551013, guid: 5b855eb8cb94bea4e8b78aa6e5a9f394, type: 3}
 --- !u!4 &144835606
 Transform:
   m_ObjectHideFlags: 0

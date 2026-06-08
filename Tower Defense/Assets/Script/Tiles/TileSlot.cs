@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +13,7 @@ public class TileSlot : MonoBehaviour
 
 #if UNITY_EDITOR
         Undo.RecordObject(gameObject, "Switch Tile");
+        Undo.RecordObject(transform, "Switch Tile Transform");
 
         if (GetMeshFilter != null)
         {
@@ -23,7 +23,13 @@ public class TileSlot : MonoBehaviour
         { 
             Undo.RecordObject(GetMeshRenderer, "Switch Tile Material");
         }
+        if (GetTileCollider != null)
+        {
+            Undo.RecordObject(GetTileCollider, "Switch Tile Collider");
+        }
 #endif
+        gameObject.name = referencedTile.name;
+
         if (GetMeshFilter != null)
         {
             GetMeshFilter.sharedMesh = newTilePrefab.GetMesh();
@@ -32,6 +38,8 @@ public class TileSlot : MonoBehaviour
         {
             GetMeshRenderer.sharedMaterial = newTilePrefab.GetMaterial();
         }
+
+        UpdateCollider(newTilePrefab.GetCollider());
 
         List<GameObject> currentChildren = GetAllChildren();
         for (int i = currentChildren.Count - 1; i >= 0; i--)
@@ -57,7 +65,10 @@ public class TileSlot : MonoBehaviour
                 Undo.RegisterCreatedObjectUndo(spawnedChild, "Spawn Tile Child");
             }
 #else
-    Instantiate(childTransform.gameObject, transform);
+            GameObject spawnedChild = Instantiate(childTransform.gameObject, transform);
+            spawnedChild.transform.localPosition = childTransform.localPosition;
+            spawnedChild.transform.localRotation = childTransform.localRotation;
+            spawnedChild.transform.localScale = childTransform.localScale;
 #endif
         }
 
@@ -68,6 +79,31 @@ public class TileSlot : MonoBehaviour
 
     public Material GetMaterial() => GetMeshRenderer != null ? GetMeshRenderer.sharedMaterial : null;
     public Mesh GetMesh() => GetMeshFilter != null ? GetMeshFilter.sharedMesh : null;
+    public Collider GetCollider() => GetTileCollider != null ? GetTileCollider : null;
+
+    public void RotateTile(int direction)
+    {
+#if UNITY_EDITOR
+        Undo.RecordObject(transform, "Rotate Tile");
+#endif
+        transform.Rotate(0, 90 * direction, 0);
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(gameObject);
+#endif
+    }
+
+    public void AdjustVertical(int verticalDirection)
+    {
+#if UNITY_EDITOR
+        Undo.RecordObject(transform, "Adjust Vertical Position");
+#endif
+        transform.position += new Vector3(0, 0.1f * verticalDirection, 0);
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(gameObject);
+#endif
+    }
 
     public List<GameObject> GetAllChildren()
     {
@@ -81,6 +117,44 @@ public class TileSlot : MonoBehaviour
         return children;
     }
 
+    public void UpdateCollider(Collider newCollider)
+    {
+        Collider currentCollider = GetTileCollider;
+        if (currentCollider != null)
+        {
+#if UNITY_EDITOR
+            Undo.DestroyObjectImmediate(currentCollider);
+#else
+            DestroyImmediate(currentCollider);
+#endif
+        }
+
+        if (newCollider is BoxCollider)
+        {
+            BoxCollider originOne = newCollider.GetComponent<BoxCollider>();
+#if UNITY_EDITOR
+            BoxCollider newOne = Undo.AddComponent<BoxCollider>(gameObject);
+#else
+            BoxCollider newOne = gameObject.AddComponent<BoxCollider>();
+#endif
+            newOne.center = originOne.center;
+            newOne.size = originOne.size;
+        }
+
+        if (newCollider is MeshCollider)
+        {
+            MeshCollider originOne = newCollider.GetComponent<MeshCollider>();
+#if UNITY_EDITOR
+            MeshCollider newOne = Undo.AddComponent<MeshCollider>(gameObject);
+#else
+            MeshCollider newOne = gameObject.AddComponent<MeshCollider>();
+#endif
+            newOne.sharedMesh = originOne.sharedMesh;
+            newOne.convex = originOne.convex;
+        }
+    }
+
     private MeshRenderer GetMeshRenderer => GetComponent<MeshRenderer>();
     private MeshFilter GetMeshFilter => GetComponent<MeshFilter>();
+    private Collider GetTileCollider => GetComponent<Collider>();
 }

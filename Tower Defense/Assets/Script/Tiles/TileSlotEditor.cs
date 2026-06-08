@@ -5,6 +5,7 @@ using UnityEngine;
 public class TileSlotEditor : Editor
 {
     private TileSetHolder tileSetHolder;
+    private GUIStyle centeredGUIStyle;
 
     private void OnEnable()
     {
@@ -18,19 +19,62 @@ public class TileSlotEditor : Editor
 
         if (tileSetHolder == null)
         {
-            EditorGUILayout.HelpBox("씬에 TileSetHolder 가 존재하지 않습니다.", MessageType.Warning);
             return;
         }
 
-        float buttonWidth = (EditorGUIUtility.currentViewWidth - 25) / 2;
+        centeredGUIStyle = new GUIStyle(GUI.skin.label)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontStyle = FontStyle.Bold,
+            fontSize = 16
+        };
+
+        float oneBtnWidth = (EditorGUIUtility.currentViewWidth - 25);
+        float twoBtnWidth = (EditorGUIUtility.currentViewWidth - 25) / 2;
+        float threeBtnWidth = (EditorGUIUtility.currentViewWidth - 25) / 3;
+
+        GUILayout.Label("Tile Position and Rotation", centeredGUIStyle);
 
         GUILayout.BeginHorizontal();
-        AddTileChangeGUI("Field", buttonWidth, tileSetHolder.tileField);
-        AddTileChangeGUI("Road", buttonWidth, tileSetHolder.tileRoad);
+        AddTileTRotationGUI("Rotate Left", twoBtnWidth, tileSetHolder.tileField, -1);
+        AddTileTRotationGUI("Rotate Right", twoBtnWidth, tileSetHolder.tileField, 1);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        AddTileChangeGUI("Sideway", buttonWidth * 2, tileSetHolder.tileSideway);
+        AddTileVerticalGUI("-0.1f on the Y", twoBtnWidth, tileSetHolder.tileField, -1);
+        AddTileVerticalGUI("+0.1f on the Y", twoBtnWidth, tileSetHolder.tileField, +1);
+        GUILayout.EndHorizontal();
+
+        GUILayout.Label("Tile Options", centeredGUIStyle);
+
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Field", twoBtnWidth, tileSetHolder.tileField);
+        AddTileChangeGUI("Road", twoBtnWidth, tileSetHolder.tileRoad);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Sideway", oneBtnWidth, tileSetHolder.tileSideway);
+        GUILayout.EndHorizontal();
+
+        GUILayout.Label("Corner Options", centeredGUIStyle);
+
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Inner Corner", twoBtnWidth, tileSetHolder.tileInnerCorner);
+        AddTileChangeGUI("Outer Corner", twoBtnWidth, tileSetHolder.tileOuterCorner);
+        GUILayout.EndHorizontal();
+
+        GUILayout.Label("Bridges and Hills", centeredGUIStyle);
+
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Hill 1", threeBtnWidth, tileSetHolder.tileHill_1);
+        AddTileChangeGUI("Hill 2", threeBtnWidth, tileSetHolder.tileHill_2);
+        AddTileChangeGUI("Hill 3", threeBtnWidth, tileSetHolder.tileHill_3);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Field Bridge", threeBtnWidth, tileSetHolder.tileBridgeField);
+        AddTileChangeGUI("HRoad Bridge", threeBtnWidth, tileSetHolder.tileBridgeRoad);
+        AddTileChangeGUI("Sideway Bridge", threeBtnWidth, tileSetHolder.tileBridgeSideway);
         GUILayout.EndHorizontal();
     }
 
@@ -46,7 +90,6 @@ public class TileSlotEditor : Editor
     {
         if (targetPrefab == null)
         {
-            Debug.LogWarning("TileSetHolder에 해당 타일 프리팹이 등록되지 않았습니다.");
             return;
         }
 
@@ -55,6 +98,54 @@ public class TileSlotEditor : Editor
             if (targetTile is TileSlot slot)
             {
                 slot.SwitchTile(targetPrefab);
+            }
+        }
+    }
+
+    private void AddTileTRotationGUI(string GUIName, float GUIWidth, GameObject targetPrefab, int rotationValue)
+    {
+        if (GUILayout.Button(GUIName, GUILayout.Width(GUIWidth)))
+        {
+            ApplyRotationChange(targetPrefab, rotationValue);
+        }
+    }
+
+    private void ApplyRotationChange(GameObject targetPrefab, int rotationValue)
+    {
+        if (targetPrefab == null)
+        {
+            return;
+        }
+
+        foreach (Object targetTile in targets)
+        {
+            if (targetTile is TileSlot slot)
+            {
+                slot.RotateTile(rotationValue);
+            }
+        }
+    }
+
+    private void AddTileVerticalGUI(string GUIName, float GUIWidth, GameObject targetPrefab, int verticalValue)
+    {
+        if (GUILayout.Button(GUIName, GUILayout.Width(GUIWidth)))
+        {
+            ApplyVerticalChange(targetPrefab, verticalValue);
+        }
+    }
+
+    private void ApplyVerticalChange(GameObject targetPrefab, int verticalValue)
+    {
+        if (targetPrefab == null)
+        {
+            return;
+        }
+
+        foreach (Object targetTile in targets)
+        {
+            if (targetTile is TileSlot slot)
+            {
+                slot.AdjustVertical(verticalValue);
             }
         }
     }
