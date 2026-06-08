@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3637509925998525907}
   - component: {fileID: 4248663628370173972}
   - component: {fileID: 2986259775875138665}
-  - component: {fileID: 883208885214689080}
+  - component: {fileID: -1912744258626343732}
   m_Layer: 6
   m_Name: tile_road
   m_TagString: Untagged
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &883208885214689080
+--- !u!114 &-1912744258626343732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,4 +121,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ca6ff1e943766479e1823c9ae4c187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBuild: 0

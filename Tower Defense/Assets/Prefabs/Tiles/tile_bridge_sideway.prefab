@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 5522097446547627764}
   - component: {fileID: 2852467732429504310}
   - component: {fileID: 8914371206235157341}
+  - component: {fileID: -1543913662377336586}
   m_Layer: 0
   m_Name: tile_bridge_sideway
   m_TagString: Untagged
@@ -218,6 +219,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1, z: 1}
   m_Center: {x: 0.25, y: 0, z: 0}
+--- !u!114 &-1543913662377336586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895357942220551013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ca6ff1e943766479e1823c9ae4c187, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5582947256470093640
 GameObject:
   m_ObjectHideFlags: 0
