@@ -63,6 +63,11 @@ public class TileSlotEditor : Editor
         AddTileChangeGUI("Outer Corner", twoBtnWidth, tileSetHolder.tileOuterCorner);
         GUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal();
+        AddTileChangeGUI("Inner Corner Small", twoBtnWidth, tileSetHolder.tileInnerCornerSmall);
+        AddTileChangeGUI("Outer Corner Small", twoBtnWidth, tileSetHolder.tileOuterCornerSmall);
+        GUILayout.EndHorizontal();
+
         GUILayout.Label("Bridges and Hills", centeredGUIStyle);
 
         GUILayout.BeginHorizontal();
@@ -72,9 +77,9 @@ public class TileSlotEditor : Editor
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        AddTileChangeGUI("Field Bridge", threeBtnWidth, tileSetHolder.tileBridgeField);
-        AddTileChangeGUI("HRoad Bridge", threeBtnWidth, tileSetHolder.tileBridgeRoad);
-        AddTileChangeGUI("Sideway Bridge", threeBtnWidth, tileSetHolder.tileBridgeSideway);
+        AddTileChangeGUI("Bridge of Field", threeBtnWidth, tileSetHolder.tileBridgeField);
+        AddTileChangeGUI("Bridge of Road", threeBtnWidth, tileSetHolder.tileBridgeRoad);
+        AddTileChangeGUI("Bridge of Sideway", threeBtnWidth, tileSetHolder.tileBridgeSideway);
         GUILayout.EndHorizontal();
     }
 

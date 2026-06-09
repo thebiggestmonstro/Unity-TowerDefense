@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,6 +17,23 @@ public class GridBuilder : MonoBehaviour
     [SerializeField]
     private List<GameObject> createdTiles;
 
+#if UNITY_EDITOR
+    private void OnEnable()
+    {
+        Undo.undoRedoPerformed += OnUndoRedoPerformed;
+    }
+
+    private void OnDisable()
+    {
+        Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+    }
+
+    private void OnUndoRedoPerformed()
+    {
+        UpdateNavMesh();
+    }
+#endif
+
     [ContextMenu("Build Grid")]
     private void BuildGrid()
     {
@@ -26,7 +44,9 @@ public class GridBuilder : MonoBehaviour
 
 #if UNITY_EDITOR
         Undo.IncrementCurrentGroup();
-        Undo.RecordObject(this, "Build Grid");
+        int undoGroupIndex = Undo.GetCurrentGroup(); 
+        Undo.SetCurrentGroupName("Build Grid");
+        Undo.RecordObject(this, "Build Grid State");
 #endif
         ClearGridInternal();
 
@@ -47,8 +67,10 @@ public class GridBuilder : MonoBehaviour
             }
         }
 
+        UpdateNavMesh();
+
 #if UNITY_EDITOR
-        Undo.SetCurrentGroupName("Build Grid");
+        Undo.CollapseUndoOperations(undoGroupIndex);
         EditorUtility.SetDirty(gameObject);
 #endif
     }
@@ -63,14 +85,16 @@ public class GridBuilder : MonoBehaviour
 
 #if UNITY_EDITOR
         Undo.IncrementCurrentGroup();
-        Undo.RecordObject(this, "Clear Grid");
+        int undoGroupIndex = Undo.GetCurrentGroup(); 
+        Undo.SetCurrentGroupName("Clear Grid");
+        Undo.RecordObject(this, "Clear Grid State");
 #endif
         ClearGridInternal();
-
         createdTiles.Clear();
+        ClearNavMesh();
 
 #if UNITY_EDITOR
-        Undo.SetCurrentGroupName("Clear Grid");
+        Undo.CollapseUndoOperations(undoGroupIndex);
         EditorUtility.SetDirty(gameObject);
 #endif
     }
@@ -110,4 +134,22 @@ public class GridBuilder : MonoBehaviour
 #endif
         }
     }
+
+    private void UpdateNavMesh()
+    {
+        if (GetNavMeshSurface != null)
+        {
+            GetNavMeshSurface.BuildNavMesh();
+        }
+    }
+
+    private void ClearNavMesh()
+    {
+        if (GetNavMeshSurface != null)
+        {
+            GetNavMeshSurface.RemoveData();
+        }
+    }
+
+    private NavMeshSurface GetNavMeshSurface => GetComponent<NavMeshSurface>();
 }

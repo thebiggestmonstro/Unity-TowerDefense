@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,6 +9,23 @@ using UnityEditor;
 
 public class TileSlot : MonoBehaviour
 {
+#if UNITY_EDITOR
+    private void OnEnable()
+    {
+        Undo.undoRedoPerformed += OnUndoRedoPerformed;
+    }
+
+    private void OnDisable()
+    {
+        Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+    }
+
+    private void OnUndoRedoPerformed()
+    {
+        UpdateNavMeshSurface();
+    }
+#endif
+
     public void SwitchTile(GameObject referencedTile)
     {
         TileSlot newTilePrefab = referencedTile.GetComponent<TileSlot>();
@@ -32,7 +51,8 @@ public class TileSlot : MonoBehaviour
         {
             Undo.RecordObject(GetTileCollider, "Change Collider");
         }
-        Undo.RecordObject(gameObject, "Change Name");
+        Undo.RegisterCompleteObjectUndo(gameObject, "Change Properties and Name");
+        Undo.RecordObject(gameObject, "Change Name and Layer");
 #endif
 
         gameObject.name = referencedTile.name;
@@ -48,32 +68,11 @@ public class TileSlot : MonoBehaviour
 
         UpdateCollider(newTilePrefab.GetCollider());
 
-        List<GameObject> currentChildren = GetAllChildren();
-        for (int i = currentChildren.Count - 1; i >= 0; i--)
-        {
-#if UNITY_EDITOR
-            Undo.DestroyObjectImmediate(currentChildren[i]);
-#else
-            Destroy(currentChildren[i]);
-#endif
-        }
+        UpdateChildren(referencedTile);
 
-        foreach (Transform childTransform in referencedTile.transform)
-        {
-            GameObject spawnedChild = Instantiate(childTransform.gameObject);
-            spawnedChild.transform.position = transform.position;
-            spawnedChild.transform.rotation = transform.rotation;
+        UpdateTileLayer(referencedTile);
 
-#if UNITY_EDITOR
-            Undo.RegisterCreatedObjectUndo(spawnedChild, "Spawn Child Tile");
-            Undo.SetTransformParent(spawnedChild.transform, this.transform, "Parent Child Tile");
-#else
-            spawnedChild.transform.SetParent(this.transform);
-#endif
-            spawnedChild.transform.localPosition = childTransform.localPosition;
-            spawnedChild.transform.localRotation = childTransform.localRotation;
-            spawnedChild.transform.localScale = childTransform.localScale;
-        }
+        UpdateNavMeshSurface();
 
 #if UNITY_EDITOR
         Undo.CollapseUndoOperations(undoGroupIndex);
@@ -91,6 +90,7 @@ public class TileSlot : MonoBehaviour
         Undo.RecordObject(transform, "Rotate Tile");
 #endif
         transform.Rotate(0, 90 * direction, 0);
+        UpdateNavMeshSurface();
 
 #if UNITY_EDITOR
         EditorUtility.SetDirty(gameObject);
@@ -103,6 +103,7 @@ public class TileSlot : MonoBehaviour
         Undo.RecordObject(transform, "Adjust Vertical Position");
 #endif
         transform.position += new Vector3(0, 0.1f * verticalDirection, 0);
+        UpdateNavMeshSurface();
 
 #if UNITY_EDITOR
         EditorUtility.SetDirty(gameObject);
@@ -156,7 +157,61 @@ public class TileSlot : MonoBehaviour
         }
     }
 
+    private void UpdateChildren(GameObject referencedTile)
+    {
+        List<GameObject> currentChildren = GetAllChildren();
+        for (int i = currentChildren.Count - 1; i >= 0; i--)
+        {
+#if UNITY_EDITOR
+            Undo.DestroyObjectImmediate(currentChildren[i]);
+#else
+            Destroy(currentChildren[i]);
+#endif
+        }
+
+#if UNITY_EDITOR
+        StaticEditorFlags flags = GameObjectUtility.GetStaticEditorFlags(referencedTile);
+#endif
+        foreach (Transform childTransform in referencedTile.transform)
+        {
+            GameObject spawnedChild = Instantiate(childTransform.gameObject);
+            spawnedChild.transform.position = transform.position;
+            spawnedChild.transform.rotation = transform.rotation;
+
+#if UNITY_EDITOR
+            Undo.RegisterCreatedObjectUndo(spawnedChild, "Spawn Child Tile");
+            Undo.SetTransformParent(spawnedChild.transform, this.transform, "Parent Child Tile");
+
+            GameObjectUtility.SetStaticEditorFlags(spawnedChild, flags);
+#else
+            spawnedChild.transform.SetParent(this.transform);
+#endif
+            spawnedChild.transform.localPosition = childTransform.localPosition;
+            spawnedChild.transform.localRotation = childTransform.localRotation;
+            spawnedChild.transform.localScale = childTransform.localScale;
+            spawnedChild.layer = referencedTile.layer;
+        }
+    }
+
+    private void UpdateNavMeshSurface()
+    {
+        if (GetTileNavMeshSurface != null)
+        {
+            GetTileNavMeshSurface.BuildNavMesh();
+        }
+    }
+
     private MeshRenderer GetMeshRenderer => GetComponent<MeshRenderer>();
     private MeshFilter GetMeshFilter => GetComponent<MeshFilter>();
     private Collider GetTileCollider => GetComponent<Collider>();
+    private NavMeshSurface GetTileNavMeshSurface => GetComponentInParent<NavMeshSurface>();
+
+    public void UpdateTileLayer(GameObject referencedObject)
+    {
+        gameObject.layer = referencedObject.layer;
+#if UNITY_EDITOR
+        StaticEditorFlags flags = GameObjectUtility.GetStaticEditorFlags(referencedObject);
+        GameObjectUtility.SetStaticEditorFlags(gameObject, flags);
+#endif
+    }
 }
