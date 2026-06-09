@@ -188,8 +188,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainPrefab: {fileID: 5829570908194696560, guid: 05c777da352234e45b8b26ab9938605e, type: 3}
-  gridLength: 10
-  gridWidth: 10
+  gridLength: 5
+  gridWidth: 5
   createdTiles: []
 --- !u!1 &330585543
 GameObject:

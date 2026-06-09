@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
-using UnityEditor; 
+using UnityEditor;
 #endif
 
 public class TileSlot : MonoBehaviour
@@ -10,9 +10,29 @@ public class TileSlot : MonoBehaviour
     public void SwitchTile(GameObject referencedTile)
     {
         TileSlot newTilePrefab = referencedTile.GetComponent<TileSlot>();
+        if (newTilePrefab == null)
+        {
+            return;
+        }
 
 #if UNITY_EDITOR
-        Undo.RegisterCompleteObjectUndo(gameObject, "Switch Tile");
+        Undo.IncrementCurrentGroup();
+        int undoGroupIndex = Undo.GetCurrentGroup();
+        Undo.SetCurrentGroupName("Switch Tile");
+
+        if (GetMeshFilter != null)
+        {
+            Undo.RecordObject(GetMeshFilter, "Change Mesh");
+        }
+        if (GetMeshRenderer != null)
+        {
+            Undo.RecordObject(GetMeshRenderer, "Change Material");
+        }
+        if (GetTileCollider != null)
+        {
+            Undo.RecordObject(GetTileCollider, "Change Collider");
+        }
+        Undo.RecordObject(gameObject, "Change Name");
 #endif
 
         gameObject.name = referencedTile.name;
@@ -40,24 +60,23 @@ public class TileSlot : MonoBehaviour
 
         foreach (Transform childTransform in referencedTile.transform)
         {
-#if UNITY_EDITOR
-            GameObject spawnedChild = Instantiate(childTransform.gameObject, this.transform);
+            GameObject spawnedChild = Instantiate(childTransform.gameObject);
+            spawnedChild.transform.position = transform.position;
+            spawnedChild.transform.rotation = transform.rotation;
 
-            if (spawnedChild != null)
-            {
-                spawnedChild.transform.localPosition = childTransform.localPosition;
-                spawnedChild.transform.localRotation = childTransform.localRotation;
-                spawnedChild.transform.localScale = childTransform.localScale;
-            }
+#if UNITY_EDITOR
+            Undo.RegisterCreatedObjectUndo(spawnedChild, "Spawn Child Tile");
+            Undo.SetTransformParent(spawnedChild.transform, this.transform, "Parent Child Tile");
 #else
-            GameObject spawnedChild = Instantiate(childTransform.gameObject, transform);
+            spawnedChild.transform.SetParent(this.transform);
+#endif
             spawnedChild.transform.localPosition = childTransform.localPosition;
             spawnedChild.transform.localRotation = childTransform.localRotation;
             spawnedChild.transform.localScale = childTransform.localScale;
-#endif
         }
 
 #if UNITY_EDITOR
+        Undo.CollapseUndoOperations(undoGroupIndex);
         EditorUtility.SetDirty(gameObject);
 #endif
     }
@@ -105,6 +124,7 @@ public class TileSlot : MonoBehaviour
     public void UpdateCollider(Collider newCollider)
     {
         Collider currentCollider = GetTileCollider;
+
         if (currentCollider != null)
         {
 #if UNITY_EDITOR
