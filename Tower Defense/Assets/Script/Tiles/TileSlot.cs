@@ -12,22 +12,9 @@ public class TileSlot : MonoBehaviour
         TileSlot newTilePrefab = referencedTile.GetComponent<TileSlot>();
 
 #if UNITY_EDITOR
-        Undo.RecordObject(gameObject, "Switch Tile");
-        Undo.RecordObject(transform, "Switch Tile Transform");
-
-        if (GetMeshFilter != null)
-        {
-            Undo.RecordObject(GetMeshFilter, "Switch Tile Mesh");
-        }
-        if (GetMeshRenderer != null)
-        { 
-            Undo.RecordObject(GetMeshRenderer, "Switch Tile Material");
-        }
-        if (GetTileCollider != null)
-        {
-            Undo.RecordObject(GetTileCollider, "Switch Tile Collider");
-        }
+        Undo.RegisterCompleteObjectUndo(gameObject, "Switch Tile");
 #endif
+
         gameObject.name = referencedTile.name;
 
         if (GetMeshFilter != null)
@@ -61,8 +48,6 @@ public class TileSlot : MonoBehaviour
                 spawnedChild.transform.localPosition = childTransform.localPosition;
                 spawnedChild.transform.localRotation = childTransform.localRotation;
                 spawnedChild.transform.localScale = childTransform.localScale;
-
-                Undo.RegisterCreatedObjectUndo(spawnedChild, "Spawn Tile Child");
             }
 #else
             GameObject spawnedChild = Instantiate(childTransform.gameObject, transform);
@@ -129,28 +114,25 @@ public class TileSlot : MonoBehaviour
 #endif
         }
 
-        if (newCollider is BoxCollider)
+        if (newCollider is BoxCollider originBox)
         {
-            BoxCollider originOne = newCollider.GetComponent<BoxCollider>();
 #if UNITY_EDITOR
             BoxCollider newOne = Undo.AddComponent<BoxCollider>(gameObject);
 #else
             BoxCollider newOne = gameObject.AddComponent<BoxCollider>();
 #endif
-            newOne.center = originOne.center;
-            newOne.size = originOne.size;
+            newOne.center = originBox.center;
+            newOne.size = originBox.size;
         }
-
-        if (newCollider is MeshCollider)
+        else if (newCollider is MeshCollider originMesh)
         {
-            MeshCollider originOne = newCollider.GetComponent<MeshCollider>();
 #if UNITY_EDITOR
             MeshCollider newOne = Undo.AddComponent<MeshCollider>(gameObject);
 #else
             MeshCollider newOne = gameObject.AddComponent<MeshCollider>();
 #endif
-            newOne.sharedMesh = originOne.sharedMesh;
-            newOne.convex = originOne.convex;
+            newOne.sharedMesh = originMesh.sharedMesh;
+            newOne.convex = originMesh.convex;
         }
     }
 
