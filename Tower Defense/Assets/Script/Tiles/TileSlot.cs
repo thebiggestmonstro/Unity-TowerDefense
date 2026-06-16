@@ -189,7 +189,7 @@ public class TileSlot : MonoBehaviour
             spawnedChild.transform.localPosition = childTransform.localPosition;
             spawnedChild.transform.localRotation = childTransform.localRotation;
             spawnedChild.transform.localScale = childTransform.localScale;
-            spawnedChild.layer = referencedTile.layer;
+            spawnedChild.layer = childTransform.gameObject.layer;
         }
     }
 

@@ -1,25 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class WaveManager : MonoBehaviour
 {
     [Header("Wave Data Assets")]
     [SerializeField]
     private List<WaveData> allWaves;
     private int currentWaveIndex = 0;
+    private Queue<GameObject> enemiesToCreate;
 
     [Space]
+    [Header("Spawners")]
     [SerializeField]
-    private Transform enemySpawner;
-    [SerializeField]
-    private float spawnCooldown;
-    private float spawnTimer;
+    private List<Enemy_Portal> activePortals;
 
-    public static EnemyManager Instance { get; private set; }
-    private List<GameObject> enemiesToCreate;
+    public static WaveManager Instance { get; private set; }
+    
 
     private void Awake()
     {
+        enemiesToCreate = new Queue<GameObject>();
+
         if (Instance == null)
         {
             Instance = this;
@@ -42,20 +43,25 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void RegisterPortal(Enemy_Portal portal)
     {
-        if (enemiesToCreate.Count <= 0)
+        if (!activePortals.Contains(portal))
         {
-            return;
+            activePortals.Add(portal);
         }
+    }
 
-        spawnTimer -= Time.deltaTime;
-
-        if (spawnTimer <= 0 && enemiesToCreate.Count > 0)
+    public void UnregisterPortal(Enemy_Portal portal)
+    {
+        if (activePortals.Contains(portal))
         {
-            CreateEnemy();
-            spawnTimer = spawnCooldown;
+            activePortals.Remove(portal);
         }
+    }
+
+    public bool HasPortal(Enemy_Portal portal)
+    { 
+        return activePortals.Contains(portal);
     }
 
     public void StartWave(int waveIndex)
@@ -67,8 +73,28 @@ public class EnemyManager : MonoBehaviour
         }
 
         currentWaveIndex = waveIndex;
-        enemiesToCreate = CreateNewEnemyWave(allWaves[currentWaveIndex]);
-        spawnTimer = spawnCooldown;
+        List<GameObject> waveList = CreateNewEnemyWave(allWaves[currentWaveIndex]);
+        ShuffleList(waveList);
+        enemiesToCreate = new Queue<GameObject>(waveList);
+
+        foreach (var portal in activePortals)
+        {
+            if (portal != null)
+            {
+                portal.StartSpawning();
+            }
+        }
+    }
+
+    private void ShuffleList(List<GameObject> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rnd = Random.Range(0, i + 1);
+            GameObject temp = list[i];
+            list[i] = list[rnd];
+            list[rnd] = temp;
+        }
     }
 
     private List<GameObject> CreateNewEnemyWave(WaveData waveData)
@@ -91,30 +117,24 @@ public class EnemyManager : MonoBehaviour
         return newEnemyList;
     }
 
-    private void CreateEnemy()
-    {
-        GameObject randomEnemy = GetRandomEnemy();
-        if (randomEnemy)
-        {
-            GameObject newEnemy = Instantiate(randomEnemy, enemySpawner.position, Quaternion.identity);
-        }
-    }
-
-    private GameObject GetRandomEnemy()
+    public GameObject RequestSpawnEnemy()
     {
         if (enemiesToCreate.Count == 0)
         {
-            return null;
+            return null; 
         }
 
-        int randomIndex = Random.Range(0, enemiesToCreate.Count);
-        GameObject chosenEnemy = enemiesToCreate[randomIndex];
-        enemiesToCreate.RemoveAt(randomIndex);
-        return chosenEnemy;
+        return enemiesToCreate.Dequeue();
     }
 
+    [ContextMenu("Setup Next Wave")]
     public void NextWave()
     {
         StartWave(currentWaveIndex + 1);
+    }
+
+    public bool HasEnemiesLeft()
+    {
+        return enemiesToCreate.Count > 0;
     }
 }

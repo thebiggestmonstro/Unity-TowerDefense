@@ -71,9 +71,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2369183839ea049b4a741fc1569015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainPrefab: {fileID: 5829570908194696560, guid: 05c777da352234e45b8b26ab9938605e, type: 3}
-  gridLength: 5
-  gridWidth: 5
+  mainPrefab: {fileID: 1477721996872542843, guid: 70c1c9a1fa0e4d54f8be0f19d72bdc72, type: 3}
+  gridLength: 10
+  gridWidth: 10
   createdTiles: []
 --- !u!114 &768186899803991859
 MonoBehaviour:
