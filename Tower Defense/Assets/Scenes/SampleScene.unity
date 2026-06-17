@@ -1205,6 +1205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allWaves:
   - {fileID: 11400000, guid: 4093c2cb4583194489811f045f922fa4, type: 2}
+  - {fileID: 11400000, guid: 2280e55ea2c7a7c4982530c11d021c71, type: 2}
   activePortals: []
 --- !u!4 &859457217
 Transform:

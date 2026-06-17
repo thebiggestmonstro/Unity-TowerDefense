@@ -40,6 +40,8 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private int currentWaypointIndex = 0;
     private NavMeshAgent agent;
     private bool isPathEnded = false;
+    [SerializeField]
+    private Enemy_Portal myPortal;
 
     private void Awake()
     {
@@ -127,7 +129,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
         if (healthPoints <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
     }
 
@@ -147,7 +149,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     public EnemyType GetEnemyType() => enemyType;
 
 
-    public void SetupEnemy(List<Waypoint> newWaypoints)
+    public void SetupEnemy(List<Waypoint> newWaypoints, Enemy_Portal myNewPortal)
     {
         myWaypoints = new List<Transform>();
 
@@ -159,6 +161,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
             }
         }
 
+        myPortal = myNewPortal;
         InitializeEnemy();
     }
 
@@ -191,5 +194,11 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         float distanceBetweenPoints = Vector3.Distance(currentWaypoint, nextWaypoint);
 
         return distanceBetweenPoints > distanceToNextWaypoint;
+    }
+
+    private void Die()
+    {
+        WaveManager.Instance.RemoveActiveEnemy(gameObject);
+        Destroy(gameObject);
     }
 }

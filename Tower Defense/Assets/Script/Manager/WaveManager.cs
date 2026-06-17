@@ -14,9 +14,20 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private List<Enemy_Portal> activePortals;
 
+    [Space]
+    [Header("Wave Time Setting")]
+    [SerializeField]
+    private float timeBetweenWaves = 5.0f;
+    [SerializeField]
+    private float waveTimer;
+
+    private List<GameObject> activeEnemies = new List<GameObject>();
+    private bool currentWaveCompleted = false;
+    private float checkInterval = 0.5f;
+    private float nextCheckTime;
+    
     public static WaveManager Instance { get; private set; }
     
-
     private void Awake()
     {
         enemiesToCreate = new Queue<GameObject>();
@@ -35,11 +46,45 @@ public class WaveManager : MonoBehaviour
     {
         if (allWaves != null && allWaves.Count > 0)
         {
-            StartWave(0);
+            StartWave(currentWaveIndex);
         }
         else
         {
             Debug.LogError("Wave Data is not registered in EnemyManager");
+        }
+    }
+
+    private void Update()
+    {
+        HandleWaveCompletion();
+
+        HandleWaveTiming();
+    }
+
+    void HandleWaveCompletion()
+    {
+        if (!ReadyToCheck())
+        {
+            return;
+        }
+
+        if (!currentWaveCompleted && AllEnemiesDefeated())
+        {
+            currentWaveCompleted = !currentWaveCompleted;
+            waveTimer = timeBetweenWaves;
+        }
+    }
+
+    void HandleWaveTiming()
+    {
+        if (currentWaveCompleted)
+        {
+            waveTimer -= Time.deltaTime;
+
+            if (waveTimer <= 0)
+            {
+                StartNextWave();
+            }
         }
     }
 
@@ -72,7 +117,6 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        currentWaveIndex = waveIndex;
         List<GameObject> waveList = CreateNewEnemyWave(allWaves[currentWaveIndex]);
         ShuffleList(waveList);
         enemiesToCreate = new Queue<GameObject>(waveList);
@@ -84,6 +128,8 @@ public class WaveManager : MonoBehaviour
                 portal.StartSpawning();
             }
         }
+
+        currentWaveIndex++;
     }
 
     private void ShuffleList(List<GameObject> list)
@@ -127,14 +173,60 @@ public class WaveManager : MonoBehaviour
         return enemiesToCreate.Dequeue();
     }
 
-    [ContextMenu("Setup Next Wave")]
     public void NextWave()
     {
-        StartWave(currentWaveIndex + 1);
+        StartWave(currentWaveIndex);
+
+        currentWaveCompleted = false;
+    }
+
+    public void StartNextWave()
+    {
+        if (AllEnemiesDefeated() == false)
+        {
+            Debug.Log("Can`t start next wave while there is enemies");
+            return;
+        }
+
+        NextWave();
     }
 
     public bool HasEnemiesLeft()
     {
         return enemiesToCreate.Count > 0;
+    }
+
+    public List<GameObject> GetActiveEnemies() => activeEnemies;
+
+    public void RegisterActiveEnemy(GameObject enemyToRegister)
+    {
+        if (!activeEnemies.Contains(enemyToRegister))
+        {
+            activeEnemies.Add(enemyToRegister);    
+        }
+    }
+
+    public void RemoveActiveEnemy(GameObject enemyToRemove)
+    {
+        if (activeEnemies.Contains(enemyToRemove))
+        { 
+            activeEnemies.Remove(enemyToRemove);
+        }
+    }
+
+    private bool AllEnemiesDefeated()
+    {
+        return GetActiveEnemies().Count <= 0;
+    }
+
+    private bool ReadyToCheck()
+    {
+        if (Time.time >= nextCheckTime)
+        {
+            nextCheckTime = Time.time + checkInterval;
+            return true;
+        }
+
+        return false;
     }
 }

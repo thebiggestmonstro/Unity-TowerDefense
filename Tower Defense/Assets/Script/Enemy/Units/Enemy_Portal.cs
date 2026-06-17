@@ -75,11 +75,12 @@ public class Enemy_Portal : MonoBehaviour
         if (enemy != null)
         {
             GameObject spawnedEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
+            WaveManager.Instance.RegisterActiveEnemy(spawnedEnemy);
 
             Enemy_Base enemyComponent = spawnedEnemy.GetComponent<Enemy_Base>();
             if (enemyComponent != null)
             {
-                enemyComponent.SetupEnemy(waypointsList);
+                enemyComponent.SetupEnemy(waypointsList, this);
             }
         }
         else

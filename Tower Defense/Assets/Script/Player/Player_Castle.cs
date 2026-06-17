@@ -6,7 +6,7 @@ public class Player_Castle : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            Destroy(other.gameObject);
+            other.GetComponent<Enemy_Base>().TakeDamage(999);
         }
     }
 }

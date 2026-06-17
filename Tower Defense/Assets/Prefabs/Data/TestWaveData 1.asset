@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcc4dba0701aa954099b1c97f7daa3d5, type: 3}
-  m_Name: TestWaveData
+  m_Name: TestWaveData 1
   m_EditorClassIdentifier: 
   waveInfo:
   - enemyPrefab: {fileID: 2850966121671249568, guid: 97d45e88dae38a549b95437f07bc7ea0, type: 3}
-    spawnCount: 1
+    spawnCount: 2
   - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
-    spawnCount: 1
+    spawnCount: 2
