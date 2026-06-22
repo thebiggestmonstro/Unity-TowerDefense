@@ -1185,7 +1185,7 @@ GameObject:
   - component: {fileID: 859457217}
   - component: {fileID: 859457216}
   m_Layer: 0
-  m_Name: EnemyManager
+  m_Name: WaveManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1206,7 +1206,11 @@ MonoBehaviour:
   allWaves:
   - {fileID: 11400000, guid: 4093c2cb4583194489811f045f922fa4, type: 2}
   - {fileID: 11400000, guid: 2280e55ea2c7a7c4982530c11d021c71, type: 2}
+  - {fileID: 11400000, guid: 2854d721b1fd2684ea36d8a3204037dc, type: 2}
   activePortals: []
+  timeBetweenWaves: 5
+  waveTimer: 0
+  currentGrid: {fileID: 237842232697642186}
 --- !u!4 &859457217
 Transform:
   m_ObjectHideFlags: 0
@@ -5139,6 +5143,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4242491240687910615, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
   m_PrefabInstance: {fileID: 237842232697642183}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &237842232697642186 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
+  m_PrefabInstance: {fileID: 237842232697642183}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad2369183839ea049b4a741fc1569015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &240829370198335401
 MonoBehaviour:
   m_ObjectHideFlags: 0

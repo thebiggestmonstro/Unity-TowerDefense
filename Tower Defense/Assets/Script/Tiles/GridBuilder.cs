@@ -17,6 +17,13 @@ public class GridBuilder : MonoBehaviour
     [SerializeField]
     private List<GameObject> createdTiles;
 
+    private NavMeshSurface myNavMesh;
+
+    private void Awake()
+    {
+        myNavMesh = GetComponent<NavMeshSurface>();
+    }
+
 #if UNITY_EDITOR
     private void OnEnable()
     {
@@ -152,4 +159,5 @@ public class GridBuilder : MonoBehaviour
     }
 
     private NavMeshSurface GetNavMeshSurface => GetComponent<NavMeshSurface>();
+    public NavMeshSurface GetNavMesh() => myNavMesh;
 }

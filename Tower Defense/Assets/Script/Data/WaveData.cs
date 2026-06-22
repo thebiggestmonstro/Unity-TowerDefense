@@ -13,4 +13,8 @@ public class WaveData : ScriptableObject
 {
     [Header("Wave Configuration")]
     public List<EnemySpawnInfo> waveInfo;
+
+    [Header("Grid Configuration")]
+    public GridBuilder nextGrid;
+    public Enemy_Portal[] newPortals;
 }

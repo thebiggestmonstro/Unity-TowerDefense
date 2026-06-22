@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -21,10 +23,13 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private float waveTimer;
 
+    [Space]
+    [Header("Grid Setting")]
+    [SerializeField]
+    private GridBuilder currentGrid;
+
     private List<GameObject> activeEnemies = new List<GameObject>();
-    private bool currentWaveCompleted = false;
     private float checkInterval = 0.5f;
-    private float nextCheckTime;
     
     public static WaveManager Instance { get; private set; }
     
@@ -46,7 +51,7 @@ public class WaveManager : MonoBehaviour
     {
         if (allWaves != null && allWaves.Count > 0)
         {
-            StartWave(currentWaveIndex);
+            StartCoroutine(CoWaveLoop());
         }
         else
         {
@@ -54,36 +59,46 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private IEnumerator CoWaveLoop()
     {
-        HandleWaveCompletion();
-
-        HandleWaveTiming();
-    }
-
-    void HandleWaveCompletion()
-    {
-        if (!ReadyToCheck())
+        while (currentWaveIndex < allWaves.Count)
         {
-            return;
-        }
+            InitWave(currentWaveIndex);
 
-        if (!currentWaveCompleted && AllEnemiesDefeated())
-        {
-            currentWaveCompleted = !currentWaveCompleted;
-            waveTimer = timeBetweenWaves;
-        }
-    }
-
-    void HandleWaveTiming()
-    {
-        if (currentWaveCompleted)
-        {
-            waveTimer -= Time.deltaTime;
-
-            if (waveTimer <= 0)
+            while (HasEnemiesLeft() || !AllEnemiesDefeated())
             {
-                StartNextWave();
+                yield return new WaitForSeconds(checkInterval);
+            }
+
+            currentWaveIndex++;
+            CheckForNewLevelLayout();
+            if (currentWaveIndex >= allWaves.Count)
+            {
+                break;
+            }
+
+            waveTimer = timeBetweenWaves;
+            while (waveTimer > 0)
+            {
+                waveTimer -= Time.deltaTime;
+                yield return null; 
+            }
+        }
+
+        Debug.Log("Clear!!!");
+    }
+
+    private void InitWave(int waveIndex)
+    {
+        List<GameObject> waveList = CreateNewEnemyWave(allWaves[waveIndex]);
+        ShuffleList(waveList);
+        enemiesToCreate = new Queue<GameObject>(waveList);
+
+        foreach (var portal in activePortals)
+        {
+            if (portal != null)
+            {
+                portal.StartSpawning();
             }
         }
     }
@@ -107,29 +122,6 @@ public class WaveManager : MonoBehaviour
     public bool HasPortal(Enemy_Portal portal)
     { 
         return activePortals.Contains(portal);
-    }
-
-    public void StartWave(int waveIndex)
-    {
-        if (waveIndex >= allWaves.Count)
-        {
-            Debug.Log("Clear!!!");
-            return;
-        }
-
-        List<GameObject> waveList = CreateNewEnemyWave(allWaves[currentWaveIndex]);
-        ShuffleList(waveList);
-        enemiesToCreate = new Queue<GameObject>(waveList);
-
-        foreach (var portal in activePortals)
-        {
-            if (portal != null)
-            {
-                portal.StartSpawning();
-            }
-        }
-
-        currentWaveIndex++;
     }
 
     private void ShuffleList(List<GameObject> list)
@@ -173,24 +165,6 @@ public class WaveManager : MonoBehaviour
         return enemiesToCreate.Dequeue();
     }
 
-    public void NextWave()
-    {
-        StartWave(currentWaveIndex);
-
-        currentWaveCompleted = false;
-    }
-
-    public void StartNextWave()
-    {
-        if (AllEnemiesDefeated() == false)
-        {
-            Debug.Log("Can`t start next wave while there is enemies");
-            return;
-        }
-
-        NextWave();
-    }
-
     public bool HasEnemiesLeft()
     {
         return enemiesToCreate.Count > 0;
@@ -219,14 +193,60 @@ public class WaveManager : MonoBehaviour
         return GetActiveEnemies().Count <= 0;
     }
 
-    private bool ReadyToCheck()
+    private void CheckForNewLevelLayout()
     {
-        if (Time.time >= nextCheckTime)
+        if (currentWaveIndex >= allWaves.Count)
         {
-            nextCheckTime = Time.time + checkInterval;
-            return true;
+            return;
         }
 
-        return false;
+        WaveData nextWave = allWaves[currentWaveIndex];
+
+        if (nextWave)
+        {
+            UpdateLevelGrid(nextWave.nextGrid);
+            UpdateLevelPortals(nextWave.newPortals);
+            currentGrid.GetNavMesh()?.BuildNavMesh();
+        }
+    }
+
+    private void UpdateLevelGrid(GridBuilder nextGridPrefab)
+    {
+        if (nextGridPrefab == null)
+        {
+            return;
+        }
+
+        if (currentGrid != null)
+        {
+            Destroy(currentGrid.gameObject);
+        }
+
+        GridBuilder newGridInstance = Instantiate(nextGridPrefab, Vector3.zero, Quaternion.identity);
+        currentGrid = newGridInstance;
+    }
+
+    private void UpdateLevelPortals(Enemy_Portal[] portalPrefabs)
+    {
+        if (portalPrefabs == null || portalPrefabs.Length <= 0)
+        {
+            return;
+        }
+
+        foreach (Enemy_Portal portalPrefab in portalPrefabs)
+        {
+            if (portalPrefab == null)
+            {
+                continue;
+            }
+
+            Enemy_Portal createdPortal = Instantiate(
+                portalPrefab,
+                portalPrefab.transform.position,
+                portalPrefab.transform.rotation
+            );
+
+            RegisterPortal(createdPortal);
+        }
     }
 }
