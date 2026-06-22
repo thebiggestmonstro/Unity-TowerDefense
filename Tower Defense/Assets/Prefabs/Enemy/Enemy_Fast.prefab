@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 2066056397383653325}
   - component: {fileID: 8151246107590512104}
   - component: {fileID: 3728269784683878296}
+  - component: {fileID: 8422885233454932260}
   - component: {fileID: 2857788237810869970}
   - component: {fileID: 1020166600002715924}
   m_Layer: 7
@@ -157,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557397de7a57a4246838d24e024ae116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoints: []
+  myWaypoints: []
   arrivalDistance: 0.5
   turnSpeed: 5
   totalDistance: 0
@@ -179,6 +180,24 @@ MonoBehaviour:
         m_CallState: 2
   healthPoints: 20
   enemyType: 1
+  myPortal: {fileID: 0}
+--- !u!114 &8422885233454932260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850966121671249568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ab92689d850a94887e16d94b5555ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ascendingParts: {fileID: 7744881939471158412}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  verticalRotationSpeed: 5
 --- !u!65 &2857788237810869970
 BoxCollider:
   m_ObjectHideFlags: 0
