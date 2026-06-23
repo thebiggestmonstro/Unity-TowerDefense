@@ -693,7 +693,19 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 330585549}
+        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
+        m_MethodName: OnZoom
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 5b41f9a9-83e5-47aa-9913-07c2c0a42656
     m_ActionName: 'Camera/Zoom[/Mouse/scroll/y]'
   - m_PersistentCalls:
@@ -713,7 +725,19 @@ MonoBehaviour:
     m_ActionId: 34ab9115-dbde-4733-8bd0-53919042aea1
     m_ActionName: 'Camera/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 330585549}
+        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
+        m_MethodName: OnHoldClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: de1261b9-37f3-40ed-83df-d4f01ba45211
     m_ActionName: 'Camera/HoldClick[/Mouse/middleButton]'
   - m_PersistentCalls:
@@ -755,6 +779,13 @@ MonoBehaviour:
   minPitch: 5
   maxPitch: 85
   maxFocusPointDistance: 15
+  zoomSpeed: 10
+  minZoom: 3
+  maxZoom: 15
+  mouseMoveSpeed: 10
+  levelCenterPoint: {x: 10, y: 0, z: 10}
+  maxDistanceFromCenter: 10
+  mouseMovementSpeed: 5
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
