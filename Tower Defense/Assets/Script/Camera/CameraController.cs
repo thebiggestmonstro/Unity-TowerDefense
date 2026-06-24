@@ -50,18 +50,31 @@ public class CameraController : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool isMiddleClickPressing = false;
 
+    [Space]
+    [Header("Screen Edge Settings")]
+    [SerializeField]
+    private float edgeThreshold = 10;
+    [SerializeField] 
+    private float edgeMovementSpeed = 50;
+    private float screenWidth;
+    private float screenHeight;
+    private Vector3 edgeMovementVelocity = Vector3.zero;
+
     private void Start()
     {
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x;
         targetZoomPosition = transform.position;
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
     }
 
     private void LateUpdate()
     {
         HandleCameraZoom();
         HandleCameraRotation();
+        HandleEdgeMovement();
         HandleMouseMovement();
         HandleCameraMovement();
         UpdateFocusPointFromScreen();
@@ -212,6 +225,69 @@ public class CameraController : MonoBehaviour
 
             lastMousePosition = Mouse.current.position.ReadValue();
         }
+    }
+
+    private void HandleEdgeMovement()
+    {
+        if (Mouse.current == null)
+        {
+            return;
+        }
+
+        Vector3 targetPosition = targetZoomPosition;
+        Vector3 mousePosition = Mouse.current.position.ReadValue();
+        Vector3 moveDirection = Vector3.zero;
+
+        if (mousePosition.x > screenWidth - edgeThreshold)
+        {
+            Vector3 flatRight = Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
+            moveDirection += flatRight;
+        }
+        else if (mousePosition.x < edgeThreshold)
+        {
+            Vector3 flatRight = Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
+            moveDirection -= flatRight;
+        }
+
+        if (mousePosition.y > screenHeight - edgeThreshold)
+        {
+            Vector3 flatForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            moveDirection += flatForward;
+        }
+        else if (mousePosition.y < edgeThreshold)
+        {
+            Vector3 flatForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            moveDirection -= flatForward;
+        }
+
+        if (moveDirection.sqrMagnitude > 0)
+        {
+            moveDirection.Normalize();
+
+            Vector3 movement = moveDirection * edgeMovementSpeed * Time.deltaTime;
+            targetPosition += movement;
+
+            float originalY = targetPosition.y;
+
+            Vector3 planarTarget = new Vector3(targetPosition.x, 0, targetPosition.z);
+            Vector3 planarCenter = new Vector3(levelCenterPoint.x, 0, levelCenterPoint.z);
+            Vector3 offset = planarTarget - planarCenter;
+
+            float sqrMaxDistance = maxDistanceFromCenter * maxDistanceFromCenter;
+
+            if (offset.sqrMagnitude > sqrMaxDistance)
+            {
+                Vector3 clampedPlanarPosition = planarCenter + offset.normalized * maxDistanceFromCenter;
+                targetPosition = new Vector3(clampedPlanarPosition.x, originalY, clampedPlanarPosition.z);
+            }
+
+            Vector3 finalMovement = targetPosition - targetZoomPosition;
+
+            targetZoomPosition += finalMovement;
+            focusPoint.Translate(finalMovement, Space.World);
+        }
+
+        transform.position = Vector3.SmoothDamp(transform.position, targetZoomPosition, ref edgeMovementVelocity, smoothTime);
     }
     #endregion
 }

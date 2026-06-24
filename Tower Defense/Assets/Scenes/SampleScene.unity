@@ -779,13 +779,14 @@ MonoBehaviour:
   minPitch: 5
   maxPitch: 85
   maxFocusPointDistance: 15
-  zoomSpeed: 10
+  zoomSpeed: 20
   minZoom: 3
   maxZoom: 15
-  mouseMoveSpeed: 10
   levelCenterPoint: {x: 10, y: 0, z: 10}
   maxDistanceFromCenter: 10
   mouseMovementSpeed: 5
+  edgeTreshold: 10
+  edgeMovementSpeed: 50
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
