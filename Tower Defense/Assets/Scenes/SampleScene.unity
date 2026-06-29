@@ -541,6 +541,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585549}
+  - component: {fileID: 330585550}
   - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
@@ -616,8 +617,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.2301142, y: 0.0058468557, z: -0.001246763, w: -0.9731453}
-  m_LocalPosition: {x: 9.459542, y: 7.976981, z: -6.558874}
+  m_LocalRotation: {x: 0.183359, y: 0.67946506, z: -0.18156394, w: 0.6868343}
+  m_LocalPosition: {x: -10.819807, y: 11.720146, z: 9.646935}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -756,6 +757,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c143b2df-2816-4eb7-8835-37a2e1b010d4
     m_ActionName: 'Camera/Rotate[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330585550}
+        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
+        m_MethodName: OnSwitchToMenuView
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c90bc477-94e8-4b8a-85cd-eac118fb8b12
+    m_ActionName: 'Camera/OpenMenu[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330585550}
+        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
+        m_MethodName: OnSwitchToGameView
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 361bd340-1563-4e2b-a012-55565dcb82dc
+    m_ActionName: 'Camera/OpenGame[/Keyboard/2]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330585550}
+        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
+        m_MethodName: OnScreenshake
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: df8e9fd8-408e-4e32-99c6-15b0ab6c3d21
+    m_ActionName: 'Camera/TestShake[/Keyboard/v]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Camera
@@ -773,20 +822,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80aefebce1d4b1240902e949e8e95235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelCenterPoint: {x: 9, y: 0, z: 8}
+  maxDistanceFromCenter: 30
   moveSpeed: 10
   rotateSpeed: 15
   focusPoint: {fileID: 133941595}
   minPitch: 5
   maxPitch: 85
   maxFocusPointDistance: 15
-  zoomSpeed: 20
+  zoomSpeed: 40
   minZoom: 3
   maxZoom: 15
-  levelCenterPoint: {x: 10, y: 0, z: 10}
-  maxDistanceFromCenter: 10
   mouseMovementSpeed: 5
-  edgeTreshold: 10
-  edgeMovementSpeed: 50
+  edgeThreshold: 10
+  edgeMovementSpeed: 20
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7387c6b202078b24993ecb13f5cdc595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inMenuPosition: {x: -4.5, y: 11, z: 22.1}
+  inMenuRotation: {x: 45, y: 139, z: 0}
+  inGamePosition: {x: -1.8, y: 18.5, z: 0.9}
+  inGameRotation: {x: 61, y: 53.8, z: 0}
+  shakeMagnutide: 0.01
+  shakeDuration: 0.1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -62895,6 +62962,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 330585546}
+  - {fileID: 133941595}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 859457217}
@@ -62902,4 +62970,3 @@ SceneRoots:
   - {fileID: 430970073}
   - {fileID: 304327046}
   - {fileID: 1741647881}
-  - {fileID: 133941595}

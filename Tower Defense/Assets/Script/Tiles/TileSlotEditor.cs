@@ -1,6 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(TileSlot)), CanEditMultipleObjects]
 public class TileSlotEditor : Editor
 {
@@ -155,3 +157,5 @@ public class TileSlotEditor : Editor
         }
     }
 }
+
+#endif

@@ -1,10 +1,19 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Common Settings")]
+    [SerializeField]
+    private Vector3 levelCenterPoint;
+    [SerializeField]
+    private float maxDistanceFromCenter;
+
+    [Space]
     [Header("Movement Settings")]
-    [SerializeField] 
+    [SerializeField]
     private float moveSpeed = 10f;
     private Vector2 moveInput;
 
@@ -14,37 +23,33 @@ public class CameraController : MonoBehaviour
     private float rotateSpeed = 15f;
     [SerializeField]
     private Transform focusPoint;
-    [SerializeField] 
+    [SerializeField]
     private float minPitch = 5f;
-    [SerializeField] 
+    [SerializeField]
     private float maxPitch = 85f;
     [SerializeField]
     private float maxFocusPointDistance = 15f;
-    
+
     private float yaw;
     private float pitch;
     private bool isRightButtonPressed;
 
     [Space]
     [Header("Zoom Settings")]
-    [SerializeField] 
+    [SerializeField]
     private float zoomSpeed = 20f;
-    [SerializeField] 
+    [SerializeField]
     private float minZoom = 3f;
-    [SerializeField] 
+    [SerializeField]
     private float maxZoom = 15f;
     private float scrollValue;
-    private Vector3 targetZoomPosition; 
+    private Vector3 targetZoomPosition;
     private Vector3 zoomVelocity = Vector3.zero;
     private float smoothTime = 0.1f;
 
     [Space]
     [Header("Mouse Movement Settings")]
-    [SerializeField] 
-    private Vector3 levelCenterPoint;
-    [SerializeField] 
-    private float maxDistanceFromCenter;
-    [SerializeField] 
+    [SerializeField]
     private float mouseMovementSpeed = 0.5f;
     private Vector3 mouseMovementVelocity = Vector3.zero;
     private Vector3 lastMousePosition;
@@ -54,11 +59,14 @@ public class CameraController : MonoBehaviour
     [Header("Screen Edge Settings")]
     [SerializeField]
     private float edgeThreshold = 10;
-    [SerializeField] 
-    private float edgeMovementSpeed = 50;
+    [SerializeField]
+    private float edgeMovementSpeed = 20;
     private float screenWidth;
     private float screenHeight;
     private Vector3 edgeMovementVelocity = Vector3.zero;
+
+    private bool canControl = true;
+    private Vector3 shakeOffset = Vector3.zero;
 
     private void Start()
     {
@@ -72,20 +80,25 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         HandleCameraZoom();
         HandleCameraRotation();
-        HandleEdgeMovement();
+        //HandleEdgeMovement();
         HandleMouseMovement();
         HandleCameraMovement();
         UpdateFocusPointFromScreen();
     }
 
     #region Input Binding Function
+
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.action.ReadValue<Vector2>();
     }
-
 
     public void OnRotate(InputAction.CallbackContext context)
     {
@@ -129,9 +142,9 @@ public class CameraController : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#region Normal Function
+    #region Normal Function
     void HandleCameraMovement()
     {
         Vector3 localDir = new Vector3(moveInput.x, 0, moveInput.y);
@@ -139,8 +152,10 @@ public class CameraController : MonoBehaviour
         Vector3 finalDir = Vector3.ProjectOnPlane(worldDir, Vector3.up).normalized;
 
         Vector3 movement = finalDir * moveSpeed * Time.deltaTime;
-        transform.Translate(movement, Space.World);
-        targetZoomPosition += movement;
+        Vector3 targetPosition = ClampToMaxDistance(targetZoomPosition + movement);
+        movement = targetPosition - targetZoomPosition;
+
+        targetZoomPosition = targetPosition;
         focusPoint.Translate(movement, Space.World);
     }
 
@@ -152,14 +167,13 @@ public class CameraController : MonoBehaviour
             float mouseY = Mouse.current.delta.y.ReadValue();
 
             yaw += mouseX * rotateSpeed * Time.deltaTime;
-            pitch -= mouseY * rotateSpeed * Time.deltaTime; 
+            pitch -= mouseY * rotateSpeed * Time.deltaTime;
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
         }
 
         Quaternion targetRotation = Quaternion.Euler(pitch, yaw, 0);
         transform.rotation = targetRotation;
     }
-
 
     private void UpdateFocusPointFromScreen()
     {
@@ -177,7 +191,7 @@ public class CameraController : MonoBehaviour
 
     void HandleCameraZoom()
     {
-        if (Mathf.Abs(scrollValue) > 0.01f)
+        if (canControl && Mathf.Abs(scrollValue) > 0.01f)
         {
             float scrollDirection = scrollValue > 0 ? 1f : -1f;
 
@@ -192,11 +206,13 @@ public class CameraController : MonoBehaviour
             {
                 return;
             }
-
-            targetZoomPosition = nextTargetPosition;
+            targetZoomPosition = ClampToMaxDistance(nextTargetPosition);
         }
 
-        transform.position = Vector3.SmoothDamp(transform.position, targetZoomPosition, ref zoomVelocity, smoothTime);
+        if (canControl)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, targetZoomPosition, ref zoomVelocity, smoothTime) + shakeOffset;
+        }
     }
 
     private void HandleMouseMovement()
@@ -211,17 +227,12 @@ public class CameraController : MonoBehaviour
             moveForward.y = 0;
 
             Vector3 movement = moveRight + moveForward;
-            Vector3 targetPosition = transform.position + movement;
-
-            if (Vector3.Distance(levelCenterPoint, targetPosition) > maxDistanceFromCenter)
-            {
-                targetPosition = levelCenterPoint + (targetPosition - levelCenterPoint).normalized * maxDistanceFromCenter;
-                movement = targetPosition - transform.position; 
-            }
+            Vector3 targetPosition = ClampToMaxDistance(targetZoomPosition + movement);
+            movement = targetPosition - targetZoomPosition;
 
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref mouseMovementVelocity, smoothTime);
-            targetZoomPosition += movement; 
-            focusPoint.Translate(movement, Space.World); 
+            targetZoomPosition = targetPosition;
+            focusPoint.Translate(movement, Space.World);
 
             lastMousePosition = Mouse.current.position.ReadValue();
         }
@@ -265,29 +276,51 @@ public class CameraController : MonoBehaviour
             moveDirection.Normalize();
 
             Vector3 movement = moveDirection * edgeMovementSpeed * Time.deltaTime;
-            targetPosition += movement;
-
-            float originalY = targetPosition.y;
-
-            Vector3 planarTarget = new Vector3(targetPosition.x, 0, targetPosition.z);
-            Vector3 planarCenter = new Vector3(levelCenterPoint.x, 0, levelCenterPoint.z);
-            Vector3 offset = planarTarget - planarCenter;
-
-            float sqrMaxDistance = maxDistanceFromCenter * maxDistanceFromCenter;
-
-            if (offset.sqrMagnitude > sqrMaxDistance)
-            {
-                Vector3 clampedPlanarPosition = planarCenter + offset.normalized * maxDistanceFromCenter;
-                targetPosition = new Vector3(clampedPlanarPosition.x, originalY, clampedPlanarPosition.z);
-            }
+            targetPosition = ClampToMaxDistance(targetPosition + movement);
 
             Vector3 finalMovement = targetPosition - targetZoomPosition;
 
-            targetZoomPosition += finalMovement;
+            targetZoomPosition = targetPosition;
             focusPoint.Translate(finalMovement, Space.World);
         }
 
         transform.position = Vector3.SmoothDamp(transform.position, targetZoomPosition, ref edgeMovementVelocity, smoothTime);
     }
+
+    private Vector3 ClampToMaxDistance(Vector3 targetPosition)
+    {
+        Vector3 planarTarget = new Vector3(targetPosition.x, 0, targetPosition.z);
+        Vector3 planarCenter = new Vector3(levelCenterPoint.x, 0, levelCenterPoint.z);
+        Vector3 offset = planarTarget - planarCenter;
+
+        if (offset.sqrMagnitude > maxDistanceFromCenter * maxDistanceFromCenter)
+        {
+            Vector3 clamped = planarCenter + offset.normalized * maxDistanceFromCenter;
+            return new Vector3(clamped.x, targetPosition.y, clamped.z);
+        }
+
+        return targetPosition;
+    }
+
+    public void SyncTargetPosition(Vector3 position)
+    {
+        targetZoomPosition = position;
+        zoomVelocity = Vector3.zero; 
+    }
+
+    public void SyncCameraRotation(Quaternion rotation)
+    {
+        yaw = rotation.eulerAngles.y;
+        pitch = rotation.eulerAngles.x;
+        if (pitch > 180f)
+        {
+            pitch -= 360f;
+        }
+        transform.rotation = rotation;
+    }
+
+    public void EnableCameraConrolls(bool enable) => canControl = enable;
+    public float AdjustCameraPitchValue(float value) => pitch = value;
+    public void SetShakeOffset(Vector3 offset) => shakeOffset = offset;
     #endregion
 }
