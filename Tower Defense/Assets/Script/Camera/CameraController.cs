@@ -322,5 +322,8 @@ public class CameraController : MonoBehaviour
     public void EnableCameraConrolls(bool enable) => canControl = enable;
     public float AdjustCameraPitchValue(float value) => pitch = value;
     public void SetShakeOffset(Vector3 offset) => shakeOffset = offset;
+
+    public void AdjustKeyboardSensitivity(float value) => moveSpeed = value;
+    public void AdjustMouseSensitivity(float value) => mouseMovementSpeed = value;
     #endregion
 }
