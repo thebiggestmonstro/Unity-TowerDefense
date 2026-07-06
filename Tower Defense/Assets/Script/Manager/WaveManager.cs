@@ -30,7 +30,8 @@ public class WaveManager : MonoBehaviour
 
     private List<GameObject> activeEnemies = new List<GameObject>();
     private float checkInterval = 0.5f;
-    
+    private bool isForcedSkip = false;
+
     public static WaveManager Instance { get; private set; }
     
     private void Awake()
@@ -65,6 +66,8 @@ public class WaveManager : MonoBehaviour
         {
             InitWave(currentWaveIndex);
 
+            UIManager.GetUI<UI_InGame>("UI_InGame").EnableWaveTimerText(false);
+
             while (HasEnemiesLeft() || !AllEnemiesDefeated())
             {
                 yield return new WaitForSeconds(checkInterval);
@@ -78,13 +81,21 @@ public class WaveManager : MonoBehaviour
             }
 
             waveTimer = timeBetweenWaves;
-            while (waveTimer > 0)
+            isForcedSkip = false;
+            UIManager.GetUI<UI_InGame>("UI_InGame").EnableWaveTimerText(true);
+
+            while (waveTimer > 0 && !isForcedSkip)
             {
                 waveTimer -= Time.deltaTime;
+                UIManager.GetUI<UI_InGame>("UI_InGame").UpdateWaveTimerText(waveTimer);
                 yield return null; 
             }
+
+            isForcedSkip = false;
+            UIManager.GetUI<UI_InGame>("UI_InGame").EnableWaveTimerText(false);
         }
 
+        UIManager.GetUI<UI_InGame>("UI_InGame").EnableWaveTimerText(false);
         Debug.Log("Clear!!!");
     }
 
@@ -247,6 +258,14 @@ public class WaveManager : MonoBehaviour
             );
 
             RegisterPortal(createdPortal);
+        }
+    }
+
+    public void ForceStartNextWave()
+    {
+        if (waveTimer > 0)
+        {
+            isForcedSkip = true;
         }
     }
 }

@@ -133,6 +133,19 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         }
     }
 
+    private void Die()
+    {
+        WaveManager.Instance.RemoveActiveEnemy(gameObject);
+        GameManager.Instance.UpdateCurrency(1);
+        Destroy(gameObject);
+    }
+
+    public void DestroyEnemy()
+    {
+        WaveManager.Instance.RemoveActiveEnemy(gameObject);
+        Destroy(gameObject);
+    }
+
     private void CollectTotalDistanceToEndPoint()
     {
         for (int i = 0; i < myWaypoints.Count - 1; i++)
@@ -194,11 +207,5 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         float distanceBetweenPoints = Vector3.Distance(currentWaypoint, nextWaypoint);
 
         return distanceBetweenPoints > distanceToNextWaypoint;
-    }
-
-    private void Die()
-    {
-        WaveManager.Instance.RemoveActiveEnemy(gameObject);
-        Destroy(gameObject);
     }
 }
