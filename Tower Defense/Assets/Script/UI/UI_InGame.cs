@@ -11,10 +11,18 @@ public class UI_InGame : MonoBehaviour
     private TextMeshProUGUI Txt_currency;
     [SerializeField]
     private TextMeshProUGUI Txt_waveTime;
+    [SerializeField]
+    private float waveTimerTxtOffset;
+
+    private UI_Animator uiAnimator;
+    private bool isWaveTimerVisible = false;
+    private Vector3 waveTimerBasePosition;
 
     private void Awake()
     {
         UIManager.RegisterUI(gameObject.name, this);
+        uiAnimator = GetComponentInParent<UI_Animator>();
+        waveTimerBasePosition = Txt_waveTime.transform.parent.GetComponent<RectTransform>().anchoredPosition;
     }
 
     private void OnDestroy()
@@ -39,8 +47,16 @@ public class UI_InGame : MonoBehaviour
     }
 
     public void EnableWaveTimerText(bool enable)
-    { 
-        Txt_waveTime.transform.parent.gameObject.SetActive(enable);
+    {
+        if (isWaveTimerVisible == enable)
+        {
+            return;
+        }
+        isWaveTimerVisible = enable;
+
+        Transform waveTimerTextTransform = Txt_waveTime.transform.parent;
+        Vector3 offset = enable ? new Vector3(0, waveTimerTxtOffset, 0) : Vector3.zero;
+        uiAnimator.ChangePosition(waveTimerTextTransform, waveTimerBasePosition, offset);
     }
 
     public void ForceNextWave()

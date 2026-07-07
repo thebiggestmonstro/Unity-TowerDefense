@@ -4993,6 +4993,7 @@ GameObject:
   - component: {fileID: 1709460044}
   - component: {fileID: 1709460043}
   - component: {fileID: 1709460047}
+  - component: {fileID: 1709460048}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5104,6 +5105,18 @@ MonoBehaviour:
   - {fileID: 1156666205}
   - {fileID: 1952967165}
   - {fileID: 404787656}
+--- !u!114 &1709460048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709460042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea06f224fa9a959428f8fb260252fc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1741647881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13156,7 +13169,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -300}
   m_SizeDelta: {x: 1091.93, y: 240}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!65 &653274310655403295
@@ -36498,6 +36511,7 @@ MonoBehaviour:
   Txt_healhPoints: {fileID: 2266108626370474955}
   Txt_currency: {fileID: 4288394059616996470}
   Txt_waveTime: {fileID: 4528564485945495158}
+  waveTimerTxtOffset: -180
 --- !u!1 &3850453537046417066
 GameObject:
   m_ObjectHideFlags: 0
@@ -53545,6 +53559,7 @@ GameObject:
   - component: {fileID: 649875393129589216}
   - component: {fileID: 3399069379190251979}
   - component: {fileID: 4276706923423245119}
+  - component: {fileID: 6081978106058802342}
   m_Layer: 5
   m_Name: UI_BuildButtonsHolder
   m_TagString: Untagged
@@ -53552,6 +53567,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6081978106058802342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6081978106058802341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3b36c99fecfe6749afeaf28eb54fadf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  yPosOffset: 300
+  isActive: 0
 --- !u!1 &6082734234313715875
 GameObject:
   m_ObjectHideFlags: 0
@@ -59960,7 +59989,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -90}
+  m_AnchoredPosition: {x: 0, y: 110}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!65 &7006821386221928305
