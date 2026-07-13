@@ -13,6 +13,8 @@ public class UI_InGame : MonoBehaviour
     private TextMeshProUGUI Txt_waveTime;
     [SerializeField]
     private float waveTimerTxtOffset;
+    [SerializeField]
+    UI_TextBlink waveTimerTextBlinkEffect;
 
     private UI_Animator uiAnimator;
     private bool isWaveTimerVisible = false;
@@ -57,6 +59,7 @@ public class UI_InGame : MonoBehaviour
         Transform waveTimerTextTransform = Txt_waveTime.transform.parent;
         Vector3 offset = enable ? new Vector3(0, waveTimerTxtOffset, 0) : Vector3.zero;
         uiAnimator.ChangePosition(waveTimerTextTransform, waveTimerBasePosition, offset);
+        waveTimerTextBlinkEffect.EnableBlink(enable);
     }
 
     public void ForceNextWave()
