@@ -5,11 +5,14 @@ public class UI_BuildBtns : MonoBehaviour
 {
     [SerializeField]
     private float yPosOffset;
+    [SerializeField]
+    private float openAnimationDuration = 0.1f;
 
-    public bool isActive;
     private UI_Animator uiAnimator;
     private RectTransform rectTransform;
     private Vector3 buildBtnsBasePosition;
+    private UI_BuildBtnHover[] buildButtons;
+    private bool isBuildMenuActive;
 
     private void Awake()
     {
@@ -19,7 +22,8 @@ public class UI_BuildBtns : MonoBehaviour
 
     private void Start()
     {
-        buildBtnsBasePosition = rectTransform.anchoredPosition; 
+        buildBtnsBasePosition = rectTransform.anchoredPosition;
+        buildButtons = GetComponentsInChildren<UI_BuildBtnHover>();
     }
 
     private void Update()
@@ -32,9 +36,19 @@ public class UI_BuildBtns : MonoBehaviour
 
     void ShowBuildButtons()
     {
-        isActive = !isActive;
-        float yOffset = isActive ? yPosOffset : -yPosOffset;
-        Vector3 offset = new Vector3(0, yOffset);
-        uiAnimator.ChangePosition(transform, buildBtnsBasePosition, offset);
+        isBuildMenuActive = !isBuildMenuActive;
+        float yOffset = isBuildMenuActive ? yPosOffset : -yPosOffset;
+        float methodDelay = isBuildMenuActive ? openAnimationDuration : 0;
+
+        uiAnimator.ChangePosition(transform, buildBtnsBasePosition, new Vector3(0, yOffset), openAnimationDuration);
+        Invoke(nameof(ToggleButtonsMovement), methodDelay);
+    }
+
+    private void ToggleButtonsMovement()
+    {
+        foreach (var button in buildButtons)
+        {
+            button.ToggleCanMove(isBuildMenuActive);
+        }
     }
 }

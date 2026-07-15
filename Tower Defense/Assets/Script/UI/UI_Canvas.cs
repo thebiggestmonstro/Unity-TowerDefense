@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UI_Canvas : MonoBehaviour
@@ -12,6 +13,7 @@ public class UI_Canvas : MonoBehaviour
     private UI_Settings uiSettings;
     private UI_MainMenu uiMainMenu;
     private UI_InGame uiInGame;
+    private UI_Pause uiPause;
     private UI_Animator uiAnimator;
 
     private void Awake()
@@ -19,13 +21,14 @@ public class UI_Canvas : MonoBehaviour
         uiMainMenu = GetComponentInChildren<UI_MainMenu>(true);
         uiSettings = GetComponentInChildren<UI_Settings>(true);
         uiInGame = GetComponentInChildren<UI_InGame>(true);
+        uiPause = GetComponentInChildren<UI_Pause>(true);
         uiAnimator = GetComponent<UI_Animator>();
 
         ActivateUIFade(true);
 
         SwitchUI(uiSettings.gameObject);
+        SwitchUI(uiPause.gameObject);
         SwitchUI(uiInGame.gameObject);
-        SwitchUI(uiMainMenu.gameObject);
     }
 
     public void SwitchUI(GameObject uiToEnable)

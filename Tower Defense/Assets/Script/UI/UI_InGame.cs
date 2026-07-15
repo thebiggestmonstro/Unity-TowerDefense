@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UI_InGame : MonoBehaviour
@@ -20,16 +21,33 @@ public class UI_InGame : MonoBehaviour
     private bool isWaveTimerVisible = false;
     private Vector3 waveTimerBasePosition;
 
+    private UI_Canvas uiCanvas;
+    private UI_Pause uiPause;
+
     private void Awake()
     {
         UIManager.RegisterUI(gameObject.name, this);
         uiAnimator = GetComponentInParent<UI_Animator>();
+        uiCanvas = GetComponentInParent<UI_Canvas>();
         waveTimerBasePosition = Txt_waveTime.transform.parent.GetComponent<RectTransform>().anchoredPosition;
+    }
+
+    private void Start()
+    {
+        uiPause = UIManager.GetUI<UI_Pause>("UI_Pause");
     }
 
     private void OnDestroy()
     {
         UIManager.UnregisterUI<UI_InGame>(gameObject.name);
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current[Key.Escape].wasPressedThisFrame)
+        {
+            uiCanvas.SwitchUI(uiPause.gameObject);
+        }
     }
 
     public void UpdateHealthPointsText(int value, int maxValue)

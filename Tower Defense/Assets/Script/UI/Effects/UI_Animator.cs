@@ -73,7 +73,7 @@ public class UI_Animator : MonoBehaviour
         while (time < duration)
         {
             rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, time / duration);
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             yield return null;
         }
 
