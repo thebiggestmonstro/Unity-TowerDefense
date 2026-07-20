@@ -26,6 +26,14 @@ public class TileSlot : MonoBehaviour
     }
 #endif
 
+    private void Start()
+    {
+        if (gameObject.TryGetComponent<BuildTileSlot>(out BuildTileSlot buildTileSlot))
+        {
+            buildTileSlot.InitTileAnimator(TileAnimator.Instance);
+        }
+    }
+
     public void SwitchTile(GameObject referencedTile)
     {
         TileSlot newTilePrefab = referencedTile.GetComponent<TileSlot>();
@@ -73,6 +81,8 @@ public class TileSlot : MonoBehaviour
         UpdateTileLayer(referencedTile);
 
         UpdateNavMeshSurface();
+
+        ChangeToBuildTileSlot(referencedTile);
 
 #if UNITY_EDITOR
         Undo.CollapseUndoOperations(undoGroupIndex);
@@ -205,6 +215,51 @@ public class TileSlot : MonoBehaviour
     private MeshFilter GetMeshFilter => GetComponent<MeshFilter>();
     private Collider GetTileCollider => GetComponent<Collider>();
     private NavMeshSurface GetTileNavMeshSurface => GetComponentInParent<NavMeshSurface>();
+    private TileSetHolder GetTileSetHolder => GetComponentInParent<TileSetHolder>();
+
+    private void ChangeToBuildTileSlot(GameObject selectedTile)
+    {
+        BuildTileSlot buildSlot = GetComponent<BuildTileSlot>();
+
+        if (selectedTile != GetTileSetHolder.tileField)
+        {
+            if (buildSlot != null)
+            {
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Undo.DestroyObjectImmediate(buildSlot);
+                    return;
+                }
+#endif
+                Destroy(buildSlot);
+            }
+        }
+        else
+        {
+            if (buildSlot == null)
+            {
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    buildSlot = Undo.AddComponent<BuildTileSlot>(gameObject);
+                }
+                else
+#endif
+                {
+                    buildSlot = gameObject.AddComponent<BuildTileSlot>();
+                }
+            }
+
+            if (buildSlot != null && Application.isPlaying)
+            {
+                if (TileAnimator.Instance != null)
+                {
+                    buildSlot.InitTileAnimator(TileAnimator.Instance);
+                }
+            }
+        }
+    }
 
     public void UpdateTileLayer(GameObject referencedObject)
     {
