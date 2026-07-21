@@ -26,17 +26,9 @@ public class UI_BuildBtns : MonoBehaviour
         buildButtons = GetComponentsInChildren<UI_BuildBtnHover>();
     }
 
-    private void Update()
+    public void ShowBuildButtons(bool showButtons)
     {
-        if (Keyboard.current[Key.B].wasPressedThisFrame)
-        {
-            ShowBuildButtons();
-        }
-    }
-
-    void ShowBuildButtons()
-    {
-        isBuildMenuActive = !isBuildMenuActive;
+        isBuildMenuActive = showButtons;
         float yOffset = isBuildMenuActive ? yPosOffset : -yPosOffset;
         float methodDelay = isBuildMenuActive ? openAnimationDuration : 0;
 

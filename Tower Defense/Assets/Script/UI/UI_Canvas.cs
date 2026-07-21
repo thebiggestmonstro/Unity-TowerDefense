@@ -16,12 +16,15 @@ public class UI_Canvas : MonoBehaviour
     private UI_Pause uiPause;
     private UI_Animator uiAnimator;
 
+    public UI_BuildBtns uiBuildBtns { get; private set; }
+
     private void Awake()
     {
         uiMainMenu = GetComponentInChildren<UI_MainMenu>(true);
         uiSettings = GetComponentInChildren<UI_Settings>(true);
         uiInGame = GetComponentInChildren<UI_InGame>(true);
         uiPause = GetComponentInChildren<UI_Pause>(true);
+        uiBuildBtns = GetComponentInChildren<UI_BuildBtns>(true);
         uiAnimator = GetComponent<UI_Animator>();
 
         ActivateUIFade(true);

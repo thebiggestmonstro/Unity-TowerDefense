@@ -44,7 +44,7 @@ public class UI_InGame : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current[Key.Escape].wasPressedThisFrame)
+        if (Keyboard.current[Key.F10].wasPressedThisFrame)
         {
             uiCanvas.SwitchUI(uiPause.gameObject);
         }

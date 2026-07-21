@@ -26,14 +26,22 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
         }
 
+        if (BuildManager.Instance.GetSelectedBuildTile() == this)
+        {
+            return;
+        }
+
         BuildManager.Instance.SetSelectedBuildTile(this);
+        BuildManager.Instance.EnableBuildMenu();
+
+        CancelInvoke(nameof(MoveTileDown));
         MoveTileUp();
         bCanMove = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (Mouse.current.leftButton.isPressed || Mouse.current.rightButton.isPressed)
+        if (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame)
         {
             return;
         }
@@ -43,6 +51,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
         }
 
+        CancelInvoke(nameof(MoveTileDown));
         MoveTileUp();
     }
 
@@ -53,7 +62,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
         }
 
-        if (currentMoveUpCoroutine != null)
+        if(currentMoveUpCoroutine != null)
         {
             Invoke(nameof(MoveTileDown), TileAnimator.Instance.GetMovementDurtaion());
         }
@@ -73,11 +82,20 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         Vector3 targetPosition = transform.position + new Vector3(0, tileAnimator.GetBuildTileOffset(), 0);
         tileAnimator.MoveTile(transform, targetPosition);
-        currentMoveUpCoroutine = tileAnimator.activeMoveTileCoroutines[transform];
+        currentMoveUpCoroutine = tileAnimator.GetActiveTileMovementCoroutine(transform);
     }
 
     private void MoveTileDown()
     {
         tileAnimator.MoveTile(transform, defaultPosition);
     }
+
+    public void MoveTileDownImmediate()
+    {
+        CancelInvoke(nameof(MoveTileDown));
+        tileAnimator.StopTileMovement(transform);
+        transform.position = defaultPosition;
+    }
+
+    public Vector3 GetBuildPosition(float yOffset) => defaultPosition + new Vector3(0, yOffset);
 }

@@ -10,9 +10,7 @@ public class TileAnimator : MonoBehaviour
     private float buildTileSlotYOffset = 0.25f;
 
     public static TileAnimator Instance { get; private set; }
-    public Dictionary<Transform, Coroutine> activeMoveTileCoroutines = new Dictionary<Transform, Coroutine>();
-
-    public Transform targetTile;
+    private Dictionary<Transform, Coroutine> activeMoveTileCoroutines = new Dictionary<Transform, Coroutine>();
 
     private void Awake()
     {
@@ -26,15 +24,14 @@ public class TileAnimator : MonoBehaviour
         }
     }
 
-    [ContextMenu("Move Tile")]
-    public void TestMoveTile()
+    public void MoveTile(Transform tileToMove, Vector3 targetPosition)
     {
-        Vector3 targetPosition = targetTile.position + new Vector3(0, 0.25f);
-        MoveTile(targetTile, targetPosition);
+        StopTileMovement(tileToMove);
+        Coroutine newCoroutine = StartCoroutine(CoMoveTile(tileToMove, targetPosition));
+        activeMoveTileCoroutines[tileToMove] = newCoroutine;
     }
 
-
-    public void MoveTile(Transform tileToMove, Vector3 targetPosition)
+    public void StopTileMovement(Transform tileToMove)
     {
         if (activeMoveTileCoroutines.TryGetValue(tileToMove, out Coroutine runningCoroutine))
         {
@@ -44,11 +41,7 @@ public class TileAnimator : MonoBehaviour
             }
             activeMoveTileCoroutines.Remove(tileToMove);
         }
-
-        Coroutine newCoroutine = StartCoroutine(CoMoveTile(tileToMove, targetPosition));
-        activeMoveTileCoroutines[tileToMove] = newCoroutine;
     }
-
 
     private IEnumerator CoMoveTile(Transform tileToMove, Vector3 targetPosition)
     {
@@ -72,4 +65,6 @@ public class TileAnimator : MonoBehaviour
 
     public float GetBuildTileOffset() => buildTileSlotYOffset;
     public float GetMovementDurtaion() => yMovementDuration;
+
+    public Coroutine GetActiveTileMovementCoroutine(Transform transform) => activeMoveTileCoroutines[transform] != null ? activeMoveTileCoroutines[transform] : null;
 }

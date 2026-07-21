@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [Header("Currency")]
     [SerializeField]
-    private int currency;
+    private int currency = 100;
 
     public static GameManager Instance { get; private set; }
 
@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
         currentHp = maxHp;
         UIManager.GetUI<UI_InGame>("UI_InGame").UpdateHealthPointsText(currentHp, maxHp);
 
-        currency = 10;
         UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
     }
 
@@ -47,5 +46,17 @@ public class GameManager : MonoBehaviour
     {
         currency += value;
         UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
+    }
+
+    public bool CheckEnoughCurrency(int price)
+    {
+        if (price <= currency)
+        { 
+            currency -= price;
+            UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
+            return true;
+        }
+
+        return false;
     }
 }

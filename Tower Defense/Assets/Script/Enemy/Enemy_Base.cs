@@ -136,7 +136,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private void Die()
     {
         WaveManager.Instance.RemoveActiveEnemy(gameObject);
-        GameManager.Instance.UpdateCurrency(1);
+        GameManager.Instance.UpdateCurrency(100);
         Destroy(gameObject);
     }
 
