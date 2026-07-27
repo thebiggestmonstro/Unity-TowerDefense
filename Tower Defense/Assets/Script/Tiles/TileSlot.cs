@@ -1,7 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.AI.Navigation;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,10 +26,14 @@ public class TileSlot : MonoBehaviour
     }
 #endif
 
-    private void Start()
+    private IEnumerator Start()
     {
         if (gameObject.TryGetComponent<BuildTileSlot>(out BuildTileSlot buildTileSlot))
         {
+            while (TileAnimator.Instance == null)
+            {
+                yield return null;
+            }
             buildTileSlot.InitTileAnimator(TileAnimator.Instance);
         }
     }

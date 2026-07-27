@@ -30,6 +30,7 @@ public class UI_BuildBtn : MonoBehaviour
         BuildTileSlot selectedTileSlot = BuildManager.Instance.GetSelectedBuildTile();
         BuildManager.Instance.CancleBuildUnit();
         selectedTileSlot.MoveTileDownImmediate();
+        selectedTileSlot.SetBuildTileAvailability(false);
         camEffect.Screenshake(0.15f, 0.02f);
 
         GameObject newTower = Instantiate(towerToBuild, selectedTileSlot.GetBuildPosition(towerCenterY), Quaternion.identity);

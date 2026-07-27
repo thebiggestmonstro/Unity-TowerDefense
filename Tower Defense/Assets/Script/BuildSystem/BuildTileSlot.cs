@@ -7,11 +7,29 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private TileAnimator tileAnimator;
     private Vector3 defaultPosition;
     private bool bCanMove = true;
+    private bool bBuildTileAvailable = true;
     private Coroutine currentMoveUpCoroutine;
+    private MeshRenderer meshRenderer;
+    private Material material;
+    private Collider buildTileCollider;
 
     private void Awake()
     {
         defaultPosition = transform.position;
+        meshRenderer = GetComponent<MeshRenderer>();
+        buildTileCollider = GetComponent<Collider>();
+    }
+
+    private void Start()
+    {
+        if (!bBuildTileAvailable)
+        {
+            transform.position += new Vector3(0, 0.1f);
+            material = meshRenderer.material;
+            material.color = Color.red;
+            meshRenderer.material = material;
+            buildTileCollider.enabled = bBuildTileAvailable;
+        }
     }
 
     public void InitTileAnimator(TileAnimator tileAnim)
@@ -21,6 +39,11 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!bBuildTileAvailable)
+        {
+            return;
+        }
+
         if (eventData.button != PointerEventData.InputButton.Left)
         {
             return;
@@ -41,7 +64,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame)
+        if (!bBuildTileAvailable)
         {
             return;
         }
@@ -57,6 +80,11 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!bBuildTileAvailable)
+        {
+            return;
+        }
+
         if (!bCanMove)
         {
             return;
@@ -80,22 +108,24 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void MoveTileUp()
     {
-        Vector3 targetPosition = transform.position + new Vector3(0, tileAnimator.GetBuildTileOffset(), 0);
-        tileAnimator.MoveTile(transform, targetPosition);
-        currentMoveUpCoroutine = tileAnimator.GetActiveTileMovementCoroutine(transform);
+        Vector3 targetPosition = transform.position + new Vector3(0, TileAnimator.Instance.GetBuildTileOffset(), 0);
+        TileAnimator.Instance.MoveTile(transform, targetPosition);
+        currentMoveUpCoroutine = TileAnimator.Instance.GetActiveTileMovementCoroutine(transform);
     }
 
     private void MoveTileDown()
     {
-        tileAnimator.MoveTile(transform, defaultPosition);
+        TileAnimator.Instance.MoveTile(transform, defaultPosition);
     }
 
     public void MoveTileDownImmediate()
     {
         CancelInvoke(nameof(MoveTileDown));
-        tileAnimator.StopTileMovement(transform);
+        TileAnimator.Instance.StopTileMovement(transform);
         transform.position = defaultPosition;
     }
 
     public Vector3 GetBuildPosition(float yOffset) => defaultPosition + new Vector3(0, yOffset);
+
+    public void SetBuildTileAvailability(bool bValue) => bBuildTileAvailable = bValue;
 }

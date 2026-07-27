@@ -160,4 +160,6 @@ public class GridBuilder : MonoBehaviour
 
     private NavMeshSurface GetNavMeshSurface => GetComponent<NavMeshSurface>();
     public NavMeshSurface GetNavMesh() => myNavMesh;
+
+    public List<GameObject> GetCreatedTiles() => createdTiles;
 }

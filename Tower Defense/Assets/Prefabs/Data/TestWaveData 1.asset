@@ -17,5 +17,5 @@ MonoBehaviour:
     spawnCount: 4
   - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
     spawnCount: 0
-  nextGrid: {fileID: 0}
+  currentWaveGrid: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
   newPortals: []

@@ -47,16 +47,24 @@ public class TileAnimator : MonoBehaviour
     {
         float time = 0;
         Vector3 startPosition = tileToMove.position;
-
         while (time < yMovementDuration)
-        { 
+        {
+            if (tileToMove == null)
+            {
+                yield break;
+            }
+
             tileToMove.position = Vector3.Lerp(startPosition, targetPosition, time / yMovementDuration);
             time += Time.deltaTime;
             yield return null;
         }
 
-        tileToMove.position = targetPosition;
+        if (tileToMove == null)
+        {
+            yield break;
+        }
 
+        tileToMove.position = targetPosition;
         if (activeMoveTileCoroutines.ContainsKey(tileToMove))
         {
             activeMoveTileCoroutines.Remove(tileToMove);

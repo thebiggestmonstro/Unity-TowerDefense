@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +9,8 @@ public class BuildManager : MonoBehaviour
     private UI_Canvas uiCanvas;
     [SerializeField]
     private Camera mainCamera;
+
+    public GridBuilder currentGrid;
 
     public static BuildManager Instance { get; private set; }
     private BuildTileSlot selectedBuildTile;
@@ -21,6 +25,11 @@ public class BuildManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        MakeBuildTileAvaliablityFalse(currentGrid);
     }
 
     private void Update()
@@ -80,4 +89,42 @@ public class BuildManager : MonoBehaviour
     }
 
     public BuildTileSlot GetSelectedBuildTile() => selectedBuildTile;
+
+    public void MakeBuildTileAvaliablityFalse(GridBuilder currentGrid)
+    {
+        WaveData nextWave = WaveManager.Instance.GetNextWaveData();
+        if (nextWave == null || nextWave.currentWaveGrid == null)
+        {
+            return;
+        }
+
+        List<GameObject> grid = currentGrid.GetCreatedTiles();
+        List<GameObject> nextGrid = nextWave.currentWaveGrid.GetCreatedTiles();
+        if (grid == null || nextGrid == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < grid.Count; i++)
+        {
+            TileSlot currentTile = grid[i].GetComponent<TileSlot>();
+            TileSlot nextTile = nextGrid[i].GetComponent<TileSlot>();
+
+            bool tileNotSame = currentTile.GetMesh() != nextTile.GetMesh() ||
+                               currentTile.GetMaterial() != nextTile.GetMaterial() ||
+                               currentTile.GetAllChildren().Count != nextTile.GetAllChildren().Count;
+
+            if (tileNotSame == false)
+            {
+                continue;
+            }
+
+            BuildTileSlot buildTileSlot = grid[i].GetComponent<BuildTileSlot>();
+
+            if (buildTileSlot != null)
+            {
+                buildTileSlot.SetBuildTileAvailability(false);
+            }
+        }
+    }
 }

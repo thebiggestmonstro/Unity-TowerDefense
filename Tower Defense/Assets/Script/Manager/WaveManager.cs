@@ -215,9 +215,10 @@ public class WaveManager : MonoBehaviour
 
         if (nextWave)
         {
-            UpdateLevelGrid(nextWave.nextGrid);
+            UpdateLevelGrid(nextWave.currentWaveGrid);
             UpdateLevelPortals(nextWave.newPortals);
             currentGrid.GetNavMesh()?.BuildNavMesh();
+            BuildManager.Instance.MakeBuildTileAvaliablityFalse(currentGrid);
         }
     }
 
@@ -235,8 +236,10 @@ public class WaveManager : MonoBehaviour
 
         GridBuilder newGridInstance = Instantiate(nextGridPrefab, Vector3.zero, Quaternion.identity);
         currentGrid = newGridInstance;
+        BuildManager.Instance.currentGrid = currentGrid;
+        BuildManager.Instance.MakeBuildTileAvaliablityFalse(currentGrid);
     }
-
+    
     private void UpdateLevelPortals(Enemy_Portal[] portalPrefabs)
     {
         if (portalPrefabs == null || portalPrefabs.Length <= 0)
@@ -267,5 +270,21 @@ public class WaveManager : MonoBehaviour
         {
             isForcedSkip = true;
         }
+    }
+
+    public WaveData GetCurrentWaveData()
+    {
+        return allWaves[currentWaveIndex];
+    }
+
+    public WaveData GetNextWaveData()
+    {
+        int nextIndex = currentWaveIndex + 1;
+        if (nextIndex >= allWaves.Count)
+        {
+            return null; 
+        }
+
+        return allWaves[nextIndex];
     }
 }
