@@ -6,9 +6,25 @@ using UnityEngine.UI;
 
 public class UI_Animator : MonoBehaviour
 {
+    [Header("UI Feedback - Shake Effect")]
+    [SerializeField]
+    private float uiShakeMagnitude;
+    [SerializeField]
+    private float uiShakeDuration;
+    [SerializeField] 
+    private float shakeRotationMagnitude;
+
+    [Space]
+    [Header("UI Feedback - Scale Effect")]
+    [SerializeField] 
+    private float defaultUIScale = 1.5f;
+    [SerializeField] 
+    private bool bScaleChange;
+
     private Dictionary<RectTransform, Coroutine> activeMoveUICoroutines = new Dictionary<RectTransform, Coroutine>();
     private Dictionary<RectTransform, Coroutine> activeScaleUICoroutines = new Dictionary<RectTransform, Coroutine>();
     private Dictionary<Image, Coroutine> activeFadeUICoroutines = new Dictionary<Image, Coroutine>();
+    private Dictionary<RectTransform, Coroutine> activeShakeUICoroutines = new Dictionary<RectTransform, Coroutine>();
 
     public void ChangePosition(Transform transform, Vector3 basePosition, Vector3 offset, float duration = .1f)
     {
@@ -119,6 +135,61 @@ public class UI_Animator : MonoBehaviour
         if (activeFadeUICoroutines.ContainsKey(image))
         {
             activeFadeUICoroutines.Remove(image);
+        }
+    }
+
+    public void ShakeUI(Transform transform)
+    {
+        RectTransform rectTransform = transform.GetComponent<RectTransform>();
+
+        if (activeShakeUICoroutines.TryGetValue(rectTransform, out Coroutine runningCoroutine))
+        {
+            if (runningCoroutine != null)
+            {
+                StopCoroutine(runningCoroutine);
+            }
+            activeShakeUICoroutines.Remove(rectTransform);
+        }
+
+        Coroutine newCoroutine = StartCoroutine(CoShakeUI(rectTransform));
+        activeShakeUICoroutines[rectTransform] = newCoroutine;
+    }
+
+    private IEnumerator CoShakeUI(RectTransform rectTransform)
+    {
+        float time = 0;
+        Vector3 originalPos = rectTransform.anchoredPosition;
+        float currentScale = rectTransform.localScale.x;
+
+        if (bScaleChange)
+        {
+            ChangeScale(rectTransform, defaultUIScale * 1.1f, uiShakeDuration / 2);
+        }
+
+        while (time < uiShakeDuration)
+        {
+            float xOffset = Random.Range(-uiShakeMagnitude, uiShakeMagnitude);
+            float yOffset = Random.Range(-uiShakeMagnitude, uiShakeMagnitude);
+            float randomRotation = Random.Range(-shakeRotationMagnitude, shakeRotationMagnitude);
+
+            rectTransform.anchoredPosition = originalPos + new Vector3(xOffset, yOffset);
+            rectTransform.localRotation = Quaternion.Euler(0, 0, randomRotation);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        rectTransform.anchoredPosition = originalPos;
+        rectTransform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        if (bScaleChange)
+        {
+            ChangeScale(rectTransform, defaultUIScale, uiShakeDuration / 2);
+        }
+
+        if (activeShakeUICoroutines.ContainsKey(rectTransform))
+        {
+            activeShakeUICoroutines.Remove(rectTransform);
         }
     }
 }

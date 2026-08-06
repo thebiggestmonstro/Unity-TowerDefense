@@ -84,4 +84,14 @@ public class UI_InGame : MonoBehaviour
     {
         WaveManager.Instance.ForceStartNextWave();
     }
+
+    public void ShakeCurrencyUI()
+    {
+        uiCanvas.GetUIAnimator().ShakeUI(Txt_currency.transform.parent);
+    }
+
+    public void ShakeHealthPointUI()
+    {
+        uiCanvas.GetUIAnimator().ShakeUI(Txt_healhPoints.transform.parent);
+    }
 }

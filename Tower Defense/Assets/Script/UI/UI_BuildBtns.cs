@@ -11,19 +11,18 @@ public class UI_BuildBtns : MonoBehaviour
     private UI_Animator uiAnimator;
     private RectTransform rectTransform;
     private Vector3 buildBtnsBasePosition;
-    private UI_BuildBtnHover[] buildButtons;
+    private UI_BuildBtnHover[] buildButtonsEffects;
+    private UI_BuildBtn[] buildButtons;
     private bool isBuildMenuActive;
 
     private void Awake()
     {
         uiAnimator = GetComponentInParent<UI_Animator>();
         rectTransform = GetComponent<RectTransform>();
-    }
 
-    private void Start()
-    {
         buildBtnsBasePosition = rectTransform.anchoredPosition;
-        buildButtons = GetComponentsInChildren<UI_BuildBtnHover>();
+        buildButtonsEffects = GetComponentsInChildren<UI_BuildBtnHover>();
+        buildButtons = GetComponentsInChildren<UI_BuildBtn>();
     }
 
     public void ShowBuildButtons(bool showButtons)
@@ -38,9 +37,11 @@ public class UI_BuildBtns : MonoBehaviour
 
     private void ToggleButtonsMovement()
     {
-        foreach (var button in buildButtons)
+        foreach (var button in buildButtonsEffects)
         {
             button.ToggleCanMove(isBuildMenuActive);
         }
     }
+
+    public UI_BuildBtn[] GetBuildButtons() => buildButtons;
 }

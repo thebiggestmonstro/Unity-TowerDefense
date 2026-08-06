@@ -70,4 +70,6 @@ public class UI_Canvas : MonoBehaviour
             uiAnimator.FadeImage(fadeImageUI, 1, 2);
         }
     }
+
+    public UI_Animator GetUIAnimator() => uiAnimator;
 }

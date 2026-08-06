@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class UI_BuildBtn : MonoBehaviour
@@ -6,6 +7,14 @@ public class UI_BuildBtn : MonoBehaviour
     private GameObject towerToBuild;
     [SerializeField]
     private int costToBuild = 50;
+    [SerializeField]
+    private string unitName;
+
+    [Space]
+    [SerializeField]
+    private TextMeshProUGUI unitNameText;
+    [SerializeField]
+    private TextMeshProUGUI unitCostText;
 
     [Space]
     [SerializeField]
@@ -14,6 +23,12 @@ public class UI_BuildBtn : MonoBehaviour
     private float towerCenterY = 0.5f;
 
     private CameraEffect camEffect;
+    private UI_Canvas uiCanvas;
+
+    private void Awake()
+    {
+        uiCanvas = GetComponentInParent<UI_Canvas>();
+    }
 
     private void Start()
     {
@@ -24,6 +39,7 @@ public class UI_BuildBtn : MonoBehaviour
     {
         if (towerToBuild == null || !GameManager.Instance.CheckEnoughCurrency(costToBuild))
         {
+            UIManager.GetUI<UI_InGame>("UI_InGame").ShakeCurrencyUI();
             return;
         }
 
@@ -34,5 +50,22 @@ public class UI_BuildBtn : MonoBehaviour
         camEffect.Screenshake(0.15f, 0.02f);
 
         GameObject newTower = Instantiate(towerToBuild, selectedTileSlot.GetBuildPosition(towerCenterY), Quaternion.identity);
+    }
+
+    private void OnValidate()
+    {
+        unitNameText.text = unitName;
+        unitCostText.text = costToBuild.ToString();
+        gameObject.name = "UI_BuildBtn - " + unitName;
+    }
+
+    public void UnlockUnit(string unitNameToUnlock, bool unlockStatus)
+    {
+        if (unitName != unitNameToUnlock)
+        {
+            return;
+        }
+
+        gameObject.SetActive(unlockStatus);
     }
 }
