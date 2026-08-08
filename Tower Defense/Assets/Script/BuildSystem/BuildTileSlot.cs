@@ -12,6 +12,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private MeshRenderer meshRenderer;
     private Material material;
     private Collider buildTileCollider;
+    private UI_Canvas uiCanvas;
 
     private void Awake()
     {
@@ -22,6 +23,8 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void Start()
     {
+        uiCanvas = UIManager.GetUI<UI_Canvas>("Canvas");
+
         if (!bBuildTileAvailable)
         {
             transform.position += new Vector3(0, 0.1f);
@@ -60,6 +63,8 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         CancelInvoke(nameof(MoveTileDown));
         MoveTileUp();
         bCanMove = false;
+
+        uiCanvas.uiBuildBtns.GetLastSelectedButton()?.SelectButton(true);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

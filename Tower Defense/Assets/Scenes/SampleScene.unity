@@ -6674,6 +6674,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiCanvas: {fileID: 1709460047}
   mainCamera: {fileID: 330585545}
+  attackRadiusMaterial: {fileID: 2100000, guid: 94e40ea73cd084745b97cbc3250812da, type: 2}
+  buildPreviewMaterial: {fileID: 2100000, guid: a4a1ee1c3aecade42895b1fb329bee59, type: 2}
   currentGrid: {fileID: 237842232697642186}
 --- !u!4 &1857048536
 Transform:

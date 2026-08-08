@@ -62,5 +62,7 @@ public class LevelManager : MonoBehaviour
                 buildBtn.UnlockUnit(unitData.unitName, unitData.bUnlocked);
             }
         }
+
+        uiCanvas.uiBuildBtns.UpdateUnlockedButtons();
     }
 }

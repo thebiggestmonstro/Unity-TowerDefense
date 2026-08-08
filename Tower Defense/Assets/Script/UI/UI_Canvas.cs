@@ -20,6 +20,8 @@ public class UI_Canvas : MonoBehaviour
 
     private void Awake()
     {
+        UIManager.RegisterUI<UI_Canvas>(gameObject.name, this);
+
         uiMainMenu = GetComponentInChildren<UI_MainMenu>(true);
         uiSettings = GetComponentInChildren<UI_Settings>(true);
         uiInGame = GetComponentInChildren<UI_InGame>(true);

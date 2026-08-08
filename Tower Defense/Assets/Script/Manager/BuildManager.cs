@@ -10,6 +10,12 @@ public class BuildManager : MonoBehaviour
     [SerializeField]
     private Camera mainCamera;
 
+    [Space]
+    [SerializeField]
+    private Material attackRadiusMaterial;
+    [SerializeField] 
+    private Material buildPreviewMaterial;
+
     public GridBuilder currentGrid;
 
     public static BuildManager Instance { get; private set; }
@@ -57,7 +63,8 @@ public class BuildManager : MonoBehaviour
         { 
             return; 
         }
-        
+
+        uiCanvas.uiBuildBtns.GetLastSelectedButton().SelectButton(false);
         selectedBuildTile.UnSelectTile();
         selectedBuildTile = null;
         DisableBuildMenu();
@@ -127,4 +134,7 @@ public class BuildManager : MonoBehaviour
             }
         }
     }
+
+    public Material GetAttackRadiusMaterial() => attackRadiusMaterial;
+    public Material GetBuildPreviewMaterial() => buildPreviewMaterial;
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,8 @@ public class UI_BuildBtns : MonoBehaviour
     private UI_BuildBtnHover[] buildButtonsEffects;
     private UI_BuildBtn[] buildButtons;
     private bool isBuildMenuActive;
+    private List<UI_BuildBtn> unlockedButtons;
+    private UI_BuildBtn lastSelectedButton;
 
     private void Awake()
     {
@@ -44,4 +47,21 @@ public class UI_BuildBtns : MonoBehaviour
     }
 
     public UI_BuildBtn[] GetBuildButtons() => buildButtons;
+
+    public void UpdateUnlockedButtons()
+    {
+        unlockedButtons = new List<UI_BuildBtn>();
+
+        foreach (var button in buildButtons)
+        {
+            if (button.bButtonUnlocked)
+            {
+                unlockedButtons.Add(button);
+            }
+        }
+    }
+
+    public List<UI_BuildBtn> GetUnlockedButtons() => unlockedButtons;
+    public UI_BuildBtn GetLastSelectedButton() => lastSelectedButton;
+    public void SetLastSelected(UI_BuildBtn newLastSelected) => lastSelectedButton = newLastSelected;
 }

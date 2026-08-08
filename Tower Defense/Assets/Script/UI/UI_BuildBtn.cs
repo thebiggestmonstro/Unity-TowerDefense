@@ -1,7 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UI_BuildBtn : MonoBehaviour
+public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private GameObject towerToBuild;
@@ -24,15 +25,22 @@ public class UI_BuildBtn : MonoBehaviour
 
     private CameraEffect camEffect;
     private UI_Canvas uiCanvas;
+    private VisualEffect_UnitPreview unitPreview;
+    public bool bButtonUnlocked { get; private set; }
+    private UI_BuildBtnHover onButtonHoverEffect;
+    private UI_BuildBtns buildButtonsHolder;
 
     private void Awake()
     {
         uiCanvas = GetComponentInParent<UI_Canvas>();
+        camEffect = mainCamera.GetComponent<CameraEffect>();
+        onButtonHoverEffect = GetComponent<UI_BuildBtnHover>();
+        buildButtonsHolder = GetComponentInParent<UI_BuildBtns>();
     }
 
     private void Start()
     {
-        camEffect = mainCamera.GetComponent<CameraEffect>();
+        CreateUnitPreview();
     }
 
     public void BuildTower()
@@ -67,5 +75,56 @@ public class UI_BuildBtn : MonoBehaviour
         }
 
         gameObject.SetActive(unlockStatus);
+    }
+
+    private void CreateUnitPreview()
+    {
+        GameObject newPreview = Instantiate(towerToBuild, Vector3.zero, Quaternion.identity);
+        unitPreview = newPreview.AddComponent<VisualEffect_UnitPreview>();
+        unitPreview.gameObject.SetActive(false);
+    }
+
+    public void SelectButton(bool bIsSelected)
+    {
+        if (unitPreview == null)
+        {
+            if (bIsSelected)
+            {
+                CreateUnitPreview(); 
+            }
+
+            if (unitPreview == null)
+            {
+                return;
+            }
+        }
+
+        BuildTileSlot slotToUse = BuildManager.Instance.GetSelectedBuildTile();
+
+        if (slotToUse == null)
+        {
+            return;
+        }
+
+        Vector3 previewPosition = slotToUse.GetBuildPosition(1);
+        unitPreview.gameObject.SetActive(bIsSelected);
+        unitPreview.ShowPreview(bIsSelected, previewPosition);
+        onButtonHoverEffect.ShowButton(bIsSelected);
+        buildButtonsHolder.SetLastSelected(this);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        foreach (var button in buildButtonsHolder.GetBuildButtons())
+        {
+            button.SelectButton(false);
+        }
+
+        SelectButton(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+
     }
 }

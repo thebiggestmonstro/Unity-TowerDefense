@@ -196,4 +196,6 @@ public class Player_TowerBase : MonoBehaviour
             currentEnemy = FindEnemyWithinRange();
         }
     }
+
+    public float GetAttackRange() => attackRange;
 }

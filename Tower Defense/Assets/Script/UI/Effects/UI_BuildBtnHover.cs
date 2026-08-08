@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_BuildBtnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UI_BuildBtnHover : MonoBehaviour
 {
     [SerializeField]
     private float adjustSpeed = 10.0f;
@@ -24,12 +24,12 @@ public class UI_BuildBtnHover : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     private void SetTargetY(float newY) => targetY = newY;
 
-    public void ToggleCanMove(bool bCanMove)
+    public void ToggleCanMove(bool bButtonsMenuctive)
     {
-        canMove = bCanMove;
+        canMove = bButtonsMenuctive;
         SetTargetY(defaultY);
 
-        if (!bCanMove)
+        if (!bButtonsMenuctive)
         {
             SetDefaultPosition();
         }
@@ -40,7 +40,15 @@ public class UI_BuildBtnHover : MonoBehaviour, IPointerEnterHandler, IPointerExi
         transform.position = new Vector3(transform.position.x, defaultY, transform.position.z);
     }
 
-    public void OnPointerEnter(PointerEventData eventData) => SetTargetY(showcaseY);
-
-    public void OnPointerExit(PointerEventData eventData) => SetTargetY(defaultY);
+    public void ShowButton(bool bShowcase)
+    {
+        if (bShowcase)
+        {
+            SetTargetY(showcaseY);
+        }
+        else
+        {
+            SetTargetY(defaultY);
+        }
+    }
 }
