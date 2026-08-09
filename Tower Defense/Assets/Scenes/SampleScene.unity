@@ -1401,51 +1401,15 @@ MonoBehaviour:
     m_ActionId: c143b2df-2816-4eb7-8835-37a2e1b010d4
     m_ActionName: 'Camera/Rotate[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 330585550}
-        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
-        m_MethodName: OnSwitchToMenuView
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: c90bc477-94e8-4b8a-85cd-eac118fb8b12
     m_ActionName: 'Camera/OpenMenu[/Keyboard/1]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 330585550}
-        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
-        m_MethodName: OnSwitchToGameView
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 361bd340-1563-4e2b-a012-55565dcb82dc
     m_ActionName: 'Camera/OpenGame[/Keyboard/2]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 330585550}
-        m_TargetAssemblyTypeName: CameraEffect, Assembly-CSharp
-        m_MethodName: OnScreenshake
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: df8e9fd8-408e-4e32-99c6-15b0ab6c3d21
     m_ActionName: 'Camera/TestShake[/Keyboard/v]'
   m_NeverAutoSwitchControlSchemes: 0
@@ -15958,7 +15922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7250a04efe283847b918484e2c5c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerToBuild: {fileID: 8863898960767002757, guid: 206be6a01199c9c48803f7a5a539ba8d, type: 3}
+  towerToBuild: {fileID: 8863898960767002757, guid: 778f26b45ea0ead44aea95d0c0c5580d, type: 3}
   costToBuild: 50
   unitName: Rapid Fire Gun
   unitNameText: {fileID: 5537570401561814729}
@@ -21766,7 +21730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7250a04efe283847b918484e2c5c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerToBuild: {fileID: 8863898960767002757, guid: 206be6a01199c9c48803f7a5a539ba8d, type: 3}
+  towerToBuild: {fileID: 8863898960767002757, guid: 23aea0aaaeac8c445bfd8e991edd6881, type: 3}
   costToBuild: 50
   unitName: Cannon
   unitNameText: {fileID: 4557280305591639839}
@@ -21965,7 +21929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7250a04efe283847b918484e2c5c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerToBuild: {fileID: 8863898960767002757, guid: 206be6a01199c9c48803f7a5a539ba8d, type: 3}
+  towerToBuild: {fileID: 8863898960767002757, guid: ace93b7f7a2a30440a1469d59a21a59b, type: 3}
   costToBuild: 50
   unitName: Anti-air Harpon
   unitNameText: {fileID: 4221317484752746969}

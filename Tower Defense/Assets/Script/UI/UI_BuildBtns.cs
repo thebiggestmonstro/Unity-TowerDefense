@@ -28,6 +28,11 @@ public class UI_BuildBtns : MonoBehaviour
         buildButtons = GetComponentsInChildren<UI_BuildBtn>();
     }
 
+    private void Update()
+    {
+        CheckBuildButtonHotKeyPressed();
+    }
+
     public void ShowBuildButtons(bool showButtons)
     {
         isBuildMenuActive = showButtons;
@@ -64,4 +69,42 @@ public class UI_BuildBtns : MonoBehaviour
     public List<UI_BuildBtn> GetUnlockedButtons() => unlockedButtons;
     public UI_BuildBtn GetLastSelectedButton() => lastSelectedButton;
     public void SetLastSelected(UI_BuildBtn newLastSelected) => lastSelectedButton = newLastSelected;
+
+    private void CheckBuildButtonHotKeyPressed()
+    {
+        if (!isBuildMenuActive)
+        {
+            return;
+        }
+
+        for (int i = 0; i < unlockedButtons.Count; i++)
+        {
+            if (Keyboard.current[(Key)((int)Key.Digit1 + i)].wasPressedThisFrame)
+            {
+                SelectNewButton(i);
+                break;
+            }
+        }
+
+        if (Keyboard.current[Key.Space].wasPressedThisFrame && lastSelectedButton != null)
+        {
+            lastSelectedButton.BuildTower();
+        }
+    }
+
+    public void SelectNewButton(int buttonIndex)
+    {
+        if (buttonIndex >= unlockedButtons.Count)
+        {
+            return;
+        }
+
+        foreach (var button in unlockedButtons)
+        {
+            button.SelectButton(false);
+        }
+
+        UI_BuildBtn selectedButton = unlockedButtons[buttonIndex];
+        selectedButton.SelectButton(true);
+    }
 }

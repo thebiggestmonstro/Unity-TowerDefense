@@ -20,6 +20,7 @@ public class BuildManager : MonoBehaviour
 
     public static BuildManager Instance { get; private set; }
     private BuildTileSlot selectedBuildTile;
+    private bool bIsMouseOnUI;
 
     private void Awake()
     {
@@ -47,6 +48,11 @@ public class BuildManager : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            if (bIsMouseOnUI)
+            {
+                return;
+            }
+
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
             {
                 if (!hit.collider.TryGetComponent<BuildTileSlot>(out _))
@@ -137,4 +143,6 @@ public class BuildManager : MonoBehaviour
 
     public Material GetAttackRadiusMaterial() => attackRadiusMaterial;
     public Material GetBuildPreviewMaterial() => buildPreviewMaterial;
+
+    public bool SetMouseOnUI(bool isMouseOnUI) => bIsMouseOnUI = isMouseOnUI;   
 }

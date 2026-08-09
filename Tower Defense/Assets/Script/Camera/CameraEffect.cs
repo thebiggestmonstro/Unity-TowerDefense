@@ -36,30 +36,6 @@ public class CameraEffect : MonoBehaviour
         SwitchToMenuView();
     }
 
-    public void OnSwitchToMenuView(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            SwitchToMenuView();
-        }
-    }
-
-    public void OnSwitchToGameView(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            SwitchToGameView();
-        }
-    }
-
-    public void OnScreenshake(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Screenshake(shakeDuration, shakeMagnutide);
-        }
-    }
-
     public void SwitchToMenuView()
     {
         StopAllCoroutines();

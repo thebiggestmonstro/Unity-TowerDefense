@@ -51,10 +51,16 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
 
+        if (uiCanvas.uiBuildBtns.GetLastSelectedButton() == null)
+        {
+            return;
+        }
+
         BuildTileSlot selectedTileSlot = BuildManager.Instance.GetSelectedBuildTile();
         BuildManager.Instance.CancleBuildUnit();
         selectedTileSlot.MoveTileDownImmediate();
         selectedTileSlot.SetBuildTileAvailability(false);
+        uiCanvas.uiBuildBtns.SetLastSelected(null);
         camEffect.Screenshake(0.15f, 0.02f);
 
         GameObject newTower = Instantiate(towerToBuild, selectedTileSlot.GetBuildPosition(towerCenterY), Quaternion.identity);
@@ -74,6 +80,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
 
+        bButtonUnlocked = unlockStatus;
         gameObject.SetActive(unlockStatus);
     }
 
@@ -115,9 +122,14 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        BuildManager.Instance.SetMouseOnUI(true);
+
         foreach (var button in buildButtonsHolder.GetBuildButtons())
         {
-            button.SelectButton(false);
+            if (button.gameObject.activeSelf)
+            {
+                button.SelectButton(false);
+            }
         }
 
         SelectButton(true);
@@ -125,6 +137,6 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-
+        BuildManager.Instance.SetMouseOnUI(false);
     }
 }
