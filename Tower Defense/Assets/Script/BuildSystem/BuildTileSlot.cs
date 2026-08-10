@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    private TileAnimator tileAnimator;
     private Vector3 defaultPosition;
     private bool bCanMove = true;
     private bool bBuildTileAvailable = true;
@@ -35,14 +34,9 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    public void InitTileAnimator(TileAnimator tileAnim)
-    { 
-        tileAnimator = tileAnim;
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable)
+        if (!bBuildTileAvailable || TileAnimator.Instance.GetIsGridMoving())
         {
             return;
         }
@@ -69,7 +63,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable)
+        if (!bBuildTileAvailable || TileAnimator.Instance.GetIsGridMoving())
         {
             return;
         }
@@ -85,7 +79,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable)
+        if (!bBuildTileAvailable || TileAnimator.Instance.GetIsGridMoving())
         {
             return;
         }

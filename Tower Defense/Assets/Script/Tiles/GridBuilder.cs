@@ -18,6 +18,7 @@ public class GridBuilder : MonoBehaviour
     private List<GameObject> createdTiles;
 
     private NavMeshSurface myNavMesh;
+    private bool bFirstLoad;
 
     private void Awake()
     {
@@ -160,6 +161,16 @@ public class GridBuilder : MonoBehaviour
 
     private NavMeshSurface GetNavMeshSurface => GetComponent<NavMeshSurface>();
     public NavMeshSurface GetNavMesh() => myNavMesh;
-
     public List<GameObject> GetCreatedTiles() => createdTiles;
+
+    public bool IsOnFirstLoad()
+    {
+        if (!bFirstLoad)
+        {
+            bFirstLoad = !bFirstLoad;
+            return bFirstLoad;
+        }
+
+        return bFirstLoad;
+    }
 }

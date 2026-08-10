@@ -26,18 +26,6 @@ public class TileSlot : MonoBehaviour
     }
 #endif
 
-    private IEnumerator Start()
-    {
-        if (gameObject.TryGetComponent<BuildTileSlot>(out BuildTileSlot buildTileSlot))
-        {
-            while (TileAnimator.Instance == null)
-            {
-                yield return null;
-            }
-            buildTileSlot.InitTileAnimator(TileAnimator.Instance);
-        }
-    }
-
     public void SwitchTile(GameObject referencedTile)
     {
         TileSlot newTilePrefab = referencedTile.GetComponent<TileSlot>();
@@ -252,14 +240,6 @@ public class TileSlot : MonoBehaviour
 #endif
                 {
                     buildSlot = gameObject.AddComponent<BuildTileSlot>();
-                }
-            }
-
-            if (buildSlot != null && Application.isPlaying)
-            {
-                if (TileAnimator.Instance != null)
-                {
-                    buildSlot.InitTileAnimator(TileAnimator.Instance);
                 }
             }
         }

@@ -31,6 +31,7 @@ public class WaveManager : MonoBehaviour
     private List<GameObject> activeEnemies = new List<GameObject>();
     private float checkInterval = 0.5f;
     private bool isForcedSkip = false;
+    private bool bIsWaveManagerActive = false;
 
     public static WaveManager Instance { get; private set; }
     
@@ -45,18 +46,6 @@ public class WaveManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        if (allWaves != null && allWaves.Count > 0)
-        {
-            StartCoroutine(CoWaveLoop());
-        }
-        else
-        {
-            Debug.LogError("Wave Data is not registered in EnemyManager");
         }
     }
 
@@ -286,5 +275,25 @@ public class WaveManager : MonoBehaviour
         }
 
         return allWaves[nextIndex];
+    }
+
+    [ContextMenu("Active Wave Manager")]
+    public void ActivateWaveManager()
+    {
+        if (bIsWaveManagerActive)
+        {
+            return;
+        }
+
+        if (allWaves != null && allWaves.Count > 0)
+        {
+            bIsWaveManagerActive = true;
+            StartCoroutine(CoWaveLoop());
+            Debug.Log("Wave Manager Activated!");
+        }
+        else
+        {
+            Debug.LogError("Wave Data is not registered in EnemyManager");
+        }
     }
 }
