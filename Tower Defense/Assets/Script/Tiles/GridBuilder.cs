@@ -136,6 +136,7 @@ public class GridBuilder : MonoBehaviour
         if (newTile != null)
         {
             createdTiles.Add(newTile);
+            newTile.GetComponent<TileSlot>().ChangeToBuildTileSlot(newTile);
 
 #if UNITY_EDITOR
             Undo.RegisterCreatedObjectUndo(newTile, "Create Tile Instance");

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TileAnimator : MonoBehaviour
@@ -12,13 +14,18 @@ public class TileAnimator : MonoBehaviour
     [Space]
     [Header("Grid Animation Settings")]
     [SerializeField]
-    private GridBuilder mainSceneGrid;
-    [SerializeField]
     private float tileMoveDuration = 0.1f;
     [SerializeField]
     private float tileMoveDelay = 0.1f; 
     [SerializeField]
     private float yOffset = 5f;
+
+    [Space]
+    [Header("Main Scene")]
+    [SerializeField]
+    private GridBuilder mainSceneGrid;
+    [SerializeField]
+    private List<GameObject> mainMenuObjects = new List<GameObject>();
 
     private bool bIsGridMoving;
 
@@ -39,6 +46,7 @@ public class TileAnimator : MonoBehaviour
 
     private void Start()
     {
+        CollectMainSceneObjects();
         ShowGrid(mainSceneGrid, true);
     }
 
@@ -107,7 +115,7 @@ public class TileAnimator : MonoBehaviour
 
     public void ShowGrid(GridBuilder gridToMove, bool showGrid)
     {
-        List<GameObject> objectsToMove = gridToMove.GetCreatedTiles();
+        List<GameObject> objectsToMove = GetObjectsToMove(gridToMove, showGrid);
 
         if (gridToMove.IsOnFirstLoad())
         {
@@ -145,4 +153,47 @@ public class TileAnimator : MonoBehaviour
     }
 
     public bool GetIsGridMoving() => bIsGridMoving;
+
+    private List<GameObject> GetExtraObjects()
+    {
+        List<GameObject> extraObjects = new List<GameObject>();
+
+        extraObjects.AddRange(WaveManager.Instance.GetActivePortals().Select(component => component.gameObject));
+        extraObjects.AddRange(UnitManager.Instance.GetUnits<Player_Castle>().Select(component => component.gameObject));
+
+        return extraObjects;
+    }
+
+    private List<GameObject> GetObjectsToMove(GridBuilder gridToMove, bool startOnTiles)
+    { 
+        List<GameObject> objectsToMove = new List<GameObject>();
+        List<GameObject> extraObjects = GetExtraObjects();
+
+        if (startOnTiles)
+        {
+            objectsToMove.AddRange(gridToMove.GetCreatedTiles());
+            objectsToMove.AddRange(extraObjects);
+        }
+        else
+        {
+            objectsToMove.AddRange(extraObjects);
+            objectsToMove.AddRange(gridToMove.GetCreatedTiles());
+        }
+
+        return objectsToMove;
+    }
+
+    private void CollectMainSceneObjects()
+    {
+        mainMenuObjects.AddRange(mainSceneGrid.GetCreatedTiles());
+        mainMenuObjects.AddRange(GetExtraObjects());
+    }
+
+    public void EnableMainSceneObjects(bool enable)
+    {
+        foreach (var obj in mainMenuObjects)
+        {
+            obj.SetActive(enable);
+        }
+    }
 }

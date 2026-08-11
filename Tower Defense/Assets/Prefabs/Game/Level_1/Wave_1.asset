@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcc4dba0701aa954099b1c97f7daa3d5, type: 3}
-  m_Name: TestWaveData 2
+  m_Name: Wave_1
   m_EditorClassIdentifier: 
   waveInfo:
   - enemyPrefab: {fileID: 2850966121671249568, guid: 97d45e88dae38a549b95437f07bc7ea0, type: 3}
-    spawnCount: 8
+    spawnCount: 2
   - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
     spawnCount: 0
-  currentWaveGrid: {fileID: 5526686394793122203, guid: ec40785d1fa519346b26d93e30d7ca56, type: 3}
-  newPortals:
-  - {fileID: 8570910606372780819, guid: a180ea3f1fbdfd249a06ed945a4e84ad, type: 3}
+  currentWaveGrid: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
+  newPortals: []

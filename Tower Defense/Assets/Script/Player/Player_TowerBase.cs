@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_TowerBase : MonoBehaviour
+public class Player_TowerBase : MonoBehaviour, IUnitInterface
 {
     [Header("Unit Setting")]
     [SerializeField]
@@ -31,6 +31,24 @@ public class Player_TowerBase : MonoBehaviour
     protected virtual void Awake()
     { 
 
+    }
+
+    protected virtual void Start()
+    {
+        if (UnitManager.Instance != null && !UnitManager.Instance.FindContainsUnit(this))
+        {
+            UnitManager.Instance.RegisterUnit(this);
+        }
+    }
+
+    protected virtual void OnEnable()
+    {
+        UnitManager.Instance?.RegisterUnit(this);
+    }
+
+    protected virtual void OnDisable()
+    {
+        UnitManager.Instance?.UnregisterUnit(this);
     }
 
     protected virtual void Update()
@@ -198,4 +216,6 @@ public class Player_TowerBase : MonoBehaviour
     }
 
     public float GetAttackRange() => attackRange;
+
+    public string UnitName => gameObject.name;
 }

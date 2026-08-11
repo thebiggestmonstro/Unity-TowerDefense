@@ -209,7 +209,7 @@ public class TileSlot : MonoBehaviour
     private NavMeshSurface GetTileNavMeshSurface => GetComponentInParent<NavMeshSurface>();
     private TileSetHolder GetTileSetHolder => GetComponentInParent<TileSetHolder>();
 
-    private void ChangeToBuildTileSlot(GameObject selectedTile)
+    public void ChangeToBuildTileSlot(GameObject selectedTile)
     {
         BuildTileSlot buildSlot = GetComponent<BuildTileSlot>();
 

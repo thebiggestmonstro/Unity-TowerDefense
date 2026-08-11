@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player_Castle : MonoBehaviour
+public class Player_Castle : MonoBehaviour, IUnitInterface
 {
     private void OnTriggerEnter(Collider other)
     {
@@ -10,4 +10,24 @@ public class Player_Castle : MonoBehaviour
             GameManager.Instance.UpdateHp(-1);
         }
     }
+
+    protected virtual void Start()
+    {
+        if (UnitManager.Instance != null && !UnitManager.Instance.FindContainsUnit(this))
+        {
+            UnitManager.Instance.RegisterUnit(this);
+        }
+    }
+
+    protected virtual void OnEnable()
+    {
+        UnitManager.Instance?.RegisterUnit(this);
+    }
+
+    protected virtual void OnDisable()
+    {
+        UnitManager.Instance?.UnregisterUnit(this);
+    }
+
+    public string UnitName => gameObject.name;
 }

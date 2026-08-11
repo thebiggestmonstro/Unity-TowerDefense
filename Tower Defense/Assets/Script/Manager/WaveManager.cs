@@ -296,4 +296,6 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Wave Data is not registered in EnemyManager");
         }
     }
+
+    public List<Enemy_Portal> GetActivePortals() => activePortals;
 }
