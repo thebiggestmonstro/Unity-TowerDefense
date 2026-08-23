@@ -22,7 +22,6 @@ public class UI_InGame : MonoBehaviour
     private Vector3 waveTimerBasePosition;
 
     private UI_Canvas uiCanvas;
-    private UI_Pause uiPause;
 
     private void Awake()
     {
@@ -32,22 +31,29 @@ public class UI_InGame : MonoBehaviour
         waveTimerBasePosition = Txt_waveTime.transform.parent.GetComponent<RectTransform>().anchoredPosition;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        uiPause = UIManager.GetUI<UI_Pause>("UI_Pause");
+        GameEvents.OnHealthChanged += UpdateHealthPointsText;
+        GameEvents.OnDamageTaken += ShakeHealthPointUI;
+        GameEvents.OnCurrencyChanged += UpdateCurrencyText;
+        GameEvents.OnCurrencyShortage += ShakeCurrencyUI;
+        GameEvents.OnWaveTimerVisibilityChanged += EnableWaveTimerText;
+        GameEvents.OnWaveTimerUpdated += UpdateWaveTimerText;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnHealthChanged -= UpdateHealthPointsText;
+        GameEvents.OnDamageTaken -= ShakeHealthPointUI;
+        GameEvents.OnCurrencyChanged -= UpdateCurrencyText;
+        GameEvents.OnCurrencyShortage -= ShakeCurrencyUI;
+        GameEvents.OnWaveTimerVisibilityChanged -= EnableWaveTimerText;
+        GameEvents.OnWaveTimerUpdated -= UpdateWaveTimerText;
     }
 
     private void OnDestroy()
     {
         UIManager.UnregisterUI<UI_InGame>(gameObject.name);
-    }
-
-    private void Update()
-    {
-        if (Keyboard.current[Key.F10].wasPressedThisFrame)
-        {
-            uiCanvas.SwitchUI(uiPause.gameObject);
-        }
     }
 
     public void UpdateHealthPointsText(int value, int maxValue)
@@ -82,7 +88,7 @@ public class UI_InGame : MonoBehaviour
 
     public void ForceNextWave()
     {
-        WaveManager.Instance.ForceStartNextWave();
+        GameServices.WaveManager.ForceStartNextWave();
     }
 
     public void ShakeCurrencyUI()

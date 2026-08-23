@@ -22,6 +22,10 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private Camera mainCamera;
     [SerializeField]
     private float towerCenterY = 0.5f;
+    [SerializeField]
+    private GameManager gameManager;
+    [SerializeField]
+    private BuildManager buildManager;
 
     private CameraEffect camEffect;
     private UI_Canvas uiCanvas;
@@ -45,9 +49,8 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void BuildTower()
     {
-        if (towerToBuild == null || !GameManager.Instance.CheckEnoughCurrency(costToBuild))
+        if (towerToBuild == null || !gameManager.CheckEnoughCurrency(costToBuild))
         {
-            UIManager.GetUI<UI_InGame>("UI_InGame").ShakeCurrencyUI();
             return;
         }
 
@@ -56,8 +59,8 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
 
-        BuildTileSlot selectedTileSlot = BuildManager.Instance.GetSelectedBuildTile();
-        BuildManager.Instance.CancleBuildUnit();
+        BuildTileSlot selectedTileSlot = buildManager.GetSelectedBuildTile();
+        buildManager.CancleBuildUnit();
         selectedTileSlot.MoveTileDownImmediate();
         selectedTileSlot.SetBuildTileAvailability(false);
         uiCanvas.uiBuildBtns.SetLastSelected(null);
@@ -88,6 +91,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         GameObject newPreview = Instantiate(towerToBuild, Vector3.zero, Quaternion.identity);
         unitPreview = newPreview.AddComponent<VisualEffect_UnitPreview>();
+        unitPreview.Initialize(buildManager.GetBuildPreviewMaterial(), buildManager.GetAttackRadiusMaterial());
         unitPreview.gameObject.SetActive(false);
     }
 
@@ -97,7 +101,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             if (bIsSelected)
             {
-                CreateUnitPreview(); 
+                CreateUnitPreview();
             }
 
             if (unitPreview == null)
@@ -106,7 +110,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
         }
 
-        BuildTileSlot slotToUse = BuildManager.Instance.GetSelectedBuildTile();
+        BuildTileSlot slotToUse = buildManager.GetSelectedBuildTile();
 
         if (slotToUse == null)
         {
@@ -122,7 +126,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        BuildManager.Instance.SetMouseOnUI(true);
+        buildManager.SetMouseOnUI(true);
 
         foreach (var button in buildButtonsHolder.GetBuildButtons())
         {
@@ -137,6 +141,6 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        BuildManager.Instance.SetMouseOnUI(false);
+        buildManager.SetMouseOnUI(false);
     }
 }

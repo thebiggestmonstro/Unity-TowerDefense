@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class VisualEffect_AttackRadius : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private float lineWidth = .1f;
-    [SerializeField] 
+    [SerializeField]
     private float radiusValue;
 
     private LineRenderer lineRenderer;
@@ -14,12 +14,13 @@ public class VisualEffect_AttackRadius : MonoBehaviour
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = lineSegments + 1;  
+        lineRenderer.positionCount = lineSegments + 1;
         lineRenderer.useWorldSpace = true;
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
-        lineRenderer.material = BuildManager.Instance.GetAttackRadiusMaterial();
     }
+
+    public void SetMaterial(Material material) => lineRenderer.material = material;
 
     public void CreateCircle(bool bShowCircle, float radius = 0)
     {

@@ -93,54 +93,23 @@ public class CameraController : MonoBehaviour
         UpdateFocusPointFromScreen();
     }
 
-    #region Input Binding Function
+    #region Input State (set by PlayerInputHandler)
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        moveInput = context.action.ReadValue<Vector2>();
-    }
+    public void SetMoveInput(Vector2 input) => moveInput = input;
 
-    public void OnRotate(InputAction.CallbackContext context)
-    {
-        if (context.started || context.performed)
-        {
-            isRightButtonPressed = true;
-        }
-        else if (context.canceled)
-        {
-            isRightButtonPressed = false;
-        }
-    }
+    public void SetRotating(bool isRotating) => isRightButtonPressed = isRotating;
 
-    public void OnZoom(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            scrollValue = context.ReadValue<float>();
-        }
-        else if (context.canceled)
-        {
-            scrollValue = 0f;
-        }
-    }
+    public void SetScrollValue(float value) => scrollValue = value;
 
-    public void OnHoldClick(InputAction.CallbackContext context)
+    public void BeginMiddleClickDrag()
     {
-        if (context.started && Mouse.current != null)
+        if (Mouse.current != null)
         {
             lastMousePosition = Mouse.current.position.ReadValue();
         }
-
-        if (context.performed)
-        {
-            isMiddleClickPressing = true;
-        }
-
-        if (context.canceled)
-        {
-            isMiddleClickPressing = false;
-        }
     }
+
+    public void SetMiddleClickPressing(bool isPressing) => isMiddleClickPressing = isPressing;
 
     #endregion
 
@@ -305,7 +274,7 @@ public class CameraController : MonoBehaviour
     public void SyncTargetPosition(Vector3 position)
     {
         targetZoomPosition = position;
-        zoomVelocity = Vector3.zero; 
+        zoomVelocity = Vector3.zero;
     }
 
     public void SyncCameraRotation(Quaternion rotation)

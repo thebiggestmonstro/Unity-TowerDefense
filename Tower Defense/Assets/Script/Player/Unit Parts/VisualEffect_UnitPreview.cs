@@ -17,8 +17,13 @@ public class VisualEffect_UnitPreview : MonoBehaviour
         unitToBuild = GetComponent<Player_TowerBase>();
         attackRange = unitToBuild.GetAttackRange();
 
-        MakeAllMeshTransperent();
         DestroyExtraComponents();
+    }
+
+    public void Initialize(Material previewMaterial, Material attackRadiusMaterial)
+    {
+        MakeAllMeshTransperent(previewMaterial);
+        attackRadiusEffect.SetMaterial(attackRadiusMaterial);
     }
 
     public void ShowPreview(bool showPreview, Vector3 previewPosition)
@@ -38,13 +43,11 @@ public class VisualEffect_UnitPreview : MonoBehaviour
         }
     }
 
-    private void MakeAllMeshTransperent()
+    private void MakeAllMeshTransperent(Material previewMaterial)
     {
-        Material previewMat = BuildManager.Instance.GetBuildPreviewMaterial();
-
         foreach (var mesh in meshRenderers)
         {
-            mesh.material = previewMat;
+            mesh.material = previewMaterial;
         }
     }
 }

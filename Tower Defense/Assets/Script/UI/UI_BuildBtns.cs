@@ -28,11 +28,6 @@ public class UI_BuildBtns : MonoBehaviour
         buildButtons = GetComponentsInChildren<UI_BuildBtn>();
     }
 
-    private void Update()
-    {
-        CheckBuildButtonHotKeyPressed();
-    }
-
     public void ShowBuildButtons(bool showButtons)
     {
         isBuildMenuActive = showButtons;
@@ -70,26 +65,25 @@ public class UI_BuildBtns : MonoBehaviour
     public UI_BuildBtn GetLastSelectedButton() => lastSelectedButton;
     public void SetLastSelected(UI_BuildBtn newLastSelected) => lastSelectedButton = newLastSelected;
 
-    private void CheckBuildButtonHotKeyPressed()
+    // Called by PlayerInputHandler; this class still decides whether the input is relevant.
+    public void SelectHotkeyButton(int buttonIndex)
     {
         if (!isBuildMenuActive)
         {
             return;
         }
 
-        for (int i = 0; i < unlockedButtons.Count; i++)
+        SelectNewButton(buttonIndex);
+    }
+
+    public void ConfirmBuild()
+    {
+        if (!isBuildMenuActive || lastSelectedButton == null)
         {
-            if (Keyboard.current[(Key)((int)Key.Digit1 + i)].wasPressedThisFrame)
-            {
-                SelectNewButton(i);
-                break;
-            }
+            return;
         }
 
-        if (Keyboard.current[Key.Space].wasPressedThisFrame && lastSelectedButton != null)
-        {
-            lastSelectedButton.BuildTower();
-        }
+        lastSelectedButton.BuildTower();
     }
 
     public void SelectNewButton(int buttonIndex)

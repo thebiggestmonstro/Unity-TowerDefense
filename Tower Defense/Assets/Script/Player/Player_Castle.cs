@@ -7,7 +7,7 @@ public class Player_Castle : MonoBehaviour, IUnitInterface
         if (other.tag == "Enemy")
         {
             other.GetComponent<Enemy_Base>().DestroyEnemy();
-            GameManager.Instance.UpdateHp(-1);
+            GameEvents.RaiseEnemyReachedCastle();
         }
     }
 

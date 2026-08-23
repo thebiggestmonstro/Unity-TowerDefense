@@ -19,25 +19,25 @@ public class Enemy_Portal : MonoBehaviour
 
     private void OnEnable()
     {
-        if (WaveManager.Instance != null)
+        if (GameServices.EnemySpawner != null)
         {
-            WaveManager.Instance.RegisterPortal(this);
+            GameServices.EnemySpawner.RegisterPortal(this);
         }
     }
 
     private void Start()
     {
-        if (WaveManager.Instance != null && !WaveManager.Instance.HasPortal(this))
+        if (GameServices.EnemySpawner != null && !GameServices.EnemySpawner.HasPortal(this))
         {
-            WaveManager.Instance.RegisterPortal(this);
+            GameServices.EnemySpawner.RegisterPortal(this);
         }
     }
 
     private void OnDisable()
     {
-        if (WaveManager.Instance != null)
+        if (GameServices.EnemySpawner != null)
         {
-            WaveManager.Instance.UnregisterPortal(this);
+            GameServices.EnemySpawner.UnregisterPortal(this);
         }
     }
 
@@ -48,7 +48,7 @@ public class Enemy_Portal : MonoBehaviour
             return;
         }
 
-        if (!WaveManager.Instance.HasEnemiesLeft())
+        if (!GameServices.EnemySpawner.HasEnemiesLeft())
         {
             isSpawning = false;
             return;
@@ -70,12 +70,12 @@ public class Enemy_Portal : MonoBehaviour
 
     public void SpawnProcess()
     {
-        GameObject enemy = WaveManager.Instance.RequestSpawnEnemy();
+        GameObject enemy = GameServices.EnemySpawner.RequestSpawnEnemy();
 
         if (enemy != null)
         {
             GameObject spawnedEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
-            WaveManager.Instance.RegisterActiveEnemy(spawnedEnemy);
+            GameServices.EnemySpawner.RegisterActiveEnemy(spawnedEnemy);
 
             Enemy_Base enemyComponent = spawnedEnemy.GetComponent<Enemy_Base>();
             if (enemyComponent != null)
@@ -90,7 +90,7 @@ public class Enemy_Portal : MonoBehaviour
     }
 
     private void CollectWaypoints()
-    { 
+    {
         waypointsList = new List<Waypoint>();
 
         foreach (Transform child in transform)
@@ -98,7 +98,7 @@ public class Enemy_Portal : MonoBehaviour
             Waypoint waypoint = child.GetComponent<Waypoint>();
 
             if (waypoint != null)
-            { 
+            {
                 waypointsList.Add(waypoint);
             }
         }

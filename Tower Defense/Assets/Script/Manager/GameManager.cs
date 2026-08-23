@@ -14,50 +14,52 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int currency = 100;
 
-    public static GameManager Instance { get; private set; }
-
-    private void Awake()
+    private void OnEnable()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        GameEvents.OnEnemyReachedCastle += HandleEnemyReachedCastle;
+        GameEvents.OnEnemyDefeated += HandleEnemyDefeated;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnEnemyReachedCastle -= HandleEnemyReachedCastle;
+        GameEvents.OnEnemyDefeated -= HandleEnemyDefeated;
     }
 
     private void Start()
     {
         currentHp = maxHp;
-        UIManager.GetUI<UI_InGame>("UI_InGame").UpdateHealthPointsText(currentHp, maxHp);
-
-        UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
+        GameEvents.RaiseHealthChanged(currentHp, maxHp);
+        GameEvents.RaiseCurrencyChanged(currency);
     }
+
+    private void HandleEnemyReachedCastle() => UpdateHp(-1);
+
+    private void HandleEnemyDefeated(int rewardAmount) => UpdateCurrency(rewardAmount);
 
     public void UpdateHp(int value)
     {
         currentHp += value;
-        UIManager.GetUI<UI_InGame>("UI_InGame").UpdateHealthPointsText(currentHp, maxHp);
-        UIManager.GetUI<UI_InGame>("UI_InGame").ShakeHealthPointUI();
+        GameEvents.RaiseHealthChanged(currentHp, maxHp);
+        GameEvents.RaiseDamageTaken();
     }
 
     public void UpdateCurrency(int value)
     {
         currency += value;
-        UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
+        GameEvents.RaiseCurrencyChanged(currency);
     }
 
     public bool CheckEnoughCurrency(int price)
     {
         if (price <= currency)
-        { 
+        {
             currency -= price;
-            UIManager.GetUI<UI_InGame>("UI_InGame").UpdateCurrencyText(currency);
+            GameEvents.RaiseCurrencyChanged(currency);
             return true;
         }
 
+        GameEvents.RaiseCurrencyShortage();
         return false;
     }
 }

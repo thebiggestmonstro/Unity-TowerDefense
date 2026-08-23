@@ -4,29 +4,12 @@ using UnityEngine.InputSystem;
 
 public class UI_Pause : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private GameObject[] pauseUiElements;
-
-    private UI_Canvas uiCanvas;
-    private UI_InGame uiInGame;
 
     private void Awake()
     {
         UIManager.RegisterUI(gameObject.name, this);
-        uiCanvas = GetComponentInParent<UI_Canvas>();
-    }
-
-    private void Start()
-    {
-        uiInGame = UIManager.GetUI<UI_InGame>("UI_InGame");
-    }
-
-    private void Update()
-    {
-        if (Keyboard.current[Key.F10].wasPressedThisFrame)
-        {
-            uiCanvas.SwitchUI(uiInGame.gameObject);
-        }
     }
 
     private void OnEnable()

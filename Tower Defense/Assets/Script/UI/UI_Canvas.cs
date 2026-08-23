@@ -31,9 +31,17 @@ public class UI_Canvas : MonoBehaviour
 
         ActivateUIFade(true);
 
-        SwitchUI(uiSettings.gameObject);
-        SwitchUI(uiPause.gameObject);
-        SwitchUI(uiInGame.gameObject);
+        // Not every scene has every UI type (e.g. the main menu scene has no
+        // in-game/pause UI, stage scenes have no main menu/settings UI), so
+        // only switch to what this scene actually contains.
+        if (uiInGame != null)
+        {
+            SwitchUI(uiInGame.gameObject);
+        }
+        else if (uiMainMenu != null)
+        {
+            SwitchUI(uiMainMenu.gameObject);
+        }
     }
 
     public void SwitchUI(GameObject uiToEnable)
@@ -47,6 +55,16 @@ public class UI_Canvas : MonoBehaviour
         }
 
         uiToEnable.SetActive(true);
+    }
+
+    public void ToggleGamePause()
+    {
+        if (uiPause == null || uiInGame == null)
+        {
+            return;
+        }
+
+        SwitchUI(uiPause.gameObject.activeSelf ? uiInGame.gameObject : uiPause.gameObject);
     }
 
     public void QuitGame()

@@ -13,25 +13,22 @@ public class BuildManager : MonoBehaviour
     [Space]
     [SerializeField]
     private Material attackRadiusMaterial;
-    [SerializeField] 
+    [SerializeField]
     private Material buildPreviewMaterial;
 
     public GridBuilder currentGrid;
 
-    public static BuildManager Instance { get; private set; }
     private BuildTileSlot selectedBuildTile;
     private bool bIsMouseOnUI;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        GameServices.RegisterBuildManager(this);
+    }
+
+    private void OnDisable()
+    {
+        GameServices.UnregisterBuildManager(this);
     }
 
     private void Start()
@@ -39,26 +36,19 @@ public class BuildManager : MonoBehaviour
         MakeBuildTileAvaliablityFalse(currentGrid);
     }
 
-    private void Update()
+    // Called by PlayerInputHandler when a world click doesn't land on a build tile.
+    public void TryDeselectOnWorldClick()
     {
-        if (Keyboard.current[Key.Escape].wasPressedThisFrame)
+        if (bIsMouseOnUI)
         {
-            CancleBuildUnit();
+            return;
         }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (Physics.Raycast(mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
         {
-            if (bIsMouseOnUI)
+            if (!hit.collider.TryGetComponent<BuildTileSlot>(out _))
             {
-                return;
-            }
-
-            if (Physics.Raycast(mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
-            {
-                if (!hit.collider.TryGetComponent<BuildTileSlot>(out _))
-                {
-                    CancleBuildUnit();
-                }
+                CancleBuildUnit();
             }
         }
     }
@@ -66,11 +56,11 @@ public class BuildManager : MonoBehaviour
     public void CancleBuildUnit()
     {
         if (selectedBuildTile == null)
-        { 
-            return; 
+        {
+            return;
         }
 
-        uiCanvas.uiBuildBtns.GetLastSelectedButton().SelectButton(false);
+        uiCanvas.uiBuildBtns.GetLastSelectedButton()?.SelectButton(false);
         selectedBuildTile.UnSelectTile();
         selectedBuildTile = null;
         DisableBuildMenu();
@@ -105,7 +95,7 @@ public class BuildManager : MonoBehaviour
 
     public void MakeBuildTileAvaliablityFalse(GridBuilder currentGrid)
     {
-        WaveData nextWave = WaveManager.Instance.GetNextWaveData();
+        WaveData nextWave = GameServices.WaveManager.GetNextWaveData();
         if (nextWave == null || nextWave.currentWaveGrid == null)
         {
             return;
