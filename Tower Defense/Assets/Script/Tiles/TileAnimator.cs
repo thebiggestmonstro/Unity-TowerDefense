@@ -15,12 +15,12 @@ public class TileAnimator : MonoBehaviour
 
     private void OnEnable()
     {
-        GameServices.RegisterTileAnimator(this);
+        GameServices.Register(this);
     }
 
     private void OnDisable()
     {
-        GameServices.UnregisterTileAnimator(this);
+        GameServices.Unregister(this);
     }
 
     public void MoveTile(Transform tileToMove, Vector3 targetPosition, float? newTileMoveDuration = null)

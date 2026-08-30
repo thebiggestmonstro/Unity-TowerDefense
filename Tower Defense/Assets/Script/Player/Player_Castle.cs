@@ -13,20 +13,20 @@ public class Player_Castle : MonoBehaviour, IUnitInterface
 
     protected virtual void Start()
     {
-        if (UnitManager.Instance != null && !UnitManager.Instance.FindContainsUnit(this))
+        if (GameServices.Get<UnitManager>() != null && !GameServices.Get<UnitManager>().FindContainsUnit(this))
         {
-            UnitManager.Instance.RegisterUnit(this);
+            GameServices.Get<UnitManager>().RegisterUnit(this);
         }
     }
 
     protected virtual void OnEnable()
     {
-        UnitManager.Instance?.RegisterUnit(this);
+        GameServices.Get<UnitManager>()?.RegisterUnit(this);
     }
 
     protected virtual void OnDisable()
     {
-        UnitManager.Instance?.UnregisterUnit(this);
+        GameServices.Get<UnitManager>()?.UnregisterUnit(this);
     }
 
     public string UnitName => gameObject.name;

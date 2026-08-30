@@ -88,7 +88,7 @@ public class UI_InGame : MonoBehaviour
 
     public void ForceNextWave()
     {
-        GameServices.WaveManager.ForceStartNextWave();
+        GameServices.Get<WaveManager>().ForceStartNextWave();
     }
 
     public void ShakeCurrencyUI()

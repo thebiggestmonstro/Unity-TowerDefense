@@ -28,12 +28,12 @@ public class GridVisibilityController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameServices.RegisterGridVisibilityController(this);
+        GameServices.Register(this);
     }
 
     private void OnDisable()
     {
-        GameServices.UnregisterGridVisibilityController(this);
+        GameServices.Unregister(this);
     }
 
     private void Start()
@@ -94,8 +94,8 @@ public class GridVisibilityController : MonoBehaviour
     {
         List<GameObject> extraObjects = new List<GameObject>();
 
-        extraObjects.AddRange(GameServices.EnemySpawner.GetActivePortals().Select(component => component.gameObject));
-        extraObjects.AddRange(UnitManager.Instance.GetUnits<Player_Castle>().Select(component => component.gameObject));
+        extraObjects.AddRange(GameServices.Get<EnemySpawner>().GetActivePortals().Select(component => component.gameObject));
+        extraObjects.AddRange(GameServices.Get<UnitManager>().GetUnits<Player_Castle>().Select(component => component.gameObject));
 
         return extraObjects;
     }

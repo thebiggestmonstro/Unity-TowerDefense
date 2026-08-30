@@ -23,12 +23,12 @@ public class BuildManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameServices.RegisterBuildManager(this);
+        GameServices.Register(this);
     }
 
     private void OnDisable()
     {
-        GameServices.UnregisterBuildManager(this);
+        GameServices.Unregister(this);
     }
 
     private void Start()
@@ -95,7 +95,7 @@ public class BuildManager : MonoBehaviour
 
     public void MakeBuildTileAvaliablityFalse(GridBuilder currentGrid)
     {
-        WaveData nextWave = GameServices.WaveManager.GetNextWaveData();
+        WaveData nextWave = GameServices.Get<WaveManager>().GetNextWaveData();
         if (nextWave == null || nextWave.currentWaveGrid == null)
         {
             return;

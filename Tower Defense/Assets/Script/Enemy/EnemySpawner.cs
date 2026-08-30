@@ -11,12 +11,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameServices.RegisterEnemySpawner(this);
+        GameServices.Register(this);
     }
 
     private void OnDisable()
     {
-        GameServices.UnregisterEnemySpawner(this);
+        GameServices.Unregister(this);
     }
 
     public void BeginWave(WaveData waveData)

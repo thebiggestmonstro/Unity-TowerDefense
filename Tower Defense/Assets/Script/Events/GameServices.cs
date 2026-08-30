@@ -1,59 +1,20 @@
 
+using System;
+using System.Collections.Generic;
+
 public static class GameServices
 {
-    public static BuildManager BuildManager { get; private set; }
-    public static WaveManager WaveManager { get; private set; }
-    public static TileAnimator TileAnimator { get; private set; }
-    public static EnemySpawner EnemySpawner { get; private set; }
-    public static GridVisibilityController GridVisibilityController { get; private set; }
+    private static readonly Dictionary<Type, object> services = new Dictionary<Type, object>();
 
-    public static void RegisterBuildManager(BuildManager manager) => BuildManager = manager;
+    public static void Register<T>(T instance) where T : class => services[typeof(T)] = instance;
 
-    public static void UnregisterBuildManager(BuildManager manager)
+    public static void Unregister<T>(T instance) where T : class
     {
-        if (BuildManager == manager)
+        if (services.TryGetValue(typeof(T), out object current) && ReferenceEquals(current, instance))
         {
-            BuildManager = null;
+            services.Remove(typeof(T));
         }
     }
 
-    public static void RegisterWaveManager(WaveManager manager) => WaveManager = manager;
-
-    public static void UnregisterWaveManager(WaveManager manager)
-    {
-        if (WaveManager == manager)
-        {
-            WaveManager = null;
-        }
-    }
-
-    public static void RegisterTileAnimator(TileAnimator animator) => TileAnimator = animator;
-
-    public static void UnregisterTileAnimator(TileAnimator animator)
-    {
-        if (TileAnimator == animator)
-        {
-            TileAnimator = null;
-        }
-    }
-
-    public static void RegisterEnemySpawner(EnemySpawner spawner) => EnemySpawner = spawner;
-
-    public static void UnregisterEnemySpawner(EnemySpawner spawner)
-    {
-        if (EnemySpawner == spawner)
-        {
-            EnemySpawner = null;
-        }
-    }
-
-    public static void RegisterGridVisibilityController(GridVisibilityController controller) => GridVisibilityController = controller;
-
-    public static void UnregisterGridVisibilityController(GridVisibilityController controller)
-    {
-        if (GridVisibilityController == controller)
-        {
-            GridVisibilityController = null;
-        }
-    }
+    public static T Get<T>() where T : class => services.TryGetValue(typeof(T), out object instance) ? (T)instance : null;
 }

@@ -5,18 +5,14 @@ public class UnitManager : MonoBehaviour
 {
     private readonly Dictionary<System.Type, HashSet<object>> registeredUnits = new Dictionary<System.Type, HashSet<object>>();
 
-    public static UnitManager Instance { get; private set; }
-
-    private void Awake()
+    private void OnEnable()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        GameServices.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        GameServices.Unregister(this);
     }
 
     public void RegisterUnit<T>(T unit) where T : class, IUnitInterface

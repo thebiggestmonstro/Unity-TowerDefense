@@ -29,12 +29,12 @@ public class WaveManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameServices.RegisterWaveManager(this);
+        GameServices.Register(this);
     }
 
     private void OnDisable()
     {
-        GameServices.UnregisterWaveManager(this);
+        GameServices.Unregister(this);
     }
 
     private IEnumerator CoWaveLoop()

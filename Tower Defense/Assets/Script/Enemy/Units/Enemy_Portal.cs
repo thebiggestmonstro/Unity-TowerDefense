@@ -19,25 +19,25 @@ public class Enemy_Portal : MonoBehaviour
 
     private void OnEnable()
     {
-        if (GameServices.EnemySpawner != null)
+        if (GameServices.Get<EnemySpawner>() != null)
         {
-            GameServices.EnemySpawner.RegisterPortal(this);
+            GameServices.Get<EnemySpawner>().RegisterPortal(this);
         }
     }
 
     private void Start()
     {
-        if (GameServices.EnemySpawner != null && !GameServices.EnemySpawner.HasPortal(this))
+        if (GameServices.Get<EnemySpawner>() != null && !GameServices.Get<EnemySpawner>().HasPortal(this))
         {
-            GameServices.EnemySpawner.RegisterPortal(this);
+            GameServices.Get<EnemySpawner>().RegisterPortal(this);
         }
     }
 
     private void OnDisable()
     {
-        if (GameServices.EnemySpawner != null)
+        if (GameServices.Get<EnemySpawner>() != null)
         {
-            GameServices.EnemySpawner.UnregisterPortal(this);
+            GameServices.Get<EnemySpawner>().UnregisterPortal(this);
         }
     }
 
@@ -48,7 +48,7 @@ public class Enemy_Portal : MonoBehaviour
             return;
         }
 
-        if (!GameServices.EnemySpawner.HasEnemiesLeft())
+        if (!GameServices.Get<EnemySpawner>().HasEnemiesLeft())
         {
             isSpawning = false;
             return;
@@ -70,12 +70,12 @@ public class Enemy_Portal : MonoBehaviour
 
     public void SpawnProcess()
     {
-        GameObject enemy = GameServices.EnemySpawner.RequestSpawnEnemy();
+        GameObject enemy = GameServices.Get<EnemySpawner>().RequestSpawnEnemy();
 
         if (enemy != null)
         {
             GameObject spawnedEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
-            GameServices.EnemySpawner.RegisterActiveEnemy(spawnedEnemy);
+            GameServices.Get<EnemySpawner>().RegisterActiveEnemy(spawnedEnemy);
 
             Enemy_Base enemyComponent = spawnedEnemy.GetComponent<Enemy_Base>();
             if (enemyComponent != null)
