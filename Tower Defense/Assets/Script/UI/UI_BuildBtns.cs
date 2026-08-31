@@ -65,7 +65,6 @@ public class UI_BuildBtns : MonoBehaviour
     public UI_BuildBtn GetLastSelectedButton() => lastSelectedButton;
     public void SetLastSelected(UI_BuildBtn newLastSelected) => lastSelectedButton = newLastSelected;
 
-    // Called by PlayerInputHandler; this class still decides whether the input is relevant.
     public void SelectHotkeyButton(int buttonIndex)
     {
         if (!isBuildMenuActive)

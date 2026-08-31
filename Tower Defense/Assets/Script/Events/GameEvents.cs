@@ -16,6 +16,10 @@ public static class GameEvents
     public static event Action<bool> OnWaveTimerVisibilityChanged;
     public static event Action<float> OnWaveTimerUpdated;
 
+    // Stage lifecycle
+    public static event Action OnStageCleared;
+    public static event Action OnReturnMainScene;
+
     public static void RaiseHealthChanged(int currentHp, int maxHp) => OnHealthChanged?.Invoke(currentHp, maxHp);
     public static void RaiseDamageTaken() => OnDamageTaken?.Invoke();
     public static void RaiseCurrencyChanged(int currency) => OnCurrencyChanged?.Invoke(currency);
@@ -24,4 +28,6 @@ public static class GameEvents
     public static void RaiseEnemyDefeated(int rewardAmount) => OnEnemyDefeated?.Invoke(rewardAmount);
     public static void RaiseWaveTimerVisibilityChanged(bool visible) => OnWaveTimerVisibilityChanged?.Invoke(visible);
     public static void RaiseWaveTimerUpdated(float remainingSeconds) => OnWaveTimerUpdated?.Invoke(remainingSeconds);
+    public static void RaiseStageCleared() => OnStageCleared?.Invoke();
+    public static void RaiseReturnMainStage() => OnReturnMainScene?.Invoke();
 }

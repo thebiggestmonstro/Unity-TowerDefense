@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_Canvas : MonoBehaviour
@@ -31,16 +32,23 @@ public class UI_Canvas : MonoBehaviour
 
         ActivateUIFade(true);
 
-        // Not every scene has every UI type (e.g. the main menu scene has no
-        // in-game/pause UI, stage scenes have no main menu/settings UI), so
-        // only switch to what this scene actually contains.
-        if (uiInGame != null)
+
+        // TEMP
+        if (SceneManager.GetActiveScene().name == "Level_1")
         {
-            SwitchUI(uiInGame.gameObject);
+            if (uiInGame != null)
+            {
+                SwitchUI(uiMainMenu.gameObject);
+                SwitchUI(uiInGame.gameObject);
+            }
         }
-        else if (uiMainMenu != null)
+        else if (SceneManager.GetActiveScene().name == "SampleScene")
         {
-            SwitchUI(uiMainMenu.gameObject);
+            if (uiMainMenu != null)
+            {
+                SwitchUI(uiInGame.gameObject);
+                SwitchUI(uiMainMenu.gameObject);
+            }
         }
     }
 

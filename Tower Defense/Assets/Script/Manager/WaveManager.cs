@@ -73,6 +73,7 @@ public class WaveManager : MonoBehaviour
 
         GameEvents.RaiseWaveTimerVisibilityChanged(false);
         Debug.Log("Clear!!!");
+        GameEvents.RaiseStageCleared();
     }
 
     private void AdvanceLevelLayout()
