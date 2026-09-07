@@ -34,9 +34,15 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    private bool CanInteractWithTile(out GridVisibilityController gridVisibility)
+    {
+        gridVisibility = GameServices.Get<GridVisibilityController>();
+        return gridVisibility != null && bBuildTileAvailable && !gridVisibility.GetIsGridMoving();
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable || GameServices.Get<GridVisibilityController>().GetIsGridMoving())
+        if (!CanInteractWithTile(out _))
         {
             return;
         }
@@ -46,13 +52,14 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
         }
 
-        if (GameServices.Get<BuildManager>().GetSelectedBuildTile() == this)
+        BuildManager buildManager = GameServices.Get<BuildManager>();
+        if (buildManager == null || buildManager.GetSelectedBuildTile() == this)
         {
             return;
         }
 
-        GameServices.Get<BuildManager>().SetSelectedBuildTile(this);
-        GameServices.Get<BuildManager>().EnableBuildMenu();
+        buildManager.SetSelectedBuildTile(this);
+        buildManager.EnableBuildMenu();
 
         CancelInvoke(nameof(MoveTileDown));
         MoveTileUp();
@@ -63,12 +70,7 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable || GameServices.Get<GridVisibilityController>().GetIsGridMoving())
-        {
-            return;
-        }
-
-        if (!bCanMove)
+        if (!CanInteractWithTile(out _) || !bCanMove)
         {
             return;
         }
@@ -79,19 +81,20 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!bBuildTileAvailable || GameServices.Get<GridVisibilityController>().GetIsGridMoving())
+        if (!CanInteractWithTile(out _) || !bCanMove)
         {
             return;
         }
 
-        if (!bCanMove)
+        TileAnimator tileAnimator = GameServices.Get<TileAnimator>();
+        if (tileAnimator == null)
         {
             return;
         }
 
         if (currentMoveUpCoroutine != null)
         {
-            Invoke(nameof(MoveTileDown), GameServices.Get<TileAnimator>().GetMovementDurtaion());
+            Invoke(nameof(MoveTileDown), tileAnimator.GetMovementDurtaion());
         }
         else
         {
@@ -107,20 +110,26 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void MoveTileUp()
     {
-        Vector3 targetPosition = transform.position + new Vector3(0, GameServices.Get<TileAnimator>().GetBuildTileOffset(), 0);
-        GameServices.Get<TileAnimator>().MoveTile(transform, targetPosition);
-        currentMoveUpCoroutine = GameServices.Get<TileAnimator>().GetActiveTileMovementCoroutine(transform);
+        TileAnimator tileAnimator = GameServices.Get<TileAnimator>();
+        if (tileAnimator == null)
+        {
+            return;
+        }
+
+        Vector3 targetPosition = transform.position + new Vector3(0, tileAnimator.GetBuildTileOffset(), 0);
+        tileAnimator.MoveTile(transform, targetPosition);
+        currentMoveUpCoroutine = tileAnimator.GetActiveTileMovementCoroutine(transform);
     }
 
     private void MoveTileDown()
     {
-        GameServices.Get<TileAnimator>().MoveTile(transform, defaultPosition);
+        GameServices.Get<TileAnimator>()?.MoveTile(transform, defaultPosition);
     }
 
     public void MoveTileDownImmediate()
     {
         CancelInvoke(nameof(MoveTileDown));
-        GameServices.Get<TileAnimator>().StopTileMovement(transform);
+        GameServices.Get<TileAnimator>()?.StopTileMovement(transform);
         transform.position = defaultPosition;
     }
 

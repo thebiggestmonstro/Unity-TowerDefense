@@ -32,23 +32,15 @@ public class UI_Canvas : MonoBehaviour
 
         ActivateUIFade(true);
 
-
-        // TEMP
-        if (SceneManager.GetActiveScene().name == "Level_1")
+        if (uiInGame != null && uiInGame.gameObject.activeSelf)
         {
-            if (uiInGame != null)
-            {
-                SwitchUI(uiMainMenu.gameObject);
-                SwitchUI(uiInGame.gameObject);
-            }
+            SwitchUI(uiMainMenu.gameObject);
+            SwitchUI(uiInGame.gameObject);
         }
-        else if (SceneManager.GetActiveScene().name == "SampleScene")
+        else if (uiMainMenu != null && uiMainMenu.gameObject.activeSelf)
         {
-            if (uiMainMenu != null)
-            {
-                SwitchUI(uiInGame.gameObject);
-                SwitchUI(uiMainMenu.gameObject);
-            }
+            SwitchUI(uiInGame.gameObject);
+            SwitchUI(uiMainMenu.gameObject);
         }
     }
 

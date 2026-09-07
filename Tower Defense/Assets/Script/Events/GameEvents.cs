@@ -19,6 +19,8 @@ public static class GameEvents
     // Stage lifecycle
     public static event Action OnStageCleared;
     public static event Action OnReturnMainScene;
+    public static event Action<string> OnSceneSelected;
+    public static event Action OnSceneRestarted;
 
     public static void RaiseHealthChanged(int currentHp, int maxHp) => OnHealthChanged?.Invoke(currentHp, maxHp);
     public static void RaiseDamageTaken() => OnDamageTaken?.Invoke();
@@ -30,4 +32,6 @@ public static class GameEvents
     public static void RaiseWaveTimerUpdated(float remainingSeconds) => OnWaveTimerUpdated?.Invoke(remainingSeconds);
     public static void RaiseStageCleared() => OnStageCleared?.Invoke();
     public static void RaiseReturnMainStage() => OnReturnMainScene?.Invoke();
+    public static void RaiseSceneSelected(string sceneName) => OnSceneSelected?.Invoke(sceneName); 
+    public static void RaiseSceneRestarted() => OnSceneRestarted?.Invoke();
 }

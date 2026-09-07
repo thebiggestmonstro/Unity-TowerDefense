@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcc4dba0701aa954099b1c97f7daa3d5, type: 3}
+  m_Name: Wave_1
+  m_EditorClassIdentifier: 
+  waveInfo:
+  - enemyPrefab: {fileID: 2850966121671249568, guid: 97d45e88dae38a549b95437f07bc7ea0, type: 3}
+    spawnCount: 2
+  - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
+    spawnCount: 0
+  currentWaveGrid: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
+  newPortals: []

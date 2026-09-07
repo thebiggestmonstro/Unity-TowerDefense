@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextSceneOnClear: 
+  mainScene: SampleScene
 --- !u!1 &5757959863405669286
 GameObject:
   m_ObjectHideFlags: 0

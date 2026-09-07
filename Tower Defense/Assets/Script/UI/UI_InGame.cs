@@ -16,6 +16,8 @@ public class UI_InGame : MonoBehaviour
     private float waveTimerTxtOffset;
     [SerializeField]
     UI_TextBlink waveTimerTextBlinkEffect;
+    [SerializeField]
+    private UI_Victory uiVictory;
 
     private UI_Animator uiAnimator;
     private bool isWaveTimerVisible = false;
@@ -99,5 +101,13 @@ public class UI_InGame : MonoBehaviour
     public void ShakeHealthPointUI()
     {
         uiCanvas.GetUIAnimator().ShakeUI(Txt_healhPoints.transform.parent);
+    }
+
+    public void EnableVictoryUI(bool enable)
+    {
+        if (uiVictory != null)
+        {
+            uiVictory.gameObject.SetActive(enable);
+        }
     }
 }

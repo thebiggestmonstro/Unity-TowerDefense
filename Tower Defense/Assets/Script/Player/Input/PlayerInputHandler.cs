@@ -45,17 +45,26 @@ public class PlayerInputHandler : MonoBehaviour
         {
             GameEvents.RaiseStageCleared();
         }
+
+        if (Keyboard.current[Key.L].wasPressedThisFrame)
+        {
+            GameEvents.RaiseSceneRestarted();
+        }
     }
 
     #region Camera action map
-
     public void OnMove(InputAction.CallbackContext context)
     {
-        cameraController.SetMoveInput(context.action.ReadValue<Vector2>());
+        cameraController?.SetMoveInput(context.action.ReadValue<Vector2>());
     }
 
     public void OnRotate(InputAction.CallbackContext context)
     {
+        if (cameraController == null)
+        {
+            return;
+        }
+
         if (context.started || context.performed)
         {
             cameraController.SetRotating(true);
@@ -68,6 +77,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnZoom(InputAction.CallbackContext context)
     {
+        if (cameraController == null)
+        {
+            return;
+        }
+
         if (context.performed)
         {
             cameraController.SetScrollValue(context.ReadValue<float>());
@@ -80,6 +94,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnHoldClick(InputAction.CallbackContext context)
     {
+        if (cameraController == null)
+        {
+            return;
+        }
+
         if (context.started)
         {
             cameraController.BeginMiddleClickDrag();
@@ -102,7 +121,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnCancelBuild(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || buildManager == null)
         {
             return;
         }
@@ -112,7 +131,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || buildManager == null)
         {
             return;
         }
@@ -130,7 +149,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void HandleHotkey(InputAction.CallbackContext context, int buttonIndex)
     {
-        if (!context.performed)
+        if (!context.performed || uiBuildBtns == null)
         {
             return;
         }
@@ -140,7 +159,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnConfirmBuild(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || uiBuildBtns == null)
         {
             return;
         }
@@ -154,7 +173,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnTogglePause(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || uiCanvas == null)
         {
             return;
         }

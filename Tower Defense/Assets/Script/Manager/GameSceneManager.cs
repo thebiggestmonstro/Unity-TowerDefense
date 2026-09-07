@@ -13,6 +13,8 @@ public class GameSceneManager : MonoBehaviour
         GameServices.Register(this);
         GameEvents.OnStageCleared += HandleStageCleared;
         GameEvents.OnReturnMainScene += HandleReturnMainScene;
+        GameEvents.OnSceneSelected += HandleSceneSelected;
+        GameEvents.OnSceneRestarted += HandleRestartCurrentScene;
     }
 
     private void OnDisable()
@@ -20,6 +22,8 @@ public class GameSceneManager : MonoBehaviour
         GameServices.Unregister(this);
         GameEvents.OnStageCleared -= HandleStageCleared;
         GameEvents.OnReturnMainScene -= HandleReturnMainScene;
+        GameEvents.OnSceneSelected -= HandleSceneSelected;
+        GameEvents.OnSceneRestarted -= HandleRestartCurrentScene;
     }
 
     private void LoadScene(string sceneName)
@@ -31,7 +35,7 @@ public class GameSceneManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(nextSceneOnClear))
         {
-            Debug.LogWarning($"{nameof(GameSceneManager)}: stage cleared but no Next Scene On Clear is set.");
+            UIManager.GetUI<UI_InGame>("UI_InGame").EnableVictoryUI(true);
             return;
         }
 
@@ -47,5 +51,28 @@ public class GameSceneManager : MonoBehaviour
         }
 
         LoadScene(mainScene);
+    }
+
+    public void HandleSceneSelected(string selectedSceneName)
+    {
+        if (string.IsNullOrEmpty(selectedSceneName))
+        {
+            Debug.LogWarning($"{nameof(GameSceneManager)}: selected scene was not set.");
+            return;
+        }
+
+        LoadScene(selectedSceneName);
+    }
+
+
+    public void HandleRestartCurrentScene()
+    {
+        if (string.IsNullOrEmpty(SceneManager.GetActiveScene().name))
+        {
+            Debug.LogWarning($"{nameof(GameSceneManager)}: current scene was not set.");
+            return;
+        }
+
+        LoadScene(SceneManager.GetActiveScene().name);
     }
 }
