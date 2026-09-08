@@ -39,6 +39,7 @@ public class GameSceneManager : MonoBehaviour
             return;
         }
 
+        GameServices.Get<SaveManager>()?.UnlockLevel(nextSceneOnClear);
         LoadScene(nextSceneOnClear);
     }
 

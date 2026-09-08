@@ -62003,6 +62003,10 @@ PrefabInstance:
       propertyPath: cameraController
       value: 
       objectReference: {fileID: 330585549}
+    - target: {fileID: 6205099294812674171, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7508223111941680839, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
       propertyPath: mainSceneGrid
       value: 

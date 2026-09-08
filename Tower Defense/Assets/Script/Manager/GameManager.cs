@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         currentHp = maxHp;
         GameEvents.RaiseHealthChanged(currentHp, maxHp);
         GameEvents.RaiseCurrencyChanged(currency);
+        GameEvents.RaiseLevelStarted();
     }
 
     private void HandleEnemyReachedCastle() => UpdateHp(-1);

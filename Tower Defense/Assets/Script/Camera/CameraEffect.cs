@@ -38,6 +38,16 @@ public class CameraEffect : MonoBehaviour
         camController = GetComponent<CameraController>();
     }
 
+    private void OnEnable()
+    {
+        GameEvents.OnLevelStarted += HandleLevelStarted;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnLevelStarted -= HandleLevelStarted;
+    }
+
     private void Start()
     {
         SwitchToMenuView();
@@ -110,4 +120,6 @@ public class CameraEffect : MonoBehaviour
 
         camController.SetShakeOffset(Vector3.zero);
     }
+
+    private void HandleLevelStarted() => SwitchToGameView();
 }
