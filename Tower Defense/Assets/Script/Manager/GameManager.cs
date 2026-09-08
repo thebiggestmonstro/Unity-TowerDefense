@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
         currentHp += value;
         GameEvents.RaiseHealthChanged(currentHp, maxHp);
         GameEvents.RaiseDamageTaken();
+
+        if (currentHp <= 0)
+        { 
+            GameEvents.RaiseLevelLost();
+        }
     }
 
     public void UpdateCurrency(int value)

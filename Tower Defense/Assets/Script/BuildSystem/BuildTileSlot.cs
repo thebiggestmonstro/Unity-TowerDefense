@@ -24,6 +24,11 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         uiCanvas = UIManager.GetUI<UI_Canvas>("Canvas");
 
+        if (GetComponent<TileSlot_LevelBtn>() != null)
+        {
+            bBuildTileAvailable = true;
+        }
+
         if (!bBuildTileAvailable)
         {
             transform.position += new Vector3(0, 0.1f);

@@ -18,6 +18,8 @@ public class UI_InGame : MonoBehaviour
     UI_TextBlink waveTimerTextBlinkEffect;
     [SerializeField]
     private UI_Victory uiVictory;
+    [SerializeField]
+    private UI_Defeat uiDefeat;
 
     private UI_Animator uiAnimator;
     private bool isWaveTimerVisible = false;
@@ -41,6 +43,7 @@ public class UI_InGame : MonoBehaviour
         GameEvents.OnCurrencyShortage += ShakeCurrencyUI;
         GameEvents.OnWaveTimerVisibilityChanged += EnableWaveTimerText;
         GameEvents.OnWaveTimerUpdated += UpdateWaveTimerText;
+        GameEvents.OnLevelLost += SetGameOverUI;
     }
 
     private void OnDisable()
@@ -51,6 +54,7 @@ public class UI_InGame : MonoBehaviour
         GameEvents.OnCurrencyShortage -= ShakeCurrencyUI;
         GameEvents.OnWaveTimerVisibilityChanged -= EnableWaveTimerText;
         GameEvents.OnWaveTimerUpdated -= UpdateWaveTimerText;
+        GameEvents.OnLevelLost -= SetGameOverUI;
     }
 
     private void OnDestroy()
@@ -108,6 +112,14 @@ public class UI_InGame : MonoBehaviour
         if (uiVictory != null)
         {
             uiVictory.gameObject.SetActive(enable);
+        }
+    }
+
+    private void SetGameOverUI()
+    {
+        if (uiDefeat != null)
+        { 
+            uiDefeat.gameObject.SetActive(true);
         }
     }
 }

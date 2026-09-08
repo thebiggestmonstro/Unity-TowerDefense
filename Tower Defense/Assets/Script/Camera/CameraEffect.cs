@@ -18,6 +18,13 @@ public class CameraEffect : MonoBehaviour
     private Vector3 inGameRotation;
 
     [Space]
+    [Header("Level Selection View")]
+    [SerializeField]
+    private Vector3 levelSelectionPosition;
+    [SerializeField]
+    private Vector3 levelSelectionRotation;
+
+    [Space]
     [Header("Screenshake Settings")]
     [Range(0.01f, .5f)]
     [SerializeField] private float shakeMagnutide;
@@ -46,6 +53,12 @@ public class CameraEffect : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(ChangePositionAndRotation(inGamePosition, Quaternion.Euler(inGameRotation)));
+    }
+
+    public void SwitchToLevelSelectionView()
+    {
+        StopAllCoroutines();
+        StartCoroutine(ChangePositionAndRotation(levelSelectionPosition, Quaternion.Euler(levelSelectionRotation)));
     }
 
     public void Screenshake(float newDuration, float newMagnitude)

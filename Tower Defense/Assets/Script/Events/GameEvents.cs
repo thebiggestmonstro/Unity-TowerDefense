@@ -15,6 +15,7 @@ public static class GameEvents
     // Wave progress broadcasts
     public static event Action<bool> OnWaveTimerVisibilityChanged;
     public static event Action<float> OnWaveTimerUpdated;
+    public static event Action OnLevelLost;
 
     // Stage lifecycle
     public static event Action OnStageCleared;
@@ -30,6 +31,7 @@ public static class GameEvents
     public static void RaiseEnemyDefeated(int rewardAmount) => OnEnemyDefeated?.Invoke(rewardAmount);
     public static void RaiseWaveTimerVisibilityChanged(bool visible) => OnWaveTimerVisibilityChanged?.Invoke(visible);
     public static void RaiseWaveTimerUpdated(float remainingSeconds) => OnWaveTimerUpdated?.Invoke(remainingSeconds);
+    public static void RaiseLevelLost() => OnLevelLost?.Invoke();
     public static void RaiseStageCleared() => OnStageCleared?.Invoke();
     public static void RaiseReturnMainStage() => OnReturnMainScene?.Invoke();
     public static void RaiseSceneSelected(string sceneName) => OnSceneSelected?.Invoke(sceneName); 
