@@ -65,6 +65,12 @@ public class Enemy_Base : MonoBehaviour, IDamageable
             return;
         }
 
+        if (!agent.isOnNavMesh)
+        {
+            TryRecoverOnNavMesh();
+            return;
+        }
+
         if (agent.velocity.sqrMagnitude > 0.01f)
         {
             FaceToTarget(agent.steeringTarget);
@@ -108,6 +114,16 @@ public class Enemy_Base : MonoBehaviour, IDamageable
             agent.ResetPath();
             OnDestinationReached?.Invoke();
             return;
+        }
+
+        if (!agent.isOnNavMesh)
+        {
+            TryRecoverOnNavMesh();
+
+            if (!agent.isOnNavMesh)
+            {
+                return; 
+            }
         }
 
         Vector3 targetPoint = myWaypoints[nextWaypointIndex].position;
@@ -155,7 +171,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         }
     }
 
-    public float GetDistanceToEndPoint() => totalDistance + agent.remainingDistance;
+    public float GetDistanceToEndPoint() => (agent != null && agent.isOnNavMesh) ? totalDistance + agent.remainingDistance : totalDistance;
 
     public Vector3 GetCenterPoint() => centerPoint.position;
 
@@ -207,5 +223,13 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         float distanceBetweenPoints = Vector3.Distance(currentWaypoint, nextWaypoint);
 
         return distanceBetweenPoints > distanceToNextWaypoint;
+    }
+
+    private void TryRecoverOnNavMesh()
+    {
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+        }
     }
 }

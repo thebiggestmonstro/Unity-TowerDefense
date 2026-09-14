@@ -433,7 +433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileAnimator: {fileID: 8086033380938261795}
   tileMoveDuration: 0.1
-  tileMoveDelay: 0.1
+  tileMoveDelay: 0
   yOffset: 5
   mainSceneGrid: {fileID: 0}
   mainMenuObjects: []

@@ -15,6 +15,7 @@ public class GameSceneManager : MonoBehaviour
         GameEvents.OnReturnMainScene += HandleReturnMainScene;
         GameEvents.OnSceneSelected += HandleSceneSelected;
         GameEvents.OnSceneRestarted += HandleRestartCurrentScene;
+        GameEvents.OnNextLevelStarted += HandleStartNextScene;
     }
 
     private void OnDisable()
@@ -24,6 +25,7 @@ public class GameSceneManager : MonoBehaviour
         GameEvents.OnReturnMainScene -= HandleReturnMainScene;
         GameEvents.OnSceneSelected -= HandleSceneSelected;
         GameEvents.OnSceneRestarted -= HandleRestartCurrentScene;
+        GameEvents.OnNextLevelStarted -= HandleStartNextScene;
     }
 
     private void LoadScene(string sceneName)
@@ -40,7 +42,7 @@ public class GameSceneManager : MonoBehaviour
         }
 
         GameServices.Get<SaveManager>()?.UnlockLevel(nextSceneOnClear);
-        LoadScene(nextSceneOnClear);
+        UIManager.GetUI<UI_InGame>("UI_InGame").EnableLevelClearUI(true);
     }
 
     public void HandleReturnMainScene()
@@ -75,5 +77,15 @@ public class GameSceneManager : MonoBehaviour
         }
 
         LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void HandleStartNextScene()
+    {
+        if (string.IsNullOrEmpty(nextSceneOnClear))
+        {
+            return;
+        }
+
+        LoadScene(nextSceneOnClear);
     }
 }

@@ -20,6 +20,8 @@ public class UI_InGame : MonoBehaviour
     private UI_Victory uiVictory;
     [SerializeField]
     private UI_Defeat uiDefeat;
+    [SerializeField]
+    private UI_LevelCompleted uiLevelCompleted;
 
     private UI_Animator uiAnimator;
     private bool isWaveTimerVisible = false;
@@ -112,6 +114,14 @@ public class UI_InGame : MonoBehaviour
         if (uiVictory != null)
         {
             uiVictory.gameObject.SetActive(enable);
+        }
+    }
+
+    public void EnableLevelClearUI(bool enable)
+    {
+        if (uiLevelCompleted != null)
+        {
+            uiLevelCompleted.gameObject.SetActive(enable);
         }
     }
 

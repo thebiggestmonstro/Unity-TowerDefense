@@ -13,7 +13,7 @@ public class GridVisibilityController : MonoBehaviour
     [SerializeField]
     private float tileMoveDuration = 0.1f;
     [SerializeField]
-    private float tileMoveDelay = 0.1f;
+    private float tileMoveDelay = 0f;
     [SerializeField]
     private float yOffset = 5f;
 

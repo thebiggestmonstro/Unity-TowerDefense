@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Queue<GameObject> enemiesToCreate = new Queue<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
+    private int totalEliminatedEnemyCount = 0;
 
     private void OnEnable()
     {
@@ -78,6 +79,7 @@ public class EnemySpawner : MonoBehaviour
         if (activeEnemies.Contains(enemyToRemove))
         {
             activeEnemies.Remove(enemyToRemove);
+            totalEliminatedEnemyCount++;
         }
     }
 
@@ -109,4 +111,6 @@ public class EnemySpawner : MonoBehaviour
 
         return newEnemyList;
     }
+
+    public int GetTotalSpawnedCount() => totalEliminatedEnemyCount;
 }

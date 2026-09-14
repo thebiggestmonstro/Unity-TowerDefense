@@ -31,6 +31,15 @@ public class CameraEffect : MonoBehaviour
     [Range(0.1f, 3f)]
     [SerializeField] private float shakeDuration;
 
+    [Space]
+    [Header("Castle Focus Details")]
+    [SerializeField] private float focusOnCastleDuration = 0.5f;
+    [SerializeField] private float hightOffset = 3;
+    [SerializeField] private float distanceToCastle = 7;
+
+    [Header("Transition details")]
+    [SerializeField] private float transitionDuration = 3;
+
     private CameraController camController;
 
     private void Awake()
@@ -41,11 +50,13 @@ public class CameraEffect : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnLevelStarted += HandleLevelStarted;
+        GameEvents.OnDamageTaken += HandleDamaged;
     }
 
     private void OnDisable()
     {
         GameEvents.OnLevelStarted -= HandleLevelStarted;
+        GameEvents.OnDamageTaken -= HandleDamaged;
     }
 
     private void Start()
@@ -56,28 +67,51 @@ public class CameraEffect : MonoBehaviour
     public void SwitchToMenuView()
     {
         StopAllCoroutines();
-        StartCoroutine(ChangePositionAndRotation(inMenuPosition, Quaternion.Euler(inMenuRotation)));
+        StartCoroutine(CoChangePositionAndRotation(inMenuPosition, Quaternion.Euler(inMenuRotation)));
+        StartCoroutine(CoEnableCameraControllsAfter(transitionDuration + .1f));
     }
 
     public void SwitchToGameView()
     {
         StopAllCoroutines();
-        StartCoroutine(ChangePositionAndRotation(inGamePosition, Quaternion.Euler(inGameRotation)));
+        StartCoroutine(CoChangePositionAndRotation(inGamePosition, Quaternion.Euler(inGameRotation)));
+        StartCoroutine(CoEnableCameraControllsAfter(transitionDuration + .1f));
     }
 
     public void SwitchToLevelSelectionView()
     {
         StopAllCoroutines();
-        StartCoroutine(ChangePositionAndRotation(levelSelectionPosition, Quaternion.Euler(levelSelectionRotation)));
+        StartCoroutine(CoChangePositionAndRotation(levelSelectionPosition, Quaternion.Euler(levelSelectionRotation)));
+        StartCoroutine(CoEnableCameraControllsAfter(transitionDuration + .1f));
+    }
+
+    private void SwitchCameraFocusOnCastle()
+    {
+        Transform castle = GameServices.Get<UnitManager>().GetUnitByName<Player_Castle>("Player_Castle").transform;
+
+        if (castle == null)
+        {
+            Debug.Log("There is no castle to focus on!");
+            return;
+        }
+
+        Vector3 directionToCastle = (castle.position - transform.position).normalized;
+        Vector3 targetPosition = castle.position - (directionToCastle * distanceToCastle);
+        targetPosition.y = castle.position.y + hightOffset;
+
+        Quaternion targetRotation = Quaternion.LookRotation(castle.position - targetPosition);
+
+        StopAllCoroutines();
+        StartCoroutine(CoChangePositionAndRotation(targetPosition, targetRotation, focusOnCastleDuration));
+        StartCoroutine(CoEnableCameraControllsAfter(focusOnCastleDuration + .1f));
     }
 
     public void Screenshake(float newDuration, float newMagnitude)
     {
-        StartCoroutine(ScreenshakeFX(newDuration, newMagnitude));
+        StartCoroutine(CoScreenshakeFX(newDuration, newMagnitude));
     }
 
-
-    private IEnumerator ChangePositionAndRotation(Vector3 targetPosition, Quaternion targetRotation, float duration = 3, float delay = 0)
+    private IEnumerator CoChangePositionAndRotation(Vector3 targetPosition, Quaternion targetRotation, float duration = 3, float delay = 0)
     {
         yield return new WaitForSeconds(delay);
 
@@ -99,11 +133,10 @@ public class CameraEffect : MonoBehaviour
         transform.rotation = targetRotation;
 
         camController.SyncTargetPosition(targetPosition);
-        camController.SyncCameraRotation(targetRotation); 
-        camController.EnableCameraConrolls(true);
+        camController.SyncCameraRotation(targetRotation);
     }
 
-    private IEnumerator ScreenshakeFX(float duration, float magnitude)
+    private IEnumerator CoScreenshakeFX(float duration, float magnitude)
     {
         float elapsed = 0;
 
@@ -121,5 +154,13 @@ public class CameraEffect : MonoBehaviour
         camController.SetShakeOffset(Vector3.zero);
     }
 
+    private IEnumerator CoEnableCameraControllsAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        camController.EnableCameraConrolls(true);
+    }
+
     private void HandleLevelStarted() => SwitchToGameView();
+
+    private void HandleDamaged() => SwitchCameraFocusOnCastle();
 }

@@ -23,7 +23,7 @@ public static class GameEvents
     public static event Action<string> OnSceneSelected;
     public static event Action OnSceneRestarted;
     public static event Action OnLevelStarted;
-
+    public static event Action OnNextLevelStarted;
 
     public static void RaiseHealthChanged(int currentHp, int maxHp) => OnHealthChanged?.Invoke(currentHp, maxHp);
     public static void RaiseDamageTaken() => OnDamageTaken?.Invoke();
@@ -39,4 +39,5 @@ public static class GameEvents
     public static void RaiseSceneSelected(string sceneName) => OnSceneSelected?.Invoke(sceneName); 
     public static void RaiseSceneRestarted() => OnSceneRestarted?.Invoke();
     public static void RaiseLevelStarted() => OnLevelStarted?.Invoke();
+    public static void RaiseNextLevelStarted() => OnNextLevelStarted?.Invoke();
 }

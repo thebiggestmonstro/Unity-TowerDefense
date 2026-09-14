@@ -33,25 +33,6 @@ public class PlayerInputHandler : MonoBehaviour
         playerInput.actions.FindActionMap("UI")?.Disable();
     }
 
-    // TEMP
-    private void Update()
-    {
-        if (Keyboard.current[Key.J].wasPressedThisFrame)
-        {
-            GameEvents.RaiseReturnMainStage();
-        }
-
-        if (Keyboard.current[Key.K].wasPressedThisFrame)
-        {
-            GameEvents.RaiseStageCleared();
-        }
-
-        if (Keyboard.current[Key.L].wasPressedThisFrame)
-        {
-            GameEvents.RaiseSceneRestarted();
-        }
-    }
-
     #region Camera action map
     public void OnMove(InputAction.CallbackContext context)
     {
