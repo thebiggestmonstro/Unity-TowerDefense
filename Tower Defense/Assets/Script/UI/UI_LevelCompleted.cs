@@ -8,7 +8,7 @@ public class UI_LevelCompleted : MonoBehaviour
 
     private void OnEnable()
     {
-        killCountTxt.text = "Total Defeated Enemies : " + GameServices.Get<EnemySpawner>().GetTotalSpawnedCount();
+        killCountTxt.text = "Total Defeated Enemies : " + GameServices.Get<EnemySpawner>().GetTotalDefeatedCount();
     }
 
     public void NextLevelButtonClicked()

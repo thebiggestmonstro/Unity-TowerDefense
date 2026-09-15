@@ -112,5 +112,5 @@ public class EnemySpawner : MonoBehaviour
         return newEnemyList;
     }
 
-    public int GetTotalSpawnedCount() => totalEliminatedEnemyCount;
+    public int GetTotalDefeatedCount() => totalEliminatedEnemyCount;
 }

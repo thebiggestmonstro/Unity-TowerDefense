@@ -39,7 +39,6 @@ public class LevelTransitionHandler : MonoBehaviour
         GridBuilder newGridInstance = Instantiate(nextGridPrefab, Vector3.zero, Quaternion.identity);
         currentGrid = newGridInstance;
         buildManager.currentGrid = currentGrid;
-        buildManager.MakeBuildTileAvaliablityFalse(currentGrid);
     }
 
     private void UpdateLevelPortals(Enemy_Portal[] portalPrefabs)

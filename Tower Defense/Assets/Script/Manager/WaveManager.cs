@@ -126,7 +126,7 @@ public class WaveManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Wave Data is not registered in EnemyManager");
+            Debug.LogError("Wave Data is not registered in WaveManager");
         }
     }
 }

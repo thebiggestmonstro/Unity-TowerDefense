@@ -18869,6 +18869,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!222 &5247742600636491876
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18913,6 +18915,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!222 &5275485499882419901
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19068,6 +19072,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!114 &5494071649365662072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22075,6 +22081,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!1 &7187566666178260952
 GameObject:
   m_ObjectHideFlags: 0
@@ -23043,6 +23051,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!1 &7697481457357996685
 GameObject:
   m_ObjectHideFlags: 0
@@ -24800,6 +24810,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!224 &8958780181145157526
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25001,6 +25013,8 @@ MonoBehaviour:
   towerCenterY: 0.5
   gameManager: {fileID: 1118857965}
   buildManager: {fileID: 1857048535}
+  uiClickClip: {fileID: 8300000, guid: def971332e238e44a86a7c09b9f3e3ca, type: 3}
+  uiHoverClip: {fileID: 8300000, guid: 69cc5cf2934dd894c97dfd450eeea6b6, type: 3}
 --- !u!222 &9074024949696230042
 CanvasRenderer:
   m_ObjectHideFlags: 0

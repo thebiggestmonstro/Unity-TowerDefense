@@ -27,6 +27,12 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField]
     private BuildManager buildManager;
 
+    [Space]
+    [SerializeField]
+    private AudioClip uiClickClip;
+    [SerializeField]
+    private AudioClip uiHoverClip;
+
     private CameraEffect camEffect;
     private UI_Canvas uiCanvas;
     private VisualEffect_UnitPreview unitPreview;
@@ -49,6 +55,8 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void BuildTower()
     {
+        GameServices.Get<AudioManager>()?.PlayUISFX(uiClickClip);
+
         if (towerToBuild == null || !gameManager.CheckEnoughCurrency(costToBuild))
         {
             return;
@@ -127,6 +135,8 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         buildManager.SetMouseOnUI(true);
+
+        GameServices.Get<AudioManager>()?.PlayUISFX(uiHoverClip);
 
         foreach (var button in buildButtonsHolder.GetBuildButtons())
         {
