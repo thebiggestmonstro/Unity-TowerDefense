@@ -15,6 +15,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioSource uiSfxSource;
 
+    [Header("Unit SFX")]
+    [SerializeField]
+    private AudioSource unitSfxSource;
+
     private void Awake()
     {
         if (bgmSource != null)
@@ -25,6 +29,14 @@ public class AudioManager : MonoBehaviour
         if (uiSfxSource != null)
         {
             uiSfxSource.playOnAwake = false;
+        }
+
+        if (unitSfxSource != null)
+        {
+            uiSfxSource.playOnAwake = false;
+            uiSfxSource.volume = 0.6f;
+            uiSfxSource.spatialBlend = 1.0f;
+            uiSfxSource.maxDistance = 30.0f;
         }
     }
 
@@ -101,5 +113,16 @@ public class AudioManager : MonoBehaviour
         }
 
         uiSfxSource.PlayOneShot(clip);
+    }
+
+    public void PlayAttackSFX(AudioClip clip, bool randomPitch)
+    {
+        if (clip == null || unitSfxSource == null)
+        {
+            return;
+        }
+
+        unitSfxSource.pitch = randomPitch ? Random.Range(0.9f, 1.1f) : 1;
+        unitSfxSource.PlayOneShot(clip);
     }
 }

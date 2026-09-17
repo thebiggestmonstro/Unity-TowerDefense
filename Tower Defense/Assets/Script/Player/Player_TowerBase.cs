@@ -18,6 +18,8 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     protected EnemyType primaryTargetType = EnemyType.None;
     [SerializeField]
     private bool dynamicTargetChange;
+    [SerializeField]
+    protected AudioClip attackAudioClip;
 
     protected float lastAttackTime;
     protected Enemy_Base currentEnemy = null;

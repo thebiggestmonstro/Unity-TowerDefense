@@ -1953,6 +1953,7 @@ MonoBehaviour:
   towerHead: {fileID: 3964554238443095391}
   primaryTargetType: 0
   dynamicTargetChange: 1
+  attackAudioClip: {fileID: 8300000, guid: 87f0be0d5ad7f4f4ea46ebfc3e4d4a8a, type: 3}
   gunPoint: {fileID: 8384165093661443608}
   damageAmount: 10
 --- !u!114 &1477161305783625702

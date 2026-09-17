@@ -36,6 +36,7 @@ public class Player_TowerCrossbow : Player_TowerBase
 
                 visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point, enemyTarget);
                 visualEffect.PlayReloadVFX(attackCooldown);
+                GameServices.Get<AudioManager>()?.PlayAttackSFX(attackAudioClip, true);
             }
         }
     }
