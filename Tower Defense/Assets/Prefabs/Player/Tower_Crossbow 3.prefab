@@ -1970,6 +1970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffect: {fileID: 6322071732745818834}
   visualEffectDuration: 0.1
+  onHitVFX: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
   meshRenderer: {fileID: 2815351671791418685}
   maxMaterialIntensity: 150
   startColor: {r: 0, g: 0, b: 0, a: 1}

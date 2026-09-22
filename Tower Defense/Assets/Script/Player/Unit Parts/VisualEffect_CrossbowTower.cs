@@ -9,6 +9,8 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
     private LineRenderer visualEffect;
     [SerializeField]
     private float visualEffectDuration = 0.1f;
+    [SerializeField]
+    private GameObject onHitVFX;
 
     [Space]
     [Header("Setting for Glow VFX")]
@@ -171,5 +173,11 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
         {
             lr.material = material;
         }
+    }
+
+    public void CreateOnHitVFX(Vector3 hitPoint)
+    {
+        GameObject hitVFX = Instantiate(onHitVFX, hitPoint, Random.rotation);
+        Destroy(hitVFX, 1);
     }
 }

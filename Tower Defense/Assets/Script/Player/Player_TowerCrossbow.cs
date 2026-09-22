@@ -29,11 +29,23 @@ public class Player_TowerCrossbow : Player_TowerBase
         {
             towerHead.forward = directionToEnemy;
 
-            if (hitInfo.transform.TryGetComponent<IDamageable>(out var damagedTarget))
+            IDamageable damagedTarget;
+
+            if (hitInfo.collider.TryGetComponent<TankParts>(out var enemyShield))
+            {
+                damagedTarget = enemyShield.GetComponent<IDamageable>();
+            }
+            else
+            {
+                hitInfo.transform.TryGetComponent<IDamageable>(out damagedTarget);
+            }
+
+            if (damagedTarget != null)
             {
                 damagedTarget.TakeDamage(damageAmount);
                 Enemy_Base enemyTarget = damagedTarget as Enemy_Base;
 
+                visualEffect.CreateOnHitVFX(hitInfo.point);
                 visualEffect.EnableVisualEffect(gunPoint.position, hitInfo.point, enemyTarget);
                 visualEffect.PlayReloadVFX(attackCooldown);
                 GameServices.Get<AudioManager>()?.PlayAttackSFX(attackAudioClip, true);

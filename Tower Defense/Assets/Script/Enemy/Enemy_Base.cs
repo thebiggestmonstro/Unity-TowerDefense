@@ -10,6 +10,7 @@ public enum EnemyType
     Basic,
     Fast,
     Swarm,
+    Tank,
     None
 }
 
@@ -44,7 +45,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     [SerializeField]
     private Enemy_Portal myPortal;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
