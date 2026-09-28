@@ -11,6 +11,7 @@ public enum EnemyType
     Fast,
     Swarm,
     Tank,
+    Stealth,
     None
 }
 
@@ -45,11 +46,33 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     [SerializeField]
     private Enemy_Portal myPortal;
 
+    private int stealthSourceCount = 0;
+    private Renderer[] cachedRenderers;
+    private Material[][] originalMaterials;
+
     protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.avoidancePriority = Mathf.RoundToInt(agent.speed * 10);
+
+        List<Renderer> meshRenderers = new List<Renderer>();
+
+        foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+        {
+            if (renderer is MeshRenderer || renderer is SkinnedMeshRenderer)
+            {
+                meshRenderers.Add(renderer);
+            }
+        }
+
+        cachedRenderers = meshRenderers.ToArray();
+        originalMaterials = new Material[cachedRenderers.Length][];
+
+        for (int i = 0; i < cachedRenderers.Length; i++)
+        {
+            originalMaterials[i] = cachedRenderers[i].sharedMaterials;
+        }
     }
 
     private void Start()
@@ -232,6 +255,39 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
         {
             agent.Warp(hit.position);
+        }
+    }
+
+    public bool IsStealthed => stealthSourceCount > 0;
+
+    public void AddStealth(Material stealthMaterial)
+    {
+        if (++stealthSourceCount > 1)
+        {
+            return;
+        }
+
+        for (int i = 0; i < cachedRenderers.Length; i++)
+        {
+            Material[] stealthMaterials = new Material[originalMaterials[i].Length];
+            System.Array.Fill(stealthMaterials, stealthMaterial);
+            cachedRenderers[i].sharedMaterials = stealthMaterials;
+        }
+    }
+
+    public void RemoveStealth()
+    {
+        if (stealthSourceCount == 0 || --stealthSourceCount > 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < cachedRenderers.Length; i++)
+        {
+            if (cachedRenderers[i] != null)
+            {
+                cachedRenderers[i].sharedMaterials = originalMaterials[i];
+            }
         }
     }
 }

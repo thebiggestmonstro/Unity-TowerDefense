@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveInfo:
   - enemyPrefab: {fileID: 2850966121671249568, guid: 97d45e88dae38a549b95437f07bc7ea0, type: 3}
-    spawnCount: 2
+    spawnCount: 1
   - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
-    spawnCount: 0
+    spawnCount: 1
   - enemyPrefab: {fileID: 7430416259069217622, guid: e5822b1da4ea83044827f49a0e8f2fb6, type: 3}
-    spawnCount: 5
+    spawnCount: 1
   - enemyPrefab: {fileID: 7749352899777258323, guid: 3fa1efa3133e39744822fc9f145a9284, type: 3}
-    spawnCount: 3
+    spawnCount: 1
+  - enemyPrefab: {fileID: 8752071326168711888, guid: 2796c0707c5a1ca4d951af1cec1adc7e, type: 3}
+    spawnCount: 1
   currentWaveGrid: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
   newPortals: []

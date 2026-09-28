@@ -67,7 +67,7 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
         {
             float enemyDistance = (currentEnemy.GetCenterPoint() - transform.position).sqrMagnitude;
 
-            if (enemyDistance > attackRange * attackRange)
+            if (currentEnemy.IsStealthed || enemyDistance > attackRange * attackRange)
             {
                 currentEnemy = null;
             }
@@ -100,7 +100,7 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
         for (int i = 0; i < loopCount; i++)
         {
             Enemy_Base newEnemy = enemiesToAttack[i].GetComponent<Enemy_Base>();
-            if (newEnemy == null)
+            if (newEnemy == null || newEnemy.IsStealthed)
             {
                 continue;
             }

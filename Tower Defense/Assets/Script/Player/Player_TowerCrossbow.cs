@@ -11,6 +11,7 @@ public class Player_TowerCrossbow : Player_TowerBase
     private int damageAmount;
 
     private VisualEffect_CrossbowTower visualEffect;
+    private readonly RaycastHit[] rayHits = new RaycastHit[8];
 
     protected override void Awake()
     {
@@ -25,7 +26,29 @@ public class Player_TowerCrossbow : Player_TowerBase
     {
         Vector3 directionToEnemy = GetDirectionToEnemy(gunPoint);
 
-        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity))
+        int count = Physics.RaycastNonAlloc(gunPoint.position, directionToEnemy, rayHits, Mathf.Infinity);
+        RaycastHit hitInfo = default;
+        float nearestDistance = float.MaxValue;
+        bool isHit = false;
+
+        for (int i = 0; i < Mathf.Min(count, rayHits.Length); i++)
+        {
+            Enemy_Base owner = rayHits[i].collider.GetComponentInParent<Enemy_Base>();
+
+            if (owner != null && owner.IsStealthed && owner != currentEnemy)
+            {
+                continue;
+            }
+
+            if (rayHits[i].distance < nearestDistance)
+            {
+                nearestDistance = rayHits[i].distance;
+                hitInfo = rayHits[i];
+                isHit = true;
+            }
+        }
+
+        if (isHit)
         {
             towerHead.forward = directionToEnemy;
 
