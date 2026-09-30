@@ -12,6 +12,7 @@ public enum EnemyType
     Swarm,
     Tank,
     Stealth,
+    Flying,
     None
 }
 

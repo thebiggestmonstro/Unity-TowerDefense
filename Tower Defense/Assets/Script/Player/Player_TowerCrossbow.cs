@@ -26,7 +26,7 @@ public class Player_TowerCrossbow : Player_TowerBase
     {
         Vector3 directionToEnemy = GetDirectionToEnemy(gunPoint);
 
-        int count = Physics.RaycastNonAlloc(gunPoint.position, directionToEnemy, rayHits, Mathf.Infinity);
+        int count = Physics.RaycastNonAlloc(gunPoint.position, directionToEnemy, rayHits, Mathf.Infinity, enemyLayerMask);
         RaycastHit hitInfo = default;
         float nearestDistance = float.MaxValue;
         bool isHit = false;

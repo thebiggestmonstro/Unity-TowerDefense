@@ -8,6 +8,8 @@ public class Enemy_Portal : MonoBehaviour
     private float spawnCooldown = 2.0f;
     [SerializeField]
     private List<Waypoint> waypointsList;
+    [SerializeField]
+    private bool isFlyingPortal = false;
 
     private float spawnTimer;
     private bool isSpawning = false;
@@ -48,7 +50,7 @@ public class Enemy_Portal : MonoBehaviour
             return;
         }
 
-        if (!GameServices.Get<EnemySpawner>().HasEnemiesLeft())
+        if (!GameServices.Get<EnemySpawner>().HasEnemiesLeft(isFlyingPortal))
         {
             isSpawning = false;
             return;
@@ -70,7 +72,7 @@ public class Enemy_Portal : MonoBehaviour
 
     public void SpawnProcess()
     {
-        GameObject enemy = GameServices.Get<EnemySpawner>().RequestSpawnEnemy();
+        GameObject enemy = GameServices.Get<EnemySpawner>().RequestSpawnEnemy(isFlyingPortal);
 
         if (enemy != null)
         {

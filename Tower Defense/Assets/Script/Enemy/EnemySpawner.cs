@@ -6,7 +6,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private List<Enemy_Portal> activePortals;
 
-    private Queue<GameObject> enemiesToCreate = new Queue<GameObject>();
+    private Queue<GameObject> groundEnemiesToCreate = new Queue<GameObject>();
+    private Queue<GameObject> flyingEnemiesToCreate = new Queue<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
     private int totalEliminatedEnemyCount = 0;
 
@@ -22,9 +23,30 @@ public class EnemySpawner : MonoBehaviour
 
     public void BeginWave(WaveData waveData)
     {
-        List<GameObject> waveList = CreateNewEnemyWave(waveData);
-        ShuffleList(waveList);
-        enemiesToCreate = new Queue<GameObject>(waveList);
+        List<GameObject> groundList = new List<GameObject>();
+        List<GameObject> flyingList = new List<GameObject>();
+
+        foreach (var info in waveData.waveInfo)
+        {
+            if (info.enemyPrefab == null)
+            {
+                continue;
+            }
+
+            bool isFlying = info.enemyPrefab.GetComponent<Enemy_Flying>() != null;
+            List<GameObject> targetList = isFlying ? flyingList : groundList;
+
+            for (int i = 0; i < info.spawnCount; i++)
+            {
+                targetList.Add(info.enemyPrefab);
+            }
+        }
+
+        ShuffleList(groundList);
+        ShuffleList(flyingList);
+
+        groundEnemiesToCreate = new Queue<GameObject>(groundList);
+        flyingEnemiesToCreate = new Queue<GameObject>(flyingList);
 
         foreach (var portal in activePortals)
         {
@@ -55,12 +77,14 @@ public class EnemySpawner : MonoBehaviour
 
     public List<Enemy_Portal> GetActivePortals() => activePortals;
 
-    public GameObject RequestSpawnEnemy()
+    public GameObject RequestSpawnEnemy(bool isFlyingPortal)
     {
-        return enemiesToCreate.Count > 0 ? enemiesToCreate.Dequeue() : null;
+        Queue<GameObject> queue = isFlyingPortal ? flyingEnemiesToCreate : groundEnemiesToCreate;
+        return queue.Count > 0 ? queue.Dequeue() : null;
     }
 
-    public bool HasEnemiesLeft() => enemiesToCreate.Count > 0;
+    public bool HasEnemiesLeft() => groundEnemiesToCreate.Count > 0 || flyingEnemiesToCreate.Count > 0;
+    public bool HasEnemiesLeft(bool isFlyingPortal) => (isFlyingPortal ? flyingEnemiesToCreate : groundEnemiesToCreate).Count > 0;
 
     public bool AllEnemiesDefeated() => activeEnemies.Count <= 0;
 
