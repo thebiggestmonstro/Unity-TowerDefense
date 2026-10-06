@@ -576,12 +576,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5203447031346239456}
   - component: {fileID: 1179341544888968324}
-  - component: {fileID: 7301537808981261394}
+  - component: {fileID: 503264002571928961}
   - component: {fileID: 3614132204395114662}
   - component: {fileID: 2780066243294324979}
   - component: {fileID: 8906872599343304014}
   m_Layer: 7
-  m_Name: Enemy_Swarm
+  m_Name: Enemy_CreatedUnit
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -611,7 +611,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7430416259069217622}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.1
   m_Speed: 1
@@ -626,7 +626,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7301537808981261394
+--- !u!114 &503264002571928961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7430416259069217622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfda82ce3ac19fa418c005f6fdaf402a, type: 3}
+  m_Script: {fileID: 11500000, guid: ea1c35a1ba10e3844a0e4d57a17165f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myWaypoints: []
@@ -658,7 +658,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  healthPoints: 100
+  healthPoints: 5
   enemyType: 2
   myPortal: {fileID: 0}
 --- !u!114 &3614132204395114662
@@ -721,8 +721,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

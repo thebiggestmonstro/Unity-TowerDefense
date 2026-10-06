@@ -17,11 +17,11 @@ MonoBehaviour:
     spawnCount: 1
   - enemyPrefab: {fileID: 806564050742281958, guid: ab3c68f661a904c478b6578d4afaf50b, type: 3}
     spawnCount: 1
-  - enemyPrefab: {fileID: 7430416259069217622, guid: e5822b1da4ea83044827f49a0e8f2fb6, type: 3}
-    spawnCount: 1
   - enemyPrefab: {fileID: 7749352899777258323, guid: 3fa1efa3133e39744822fc9f145a9284, type: 3}
     spawnCount: 1
   - enemyPrefab: {fileID: 8752071326168711888, guid: 2796c0707c5a1ca4d951af1cec1adc7e, type: 3}
+    spawnCount: 1
+  - enemyPrefab: {fileID: 6959669288685342400, guid: 242a6ac633b7ff24f93adc1ad6a66f7a, type: 3}
     spawnCount: 1
   - enemyPrefab: {fileID: 3677966823586474816, guid: 0fc9a29c38edfe743b39e101473c4a70, type: 3}
     spawnCount: 1

@@ -13,6 +13,7 @@ public enum EnemyType
     Tank,
     Stealth,
     Flying,
+    Flying_Boss,
     None
 }
 
@@ -20,13 +21,13 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 {
     [Header("Movement Settings")]
     [SerializeField]
-    private List<Transform> myWaypoints;
+    protected List<Transform> myWaypoints;
     [SerializeField]
     private float arrivalDistance = 0.5f;
     [SerializeField]
     private float turnSpeed = 5.0f;
     [SerializeField]
-    private float totalDistance;
+    protected float totalDistance;
     [SerializeField]
     private Transform centerPoint;
 
@@ -40,9 +41,10 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     [SerializeField]
     EnemyType enemyType = EnemyType.None;
 
-    private int nextWaypointIndex = 0;
-    private int currentWaypointIndex = 0;
-    private NavMeshAgent agent;
+    protected int nextWaypointIndex = 0;
+    protected int currentWaypointIndex = 0;
+    protected NavMeshAgent agent;
+    protected Rigidbody rb;
     private bool isPathEnded = false;
     [SerializeField]
     private Enemy_Portal myPortal;
@@ -56,6 +58,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.avoidancePriority = Mathf.RoundToInt(agent.speed * 10);
+        rb = GetComponent<Rigidbody>();
 
         List<Renderer> meshRenderers = new List<Renderer>();
 
@@ -78,7 +81,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        if (myWaypoints != null && myWaypoints.Count > 0 && totalDistance == 0)
+        if (agent.enabled && myWaypoints != null && myWaypoints.Count > 0 && totalDistance == 0)
         {
             InitializeEnemy();
         }
@@ -86,7 +89,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (isPathEnded)
+        if (isPathEnded || !agent.enabled)
         {
             return;
         }
@@ -102,7 +105,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
             FaceToTarget(agent.steeringTarget);
         }
 
-        if (ShouldChangeWaypoint())
+        if (myWaypoints != null && ShouldChangeWaypoint())
         {
             SetNextDestination();
         }
@@ -175,14 +178,14 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         }
     }
 
-    private void Die()
+    protected virtual void Die()
     {
         GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject);
         GameEvents.RaiseEnemyDefeated(100);
         Destroy(gameObject);
     }
 
-    public void DestroyEnemy()
+    public virtual void DestroyEnemy()
     {
         GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject);
         Destroy(gameObject);

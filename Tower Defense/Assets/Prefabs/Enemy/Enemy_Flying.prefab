@@ -10010,7 +10010,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.35
-  m_Speed: 1.1
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 1
   m_AngularSpeed: 120
@@ -10021,7 +10021,7 @@ NavMeshAgent:
   m_Height: 1.4
   m_BaseOffset: 0.8
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &6073355450308833693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10057,6 +10057,7 @@ MonoBehaviour:
   healthPoints: 10
   enemyType: 5
   myPortal: {fileID: 0}
+  flightHeight: 3
 --- !u!65 &8685729838192440862
 BoxCollider:
   m_ObjectHideFlags: 0

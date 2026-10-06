@@ -206,7 +206,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  healthPoints: 50
+  healthPoints: 20
   enemyType: 0
   myPortal: {fileID: 0}
 --- !u!114 &3127257924173053475

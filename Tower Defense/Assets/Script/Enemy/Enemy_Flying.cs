@@ -10,8 +10,10 @@ public class Enemy_Flying : Enemy_Base
     {
         base.Awake();
 
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.baseOffset = flightHeight;
-        agent.Warp(transform.position);
+        if (agent.enabled)
+        {
+            agent.Warp(transform.position);
+        }
     }
 }
