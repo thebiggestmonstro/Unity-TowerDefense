@@ -14,6 +14,7 @@ public enum EnemyType
     Stealth,
     Flying,
     Flying_Boss,
+    Final_Boss,
     None
 }
 
