@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 334499446520174780}
   - component: {fileID: 5648323527435822498}
   - component: {fileID: 5963660750445427847}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5055,7 +5055,7 @@ GameObject:
   - component: {fileID: 7759824529413412335}
   - component: {fileID: 2951636500218654764}
   - component: {fileID: 4989646318519094854}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9958,7 +9958,7 @@ GameObject:
   - component: {fileID: 8601786959605216995}
   - component: {fileID: 8897965512869440743}
   - component: {fileID: 1795427698303033898}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14859,7 +14859,7 @@ GameObject:
   - component: {fileID: 1958813634538007198}
   - component: {fileID: 3242361186867548326}
   - component: {fileID: 8924175969441877948}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Sparkling_Electricity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19885,7 +19885,7 @@ GameObject:
   - component: {fileID: 1231042560197245546}
   - component: {fileID: 3077881132573431383}
   - component: {fileID: 6683190083684150955}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Enemy_Spider_EMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24801,6 +24801,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6ebdf41342d414fab5936a7adf5324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  empRadius: 2
+  empEffectDuration: 2
+  moveSpeed: 0.8
+  empVFX: {fileID: 2309837849184798465, guid: 662fbd1d001240142b6722c92db2912c, type: 3}
 --- !u!1 &6841316541542515325
 GameObject:
   m_ObjectHideFlags: 0
@@ -24812,7 +24816,7 @@ GameObject:
   - component: {fileID: 9014454351054168712}
   - component: {fileID: 7620645174570645894}
   - component: {fileID: 4506647795588524977}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29666,7 +29670,7 @@ GameObject:
   - component: {fileID: 1716808609979805783}
   - component: {fileID: 2054920557102174191}
   - component: {fileID: 8810620532831958182}
-  m_Layer: 13
+  m_Layer: 10
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

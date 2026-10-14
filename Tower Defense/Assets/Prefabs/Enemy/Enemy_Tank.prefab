@@ -621,6 +621,7 @@ MonoBehaviour:
         m_CallState: 2
   healthPoints: 50
   enemyType: 3
+  onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
   myPortal: {fileID: 0}
   shieldAmount: 50
   tankShield: {fileID: 7061451304416547507}

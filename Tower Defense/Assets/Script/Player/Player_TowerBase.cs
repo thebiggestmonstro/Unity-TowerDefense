@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,10 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     private float targetCheckInterval = 0.1f;
     private float lastTimeCheckedTarget;
 
+    protected bool bIsTowerActive = true;
+    protected Coroutine currentTowerDeactivateCoroutine;
+    private GameObject currentEMPVFX;
+
     protected virtual void Awake()
     { 
 
@@ -51,10 +56,23 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     protected virtual void OnDisable()
     {
         GameServices.Get<UnitManager>()?.UnregisterUnit(this);
+
+        if (currentEMPVFX != null)
+        {
+            Destroy(currentEMPVFX);
+        }
+
+        currentTowerDeactivateCoroutine = null;
+        bIsTowerActive = true;
     }
 
     protected virtual void Update()
     {
+        if (!bIsTowerActive)
+        {
+            return;
+        }
+
         UpdateTargetInAttacking();
 
         if (currentEnemy == null)
@@ -76,6 +94,11 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
 
     protected virtual void LateUpdate()
     {
+        if (!bIsTowerActive)
+        {
+            return;
+        }
+
         RotateTowerHeadToEnemy();
 
         if (CanAttack())
@@ -220,4 +243,32 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     public float GetAttackRange() => attackRange;
 
     public string UnitName => gameObject.name;
+
+    public void DeactivateTower(float duration, GameObject inEMPVFX)
+    {
+        if (currentTowerDeactivateCoroutine != null)
+        {
+            StopCoroutine(currentTowerDeactivateCoroutine);
+        }
+
+        if (currentEMPVFX == null)
+        {
+            currentEMPVFX = Instantiate(inEMPVFX, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+        }
+
+        currentTowerDeactivateCoroutine = StartCoroutine(CoDeactivateTower(duration));
+    }
+
+    private IEnumerator CoDeactivateTower(float duration)
+    {
+        bIsTowerActive = false;
+
+        yield return new WaitForSeconds(duration);
+
+        bIsTowerActive = true;
+        currentTowerDeactivateCoroutine = null;
+
+        lastTimeCheckedTarget = Time.time;
+        Destroy(currentEMPVFX);
+    }
 }

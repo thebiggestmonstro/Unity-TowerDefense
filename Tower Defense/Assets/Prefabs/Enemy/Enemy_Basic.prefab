@@ -208,6 +208,7 @@ MonoBehaviour:
         m_CallState: 2
   healthPoints: 20
   enemyType: 0
+  onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
   myPortal: {fileID: 0}
 --- !u!114 &3127257924173053475
 MonoBehaviour:

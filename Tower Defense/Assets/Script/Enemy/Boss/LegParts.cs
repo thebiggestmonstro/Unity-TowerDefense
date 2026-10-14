@@ -57,7 +57,7 @@ public class LegParts : MonoBehaviour
 
     public void UpdateLeg()
     {
-        actualTarget.position = worldTargetRefTransform.position + placeOffset;
+        actualTarget.position = worldTargetRefTransform.position + new Vector3(0, placeOffset.y, 0);
 
         if (bottomLegTransform)
         {

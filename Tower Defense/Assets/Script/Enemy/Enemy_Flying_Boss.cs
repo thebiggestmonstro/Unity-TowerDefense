@@ -56,6 +56,13 @@ public class Enemy_Flying_Boss : Enemy_Flying
         createdEnemies.Add(newUnit);
     }
 
+    protected override void Die()
+    {
+        EliminateAllCreatedUnits();
+        StopAllCoroutines();
+        base.Die();
+    }
+
     public override void DestroyEnemy()
     {
         EliminateAllCreatedUnits();

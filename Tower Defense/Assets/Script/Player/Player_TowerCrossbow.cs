@@ -24,6 +24,11 @@ public class Player_TowerCrossbow : Player_TowerBase
 
     protected override void Attack()
     {
+        if (!bIsTowerActive)
+        {
+            return;
+        }
+
         Vector3 directionToEnemy = GetDirectionToEnemy(gunPoint);
 
         int count = Physics.RaycastNonAlloc(gunPoint.position, directionToEnemy, rayHits, Mathf.Infinity, enemyLayerMask);

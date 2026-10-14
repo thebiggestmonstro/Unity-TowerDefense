@@ -2,15 +2,24 @@ using UnityEngine;
 
 public class SwingParts : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("Swing Settings")]
+    [SerializeField]
+    private Vector3 swingAxis;
+    [SerializeField]
+    private float swingDegree = 10.0f;
+    [SerializeField]
+    private float swingSpeed = 1.0f;
+
+    private Quaternion startRotation;
+
+    private void Start()
     {
-        
+        startRotation = transform.rotation;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        float angle = Mathf.Sin(Time.time * swingSpeed) * swingDegree;
+        transform.localRotation = startRotation * Quaternion.AngleAxis(angle, swingAxis.normalized);
     }
 }

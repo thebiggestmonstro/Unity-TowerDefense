@@ -41,6 +41,10 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     public int healthPoints = 10;
     [SerializeField]
     EnemyType enemyType = EnemyType.None;
+    [SerializeField]
+    private GameObject onDeathVFX;
+    [SerializeField]
+    private float onDeathVFXScale = 0.5f;
 
     protected int nextWaypointIndex = 0;
     protected int currentWaypointIndex = 0;
@@ -183,12 +187,14 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     {
         GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject);
         GameEvents.RaiseEnemyDefeated(100);
+        CreateOnDeathVFX();
         Destroy(gameObject);
     }
 
     public virtual void DestroyEnemy()
     {
         GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject);
+        CreateOnDeathVFX();
         Destroy(gameObject);
     }
 
@@ -234,7 +240,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         SetNextDestination();
     }
 
-    private bool ShouldChangeWaypoint()
+    protected virtual bool ShouldChangeWaypoint()
     {
         if (nextWaypointIndex >= myWaypoints.Count)
         {
@@ -294,5 +300,11 @@ public class Enemy_Base : MonoBehaviour, IDamageable
                 cachedRenderers[i].sharedMaterials = originalMaterials[i];
             }
         }
+    }
+
+    public void CreateOnDeathVFX()
+    {
+        GameObject newDeatVFX = Instantiate(onDeathVFX, transform.position + new Vector3(0, 0.15f, 0), Quaternion.identity);
+        newDeatVFX.transform.localScale = new Vector3(onDeathVFXScale, onDeathVFXScale, onDeathVFXScale);
     }
 }
