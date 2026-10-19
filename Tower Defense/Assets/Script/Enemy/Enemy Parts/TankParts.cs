@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class TankParts : MonoBehaviour, IDamageable
+public class TankParts : MonoBehaviour
 {
     [SerializeField]
     private float currentShieldAmount;

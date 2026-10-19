@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wave_1
   m_EditorClassIdentifier: 
   waveInfo:
-  - enemyPrefab: {fileID: 7504274497328969526, guid: d9d5eb1e8578aee4d993e3687e9bc247, type: 3}
-    spawnCount: 1
+  - enemyPrefab: {fileID: 7749352899777258323, guid: 3fa1efa3133e39744822fc9f145a9284, type: 3}
+    spawnCount: 2
   currentWaveGrid: {fileID: 8119815060831299074, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
   newPortals: []

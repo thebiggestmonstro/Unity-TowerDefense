@@ -173,7 +173,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         currentWaypointIndex = nextWaypointIndex - 1;
     }
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         healthPoints -= damage;
 

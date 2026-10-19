@@ -18,4 +18,15 @@ public class Enemy_Tank : Enemy_Base
             tankShield.SetupShield(shieldAmount);
         }
     }
+
+    public override void TakeDamage(int damage)
+    {
+        if (tankShield != null && tankShield.gameObject.activeSelf)
+        {
+            tankShield.TakeDamage(damage);
+            return;
+        }
+
+        base.TakeDamage(damage);
+    }
 }

@@ -6,8 +6,6 @@ public class Player_TowerCrossbow : Player_TowerBase
 {
     [Header("Crossbow Tower Setting")]
     [SerializeField]
-    private Transform gunPoint;
-    [SerializeField]
     private int damageAmount;
 
     private VisualEffect_CrossbowTower visualEffect;
@@ -16,8 +14,6 @@ public class Player_TowerCrossbow : Player_TowerBase
     protected override void Awake()
     {
         base.Awake();
-
-        EnableRotation(true);
         
         visualEffect = GetComponent<VisualEffect_CrossbowTower>();
     }
@@ -28,6 +24,8 @@ public class Player_TowerCrossbow : Player_TowerBase
         {
             return;
         }
+
+        base.Attack();
 
         Vector3 directionToEnemy = GetDirectionToEnemy(gunPoint);
 
@@ -57,16 +55,7 @@ public class Player_TowerCrossbow : Player_TowerBase
         {
             towerHead.forward = directionToEnemy;
 
-            IDamageable damagedTarget;
-
-            if (hitInfo.collider.TryGetComponent<TankParts>(out var enemyShield))
-            {
-                damagedTarget = enemyShield.GetComponent<IDamageable>();
-            }
-            else
-            {
-                hitInfo.transform.TryGetComponent<IDamageable>(out damagedTarget);
-            }
+            IDamageable damagedTarget = hitInfo.collider.GetComponentInParent<IDamageable>();
 
             if (damagedTarget != null)
             {
