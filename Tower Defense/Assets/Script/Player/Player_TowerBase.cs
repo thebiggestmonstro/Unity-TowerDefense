@@ -16,6 +16,8 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     [SerializeField]
     protected Transform towerHead;
     [SerializeField]
+    protected Transform towerBody;
+    [SerializeField]
     protected Transform gunPoint;
     [SerializeField]
     protected EnemyType primaryTargetType = EnemyType.None;
