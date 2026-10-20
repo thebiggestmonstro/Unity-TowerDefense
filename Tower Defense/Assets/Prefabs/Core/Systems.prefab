@@ -381,13 +381,13 @@ MonoBehaviour:
   - unitName: Rapid Fire Gun
     bUnlocked: 1
   - unitName: Spider Nest
-    bUnlocked: 0
+    bUnlocked: 1
   - unitName: Anti-air Harpon
     bUnlocked: 1
   - unitName: Blocking Fan
-    bUnlocked: 0
+    bUnlocked: 1
   - unitName: Hammer
-    bUnlocked: 0
+    bUnlocked: 1
 --- !u!1 &5760606418632644778
 GameObject:
   m_ObjectHideFlags: 0

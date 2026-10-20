@@ -175,6 +175,11 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(int damage)
     {
+        if (healthPoints <= 0)
+        {
+            return;
+        }
+
         healthPoints -= damage;
 
         if (healthPoints <= 0)
