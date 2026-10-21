@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -57,6 +58,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private int stealthSourceCount = 0;
     private Renderer[] cachedRenderers;
     private Material[][] originalMaterials;
+    private float initialSpeed;
 
     protected virtual void Awake()
     {
@@ -64,6 +66,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         agent.updateRotation = false;
         agent.avoidancePriority = Mathf.RoundToInt(agent.speed * 10);
         rb = GetComponent<Rigidbody>();
+        initialSpeed = agent.speed; 
 
         List<Renderer> meshRenderers = new List<Renderer>();
 
@@ -311,5 +314,17 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     {
         GameObject newDeatVFX = Instantiate(onDeathVFX, transform.position + new Vector3(0, 0.15f, 0), Quaternion.identity);
         newDeatVFX.transform.localScale = new Vector3(onDeathVFXScale, onDeathVFXScale, onDeathVFXScale);
+    }
+
+    public void SetSpeed(float multiplier, float duration) => StartCoroutine(CoSetSpeed(multiplier, duration));
+    
+    private IEnumerator CoSetSpeed(float speedMultiplier, float duration)
+    {
+        agent.speed = initialSpeed;
+        agent.speed = agent.speed * speedMultiplier;
+
+        yield return new WaitForSeconds(duration);
+
+        agent.speed = initialSpeed;
     }
 }

@@ -180,7 +180,7 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
         return mostAdvancedEnemy;
     }
 
-    protected bool CanAttack()
+    protected virtual bool CanAttack()
     {
         return (Time.time > lastAttackTime + attackCooldown) && (currentEnemy != null); 
     }
@@ -240,6 +240,8 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
     public float GetAttackRange() => attackRange;
 
     public string UnitName => gameObject.name;
+
+    public float GetAttackCooldown() => attackCooldown;
 
     public void DeactivateTower(float duration, GameObject inEMPVFX)
     {

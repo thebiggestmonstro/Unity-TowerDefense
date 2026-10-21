@@ -24,4 +24,9 @@ public class RotationParts : MonoBehaviour
     {
         canRotate = false;
     }
+
+    public void AdjustRotationSpeed(float newSpeed)
+    {
+        rotationSpeed = newSpeed;
+    }
 }
