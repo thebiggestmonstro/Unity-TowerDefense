@@ -14912,6 +14912,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf1f3ad506daf947a11ebbc420a7b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxDistance: 30
+  lifeTime: 3
+  onHitVFX: {fileID: 3472957858613572670}
 --- !u!1 &6150101384381208177
 GameObject:
   m_ObjectHideFlags: 0

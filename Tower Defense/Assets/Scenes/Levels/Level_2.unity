@@ -20338,7 +20338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7250a04efe283847b918484e2c5c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerToBuild: {fileID: 8863898960767002757, guid: 206be6a01199c9c48803f7a5a539ba8d, type: 3}
+  towerToBuild: {fileID: 1989773662996170455, guid: 4dc203066fce44a42b597c2b102951f3, type: 3}
   costToBuild: 50
   unitName: Spider Nest
   unitNameText: {fileID: 5515248535332678580}
