@@ -176,14 +176,14 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         currentWaypointIndex = nextWaypointIndex - 1;
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(float damage)
     {
         if (healthPoints <= 0)
         {
             return;
         }
 
-        healthPoints -= damage;
+        healthPoints -= Mathf.RoundToInt(damage);
 
         if (healthPoints <= 0)
         {

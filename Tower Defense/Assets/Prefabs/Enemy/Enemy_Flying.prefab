@@ -10054,9 +10054,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  healthPoints: 10
+  healthPoints: 75
   enemyType: 5
   onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
+  onDeathVFXScale: 0.5
   myPortal: {fileID: 0}
   flightHeight: 3
 --- !u!65 &8685729838192440862

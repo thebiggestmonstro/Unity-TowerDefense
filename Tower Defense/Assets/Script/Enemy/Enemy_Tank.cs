@@ -19,11 +19,11 @@ public class Enemy_Tank : Enemy_Base
         }
     }
 
-    public override void TakeDamage(int damage)
+    public override void TakeDamage(float damage)
     {
         if (tankShield != null && tankShield.gameObject.activeSelf)
         {
-            tankShield.TakeDamage(damage);
+            tankShield.TakeDamage(Mathf.RoundToInt(damage));
             return;
         }
 
