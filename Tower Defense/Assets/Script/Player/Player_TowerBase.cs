@@ -182,7 +182,7 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
 
     protected virtual bool CanAttack()
     {
-        return (Time.time > lastAttackTime + attackCooldown) && (currentEnemy != null); 
+        return (Time.time > lastAttackTime + attackCooldown) && (currentEnemy != null) && (!currentEnemy.IsStealthed); 
     }
 
     protected virtual void Attack()

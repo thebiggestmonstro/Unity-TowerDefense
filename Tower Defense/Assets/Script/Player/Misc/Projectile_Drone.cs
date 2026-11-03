@@ -111,6 +111,13 @@ public class Projectile_Drone : MonoBehaviour
 
         foreach (Collider enemy in enemiesAround)
         {
+            Enemy_Base enemyBase = enemy.GetComponentInParent<Enemy_Base>();
+
+            if (enemyBase == null || enemyBase.IsStealthed)
+            {
+                continue;
+            }
+
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (distance < shortestDistance)

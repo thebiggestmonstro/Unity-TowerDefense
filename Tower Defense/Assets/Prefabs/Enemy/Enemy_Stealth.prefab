@@ -19508,9 +19508,15 @@ MonoBehaviour:
   healthPoints: 10
   enemyType: 4
   onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
+  onDeathVFXScale: 0.5
   myPortal: {fileID: 0}
   stealthRadius: 1
   stealthParts: {fileID: 20650202216018103}
+  smokeVFXs:
+  - {fileID: 803827775131169334}
+  - {fileID: 727485262301094561}
+  - {fileID: 4197075864024397563}
+  - {fileID: 7696240269975158273}
 --- !u!114 &3435857286795016890
 MonoBehaviour:
   m_ObjectHideFlags: 0

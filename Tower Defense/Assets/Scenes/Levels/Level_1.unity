@@ -2452,7 +2452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2035
   m_MaxRayIntersections: 0
 --- !u!1 &369180259
 GameObject:
@@ -21316,7 +21316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7250a04efe283847b918484e2c5c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerToBuild: {fileID: 8863898960767002757, guid: 206be6a01199c9c48803f7a5a539ba8d, type: 3}
+  towerToBuild: {fileID: 5820317157204465513, guid: eeeb35e2b29f8eb419ad8fc53b22cc54, type: 3}
   costToBuild: 50
   unitName: Blocking Fan
   unitNameText: {fileID: 5695575333062363079}

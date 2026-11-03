@@ -57,7 +57,7 @@ public class Player_TowerHammer : Player_TowerBase
         {
             Enemy_Base target = col.GetComponentInParent<Enemy_Base>();
 
-            if (target != null)
+            if (target != null && !target.IsStealthed)
             {
                 targets.Add(target);
             }

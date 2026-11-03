@@ -56,9 +56,12 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private Enemy_Portal myPortal;
 
     private int stealthSourceCount = 0;
+    protected int revealSourceCount = 0;
+    private Material stealthMaterial;
+    private bool isStealthVisualApplied;
     private Renderer[] cachedRenderers;
     private Material[][] originalMaterials;
-    private float initialSpeed;
+    private float initialSpeed;    
 
     protected virtual void Awake()
     {
@@ -277,33 +280,71 @@ public class Enemy_Base : MonoBehaviour, IDamageable
         }
     }
 
-    public bool IsStealthed => stealthSourceCount > 0;
+    public bool IsStealthed => stealthSourceCount > 0 && revealSourceCount == 0;
 
-    public void AddStealth(Material stealthMaterial)
+    public void AddStealth(Material inStealthMaterial)
     {
-        if (++stealthSourceCount > 1)
+        if (++stealthSourceCount == 1)
         {
-            return;
+            stealthMaterial = inStealthMaterial;
         }
 
-        for (int i = 0; i < cachedRenderers.Length; i++)
-        {
-            Material[] stealthMaterials = new Material[originalMaterials[i].Length];
-            System.Array.Fill(stealthMaterials, stealthMaterial);
-            cachedRenderers[i].sharedMaterials = stealthMaterials;
-        }
+        UpdateStealthVisual();
     }
 
     public void RemoveStealth()
     {
-        if (stealthSourceCount == 0 || --stealthSourceCount > 0)
+        if (stealthSourceCount == 0)
         {
             return;
         }
 
+        stealthSourceCount--;
+        UpdateStealthVisual();
+    }
+
+    public virtual void AddReveal()
+    {
+        revealSourceCount++;
+        UpdateStealthVisual();
+    }
+
+    public virtual void RemoveReveal()
+    {
+        if (revealSourceCount == 0)
+        {
+            return;
+        }
+
+        revealSourceCount--;
+        UpdateStealthVisual();
+    }
+
+    private void UpdateStealthVisual()
+    {
+        bool shouldApply = IsStealthed;
+
+        if (shouldApply == isStealthVisualApplied)
+        {
+            return;
+        }
+
+        isStealthVisualApplied = shouldApply;
+
         for (int i = 0; i < cachedRenderers.Length; i++)
         {
-            if (cachedRenderers[i] != null)
+            if (cachedRenderers[i] == null)
+            {
+                continue;
+            }
+
+            if (shouldApply)
+            {
+                Material[] stealthMaterials = new Material[originalMaterials[i].Length];
+                System.Array.Fill(stealthMaterials, stealthMaterial);
+                cachedRenderers[i].sharedMaterials = stealthMaterials;
+            }
+            else
             {
                 cachedRenderers[i].sharedMaterials = originalMaterials[i];
             }
