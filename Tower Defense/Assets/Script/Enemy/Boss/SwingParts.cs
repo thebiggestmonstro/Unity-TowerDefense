@@ -14,7 +14,7 @@ public class SwingParts : MonoBehaviour
 
     private void Start()
     {
-        startRotation = transform.rotation;
+        startRotation = transform.localRotation;
     }
 
     private void Update()
