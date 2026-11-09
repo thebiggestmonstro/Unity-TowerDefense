@@ -1234,6 +1234,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 939c3406-baaa-434a-9a1b-ae88d495dfd8
     m_ActionName: 'UI/TogglePause[/Keyboard/f10]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5496746182135646276}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnRotateUnitRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f58fb124-edca-43b5-8b18-93f688c592f1
+    m_ActionName: 'Build/RotateUnitRight[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5496746182135646276}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnRotateUnitLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 05337d64-510c-45e8-b417-d10333913f45
+    m_ActionName: 'Build/RotateUnitLeft[/Keyboard/q]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Camera

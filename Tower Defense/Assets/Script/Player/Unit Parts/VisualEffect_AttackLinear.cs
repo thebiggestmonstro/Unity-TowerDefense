@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
-public class VisualEffect_Fan : MonoBehaviour
+public class VisualEffect_AttackLinear : MonoBehaviour
 {
     [SerializeField]
     private LineRenderer leftLine;

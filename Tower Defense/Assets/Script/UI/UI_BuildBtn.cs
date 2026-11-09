@@ -74,7 +74,7 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         uiCanvas.uiBuildBtns.SetLastSelected(null);
         camEffect.Screenshake(0.15f, 0.02f);
 
-        GameObject newTower = Instantiate(towerToBuild, selectedTileSlot.GetBuildPosition(towerCenterY), Quaternion.identity);
+        GameObject newTower = Instantiate(towerToBuild, selectedTileSlot.GetBuildPosition(towerCenterY), unitPreview.transform.rotation);
     }
 
     private void OnValidate()
@@ -152,5 +152,13 @@ public class UI_BuildBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         buildManager.SetMouseOnUI(false);
+    }
+
+    public void RotatePreview(float angle)
+    {
+        if (unitPreview != null)
+        {
+            unitPreview.Rotate(angle);
+        }
     }
 }

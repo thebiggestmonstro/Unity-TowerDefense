@@ -330,6 +330,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RotateUnitRight",
+                    "type": "Button",
+                    "id": "f58fb124-edca-43b5-8b18-93f688c592f1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateUnitLeft",
+                    "type": "Button",
+                    "id": "05337d64-510c-45e8-b417-d10333913f45",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -440,6 +458,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ConfirmBuild",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da34523b-6188-4680-b553-2f611783014f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateUnitRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e486a94-e76c-4fb2-bf43-f07f78e12c85",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateUnitLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

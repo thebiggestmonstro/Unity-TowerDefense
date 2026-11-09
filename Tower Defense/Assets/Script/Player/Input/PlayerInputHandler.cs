@@ -148,6 +148,19 @@ public class PlayerInputHandler : MonoBehaviour
         uiBuildBtns.ConfirmBuild();
     }
 
+    public void OnRotateUnitLeft(InputAction.CallbackContext context) => HandleRotateUnit(context, -90f);
+    public void OnRotateUnitRight(InputAction.CallbackContext context) => HandleRotateUnit(context, 90f);
+
+    private void HandleRotateUnit(InputAction.CallbackContext context, float angle)
+    {
+        if (!context.performed || uiBuildBtns == null)
+        {
+            return;
+        }
+
+        uiBuildBtns.RotateSelectedUnit(angle);
+    }
+
     #endregion
 
     #region UI action map

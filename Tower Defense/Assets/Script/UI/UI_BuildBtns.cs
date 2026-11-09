@@ -100,4 +100,14 @@ public class UI_BuildBtns : MonoBehaviour
         UI_BuildBtn selectedButton = unlockedButtons[buttonIndex];
         selectedButton.SelectButton(true);
     }
+
+    public void RotateSelectedUnit(float angle)
+    {
+        if (!isBuildMenuActive || lastSelectedButton == null)
+        {
+            return;
+        }
+
+        lastSelectedButton.RotatePreview(angle);
+    }
 }

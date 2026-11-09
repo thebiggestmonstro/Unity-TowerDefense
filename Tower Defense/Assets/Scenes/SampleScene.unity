@@ -63436,6 +63436,50 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_ActionId
+      value: f58fb124-edca-43b5-8b18-93f688c592f1
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionId
+      value: 05337d64-510c-45e8-b417-d10333913f45
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_ActionName
+      value: 'Build/RotateUnitRight[/Keyboard/e]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionName
+      value: 'Build/RotateUnitLeft[/Keyboard/q]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 706044581715542450, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 931164262125481856, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
       propertyPath: 'activePortals.Array.data[0]'
       value: 
