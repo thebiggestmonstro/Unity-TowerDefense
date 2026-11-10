@@ -31,7 +31,7 @@ public class VisualEffect_Harpon : MonoBehaviour
 
     private void Update()
     {
-        if (endPoint == null)
+        if (endPoint == null || endPoint == startPoint)
         {
             return;
         }
@@ -48,6 +48,7 @@ public class VisualEffect_Harpon : MonoBehaviour
         else
         {
             endPoint = startPoint;
+            ActivateLinks();
             DestroyVFX();
         }
     }

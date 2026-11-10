@@ -61,7 +61,8 @@ public class Enemy_Base : MonoBehaviour, IDamageable
     private bool isStealthVisualApplied;
     private Renderer[] cachedRenderers;
     private Material[][] originalMaterials;
-    private float initialSpeed;    
+    private float initialSpeed;
+    private float nextWaypointCheckTime;
 
     protected virtual void Awake()
     {
@@ -116,9 +117,14 @@ public class Enemy_Base : MonoBehaviour, IDamageable
             FaceToTarget(agent.steeringTarget);
         }
 
-        if (myWaypoints != null && ShouldChangeWaypoint())
+        if (myWaypoints != null && Time.time >= nextWaypointCheckTime)
         {
-            SetNextDestination();
+            nextWaypointCheckTime = Time.time + 0.1f;
+
+            if (ShouldChangeWaypoint())
+            {
+                SetNextDestination();
+            }
         }
     }
 
@@ -353,8 +359,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
     public void CreateOnDeathVFX()
     {
-        GameObject newDeatVFX = Instantiate(onDeathVFX, transform.position + new Vector3(0, 0.15f, 0), Quaternion.identity);
-        newDeatVFX.transform.localScale = new Vector3(onDeathVFXScale, onDeathVFXScale, onDeathVFXScale);
+        GameServices.Get<VFXManager>()?.Play(onDeathVFX, transform.position + new Vector3(0, 0.15f, 0), Quaternion.identity, onDeathVFXScale);
     }
 
     public void SetSpeed(float multiplier, float duration) => StartCoroutine(CoSetSpeed(multiplier, duration));

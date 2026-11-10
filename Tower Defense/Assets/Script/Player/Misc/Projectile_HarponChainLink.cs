@@ -42,11 +42,14 @@ public class Projectile_HarponChainLink : MonoBehaviour
 
     public void EnableVFX(bool enable)
     {
-        if (enable && !vfx.isPlaying)
+        if (enable)
         {
-            vfx.Play();
+            if (!vfx.isPlaying)
+            {
+                vfx.Play();
+            }
         }
-        else
+        else if (vfx.isPlaying)
         {
             vfx.Stop();
         }

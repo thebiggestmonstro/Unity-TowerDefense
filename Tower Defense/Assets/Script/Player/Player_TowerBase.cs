@@ -80,6 +80,12 @@ public class Player_TowerBase : MonoBehaviour, IUnitInterface
 
         if (currentEnemy == null)
         {
+            if (Time.time < lastTimeCheckedTarget + targetCheckInterval)
+            {
+                return;
+            }
+
+            lastTimeCheckedTarget = Time.time;
             currentEnemy = FindEnemyWithinRange();
             return;
         }

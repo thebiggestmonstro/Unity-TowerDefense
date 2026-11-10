@@ -145,7 +145,7 @@ NavMeshAgent:
   m_Height: 0.55
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &3728269784683878296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
   healthPoints: 10
   enemyType: 1
   onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
+  onDeathVFXScale: 0.5
   myPortal: {fileID: 0}
 --- !u!114 &8422885233454932260
 MonoBehaviour:

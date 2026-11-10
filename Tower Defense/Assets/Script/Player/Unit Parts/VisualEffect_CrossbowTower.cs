@@ -177,7 +177,6 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
 
     public void CreateOnHitVFX(Vector3 hitPoint)
     {
-        GameObject hitVFX = Instantiate(onHitVFX, hitPoint, Random.rotation);
-        Destroy(hitVFX, 1);
+        GameServices.Get<VFXManager>()?.Play(onHitVFX, hitPoint, Random.rotation);
     }
 }

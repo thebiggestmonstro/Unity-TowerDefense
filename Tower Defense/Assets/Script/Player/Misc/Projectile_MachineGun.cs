@@ -83,7 +83,6 @@ public class Projectile_MachineGun : MonoBehaviour
             return;
         }
 
-        GameObject vfx = Instantiate(onHitVFX, targetPosition, Quaternion.identity);
-        Destroy(vfx, 1f);
+        GameServices.Get<VFXManager>()?.Play(onHitVFX, targetPosition, Quaternion.identity);
     }
 }

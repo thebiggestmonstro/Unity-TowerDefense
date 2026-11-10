@@ -12,6 +12,8 @@ public class Player_TowerHammer : Player_TowerBase
     [SerializeField]
     private float slowDuration = 2.0f;
 
+    private readonly Collider[] overlapBuffer = new Collider[32];
+
     protected override void Update()
     {
         if (!bIsTowerActive)
@@ -41,11 +43,7 @@ public class Player_TowerHammer : Player_TowerBase
         return Time.time > lastAttackTime + attackCooldown && IsAnyEnemyInRange();
     }
 
-    private bool IsAnyEnemyInRange()
-    {
-        Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, enemyLayerMask);
-        return enemies.Length > 0;
-    }
+    private bool IsAnyEnemyInRange() => Physics.OverlapSphereNonAlloc(transform.position, attackRange, overlapBuffer, enemyLayerMask) > 0;
 
     private List<Enemy_Base> GetValidTargets()
     {

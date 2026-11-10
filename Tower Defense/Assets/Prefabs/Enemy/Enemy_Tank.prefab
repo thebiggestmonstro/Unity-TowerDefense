@@ -562,7 +562,7 @@ NavMeshAgent:
   m_Height: 0.65
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &6010750835514332144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -622,6 +622,7 @@ MonoBehaviour:
   healthPoints: 50
   enemyType: 3
   onDeathVFX: {fileID: 2712015576474526771, guid: 17178a347cc06f94f91283f872991a97, type: 3}
+  onDeathVFXScale: 0.5
   myPortal: {fileID: 0}
   shieldAmount: 50
   tankShield: {fileID: 7061451304416547507}

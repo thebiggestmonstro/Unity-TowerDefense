@@ -136,9 +136,7 @@ public class Projectile_Drone : MonoBehaviour
 
         if (explosionVFX != null)
         {
-            GameObject vfx = Instantiate(explosionVFX, transform.position, Quaternion.identity);
-            vfx.SetActive(true);
-            Destroy(vfx, 2f);
+            GameServices.Get<VFXManager>()?.Play(explosionVFX, transform.position, Quaternion.identity);
         }
 
         ReturnToPool();
