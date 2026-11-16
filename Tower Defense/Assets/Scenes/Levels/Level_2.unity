@@ -14235,6 +14235,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 768186899803991859, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: c8abb12897c38224f8def6840ef52cce, type: 2}
     - target: {fileID: 1894862104083783644, guid: 1593b6e6ea604c749aaccf2404170b6f, type: 3}
       propertyPath: m_Name
       value: GridBuilder
@@ -21411,7 +21415,7 @@ PrefabInstance:
       objectReference: {fileID: 330585549}
     - target: {fileID: 6022088651672679081, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
       propertyPath: allWaves.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6022088651672679081, guid: 14225b4651baaf842b564400a0a96b80, type: 3}
       propertyPath: 'allWaves.Array.data[0]'

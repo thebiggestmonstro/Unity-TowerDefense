@@ -36,7 +36,6 @@ public class BuildManager : MonoBehaviour
         MakeBuildTileAvaliablityFalse(currentGrid);
     }
 
-    // Called by PlayerInputHandler when a world click doesn't land on a build tile.
     public void TryDeselectOnWorldClick()
     {
         if (bIsMouseOnUI)

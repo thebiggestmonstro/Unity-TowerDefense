@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using CartoonFX;
 
 public class PooledVFX : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class PooledVFX : MonoBehaviour
     {
         release = releaseAction;
         particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+
+        foreach (CFXR_Effect effect in GetComponentsInChildren<CFXR_Effect>(true))
+        {
+            effect.clearBehavior = CFXR_Effect.ClearBehavior.None;
+        }
     }
 
     public void Play(Vector3 position, Quaternion rotation, float scale)
@@ -32,6 +38,14 @@ public class PooledVFX : MonoBehaviour
     private IEnumerator CoWaitAndRelease()
     {
         yield return checkWait;
+
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            if (ps.main.loop)
+            {
+                ps.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+            }
+        }
 
         while (particleSystems[0].IsAlive(true))
         {
