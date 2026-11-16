@@ -100,9 +100,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {
-        if (activeEnemies.Contains(enemyToRemove))
+        if (activeEnemies.Remove(enemyToRemove))
         {
-            activeEnemies.Remove(enemyToRemove);
             totalEliminatedEnemyCount++;
         }
     }

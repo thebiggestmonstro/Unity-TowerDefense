@@ -69,14 +69,11 @@ public class UI_Canvas : MonoBehaviour
 
     public void QuitGame()
     {
-        if (EditorApplication.isPlaying)
-        {
+        #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-        }
-        else
-        {
+        #else
             Application.Quit();
-        }
+        #endif
     }
 
     public void ActivateUIFade(bool fadeIn)

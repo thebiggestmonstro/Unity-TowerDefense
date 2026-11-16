@@ -25,8 +25,8 @@ public class Projectile_HarponChainLink : MonoBehaviour
     }
 
     public void UpdateLineRenderer(Projectile_HarponChainLink startPoint, Projectile_HarponChainLink endPoint)
-    { 
-        lineRenderer.enabled = startPoint.GetCurrentActive() && endPoint.GetCurrentActive();
+    {
+        lineRenderer.enabled = endPoint != null && startPoint.GetCurrentActive() && endPoint.GetCurrentActive();
         EnableVFX(lineRenderer.enabled);
 
         if (!lineRenderer.enabled)

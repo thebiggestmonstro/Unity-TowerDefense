@@ -28,6 +28,7 @@ public class Projectile_Drone : MonoBehaviour
     private Transform currentTarget;
     private bool bIsLaunched;
     private Action<GameObject> returnToPool;
+    private readonly Collider[] targetBuffer = new Collider[32];
 
     private void Awake()
     {
@@ -105,12 +106,13 @@ public class Projectile_Drone : MonoBehaviour
 
     private Transform FindClosestEnemy()
     {
-        Collider[] enemiesAround = Physics.OverlapSphere(transform.position, enemyCheckRadius, enemyLayerMask);
+        int enemyCount = Physics.OverlapSphereNonAlloc(transform.position, enemyCheckRadius, targetBuffer, enemyLayerMask);
         Transform advancedEnemy = null;
         float shortestDistance = float.MaxValue;
 
-        foreach (Collider enemy in enemiesAround)
+        for (int i = 0; i < enemyCount; i++)
         {
+            Collider enemy = targetBuffer[i];
             Enemy_Base enemyBase = enemy.GetComponentInParent<Enemy_Base>();
 
             if (enemyBase == null || enemyBase.IsStealthed)

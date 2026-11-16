@@ -11,8 +11,6 @@ public class VisualEffect_Harpon : MonoBehaviour
     [SerializeField]
     private GameObject chainLinkPrefab;
     [SerializeField]
-    private Transform linksParent;
-    [SerializeField]
     private float linkDistance = 0.1f;
     [SerializeField]
     private int maxLinks = 100;
@@ -27,6 +25,18 @@ public class VisualEffect_Harpon : MonoBehaviour
     private void Start()
     {
         InitializeLinks();
+    }
+
+    private void OnDisable()
+    {
+        VFXManager vfxManager = GameServices.Get<VFXManager>();
+
+        foreach (Projectile_HarponChainLink link in links)
+        {
+            vfxManager?.Release(chainLinkPrefab, link.gameObject);
+        }
+
+        links.Clear();
     }
 
     private void Update()
@@ -56,7 +66,7 @@ public class VisualEffect_Harpon : MonoBehaviour
     public void CreateVFX(Transform targetTransform)
     {
         DestroyVFX();
-        currentVFX = Instantiate(onElectroVFX, targetTransform.position + electroVFXOffset, Quaternion.identity, targetTransform);        
+        currentVFX = Instantiate(onElectroVFX, targetTransform.position + electroVFXOffset, Quaternion.identity, targetTransform);
     }
 
     private void DestroyVFX()
@@ -68,36 +78,43 @@ public class VisualEffect_Harpon : MonoBehaviour
     }
 
     private void ActivateLinks()
-    { 
+    {
         Vector3 direction = (endPoint.position - startPoint.position).normalized;
         float distance = Vector3.Distance(startPoint.position, endPoint.position);
         int activeLinksAmount = Mathf.Min(maxLinks, Mathf.CeilToInt(distance / linkDistance));
 
+        VFXManager vfxManager = GameServices.Get<VFXManager>();
+
+        if (vfxManager == null)
+        {
+            return;
+        }
+
+        while (links.Count < activeLinksAmount)
+        {
+            links.Add(vfxManager.Get(chainLinkPrefab).GetComponent<Projectile_HarponChainLink>());
+        }
+
+        while (links.Count > activeLinksAmount)
+        {
+            int lastIndex = links.Count - 1;
+            vfxManager.Release(chainLinkPrefab, links[lastIndex].gameObject);
+            links.RemoveAt(lastIndex);
+        }
+
         for (int i = 0; i < links.Count; i++)
         {
-            if (i < activeLinksAmount)
-            {
-                Vector3 newPos = startPoint.position + direction * linkDistance * (i + 1);
-                links[i].EnableLink(true, newPos);
-            }
-            else
-            {
-                links[i].EnableLink(false, Vector3.zero);
-            }
+            links[i].EnableLink(true, startPoint.position + direction * linkDistance * (i + 1));
+        }
 
-            if (i != links.Count - 1)
-            {
-                links[i].UpdateLineRenderer(links[i], links[i + 1]);
-            }
+        for (int i = 0; i < links.Count; i++)
+        {
+            links[i].UpdateLineRenderer(links[i], i < links.Count - 1 ? links[i + 1] : null);
         }
     }
 
     private void InitializeLinks()
     {
-        for (int i = 0; i < maxLinks; i++)
-        {
-            Projectile_HarponChainLink newLink = Instantiate(chainLinkPrefab, startPoint.position, Quaternion.identity, linksParent).GetComponent<Projectile_HarponChainLink>();
-            links.Add(newLink);
-        }
+        GameServices.Get<VFXManager>()?.Prewarm(chainLinkPrefab, maxLinks);
     }
 }

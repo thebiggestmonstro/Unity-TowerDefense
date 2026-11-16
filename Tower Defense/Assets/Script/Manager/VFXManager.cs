@@ -4,11 +4,13 @@ using UnityEngine.Pool;
 
 public class VFXManager : MonoBehaviour
 {
-    private readonly Dictionary<GameObject, ObjectPool<PooledVFX>> pools = new Dictionary<GameObject, ObjectPool<PooledVFX>>();
+    private readonly Dictionary<GameObject, ObjectPool<PooledVFX>> pools = new();
+    private readonly Dictionary<GameObject, ObjectPool<GameObject>> manualPools = new();
 
     private void OnEnable() => GameServices.Register(this);
     private void OnDisable() => GameServices.Unregister(this);
 
+    // Auto Control
     public void Play(GameObject prefab, Vector3 position, Quaternion rotation, float scale = 1f)
     {
         if (prefab == null)
@@ -44,6 +46,83 @@ public class VFXManager : MonoBehaviour
             defaultCapacity: 8,
             maxSize: 32
         );
+
+        return pool;
+    }
+
+    // Manual control
+    public GameObject Get(GameObject prefab)
+    {
+        if (prefab == null)
+        {
+            return null;
+        }
+
+        return GetManualPool(prefab).Get();
+    }
+
+    public void Release(GameObject prefab, GameObject instance)
+    {
+        if (prefab == null || instance == null)
+        {
+            return;
+        }
+
+        if (manualPools.TryGetValue(prefab, out ObjectPool<GameObject> pool))
+        {
+            pool.Release(instance);
+        }
+    }
+
+    public void Prewarm(GameObject prefab, int count)
+    {
+        if (prefab == null || count <= 0)
+        {
+            return;
+        }
+
+        ObjectPool<GameObject> pool = GetManualPool(prefab);
+        int missing = count - pool.CountAll;
+
+        if (missing <= 0)
+        {
+            return;
+        }
+
+        GameObject[] warmed = new GameObject[missing];
+
+        for (int i = 0; i < missing; i++)
+        {
+            warmed[i] = pool.Get();
+        }
+
+        for (int i = 0; i < missing; i++)
+        {
+            pool.Release(warmed[i]);
+        }
+    }
+
+    private ObjectPool<GameObject> GetManualPool(GameObject prefab)
+    {
+        if (!manualPools.TryGetValue(prefab, out ObjectPool<GameObject> pool))
+        {
+            pool = new ObjectPool<GameObject>(
+                createFunc: () =>
+                {
+                    GameObject instance = Instantiate(prefab, transform);
+                    instance.SetActive(false);
+                    return instance;
+                },
+                actionOnGet: instance => instance.SetActive(true),
+                actionOnRelease: instance => instance.SetActive(false),
+                actionOnDestroy: instance => Destroy(instance),
+                collectionCheck: false,
+                defaultCapacity: 100,
+                maxSize: 300
+            );
+
+            manualPools[prefab] = pool;
+        }
 
         return pool;
     }

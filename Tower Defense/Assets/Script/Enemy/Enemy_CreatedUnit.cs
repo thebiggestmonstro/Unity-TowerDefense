@@ -24,7 +24,7 @@ public class Enemy_CreatedUnit : Enemy_Swarm
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Enemy")
+        if (collision.collider.CompareTag("Enemy"))
         {
             return;
         }

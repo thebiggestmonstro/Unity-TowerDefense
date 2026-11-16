@@ -67,6 +67,7 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
     private Player_TowerCrossbow crossbowTower;
     private LineRenderer[] stringLineRenderers;
     private Enemy_Base currentEenmy;
+    private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
 
     private void Awake()
     {
@@ -136,7 +137,7 @@ public class VisualEffect_CrossbowTower : MonoBehaviour
     {
         Color emissionColor = Color.Lerp(startColor, endColor, currentMaterialIntensity / maxMaterialIntensity);
         emissionColor *= Mathf.LinearToGammaSpace(currentMaterialIntensity);
-        material.SetColor("_EmissionColor", emissionColor);
+        material.SetColor(EmissionColorId, emissionColor);
     }
 
     private void UpdateStringsEffect(LineRenderer lineRenderer, Transform startPoint, Transform endPoint)

@@ -12,6 +12,9 @@ public class Player_TowerCannon : Player_TowerBase
     [SerializeField]
     private ParticleSystem cannonAttackVFX;
 
+    private readonly Collider[] targetBuffer = new Collider[32];
+    private readonly Collider[] nearbyBuffer = new Collider[32];
+
     protected override void Attack()
     {
         base.Attack();
@@ -25,18 +28,18 @@ public class Player_TowerCannon : Player_TowerBase
 
     private int GetEnemiesAroundTarget(Transform targetTransform)
     {
-        Collider[] emeiesAround = Physics.OverlapSphere(targetTransform.position, 1, enemyLayerMask);
-        return emeiesAround.Length;
+        return Physics.OverlapSphereNonAlloc(targetTransform.position, 1, nearbyBuffer, enemyLayerMask);
     }
 
     protected override Enemy_Base FindEnemyWithinRange()
     {
-        Collider[] enemiesAround = Physics.OverlapSphere(transform.position, attackRange, enemyLayerMask);
+        int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, targetBuffer, enemyLayerMask);
         Enemy_Base advancedTarget = null;
         int maxNearbyEnemies = 0;
 
-        foreach (Collider enemy in enemiesAround)
+        for (int i = 0; i < count; i++)
         {
+            Collider enemy = targetBuffer[i];
             Enemy_Base enemeyToAttack = enemy.GetComponentInParent<Enemy_Base>();
 
             if (enemeyToAttack == null || enemeyToAttack.IsStealthed)

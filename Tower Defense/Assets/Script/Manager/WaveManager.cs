@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AI.Navigation;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -15,6 +14,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private float timeBetweenWaves = 5.0f;
     private float waveTimer;
+    private static readonly WaitForSeconds startDelay = new WaitForSeconds(10.0f);
 
     [Space]
     [Header("Collaborators")]
@@ -30,15 +30,19 @@ public class WaveManager : MonoBehaviour
     private void OnEnable()
     {
         GameServices.Register(this);
+        GameEvents.OnLevelStarted += HandleLevelStarted;
     }
 
     private void OnDisable()
     {
         GameServices.Unregister(this);
+        GameEvents.OnLevelStarted -= HandleLevelStarted;
     }
 
     private IEnumerator CoWaveLoop()
     {
+        WaitForSeconds checkWait = new WaitForSeconds(checkInterval);
+
         while (currentWaveIndex < allWaves.Count)
         {
             enemySpawner.BeginWave(allWaves[currentWaveIndex]);
@@ -46,7 +50,7 @@ public class WaveManager : MonoBehaviour
 
             while (enemySpawner.HasEnemiesLeft() || !enemySpawner.AllEnemiesDefeated())
             {
-                yield return new WaitForSeconds(checkInterval);
+                yield return checkWait;
             }
 
             currentWaveIndex++;
@@ -60,10 +64,19 @@ public class WaveManager : MonoBehaviour
             isForcedSkip = false;
             GameEvents.RaiseWaveTimerVisibilityChanged(true);
 
+            int lastDisplayedSecond = -1;
+
             while (waveTimer > 0 && !isForcedSkip)
             {
                 waveTimer -= Time.deltaTime;
-                GameEvents.RaiseWaveTimerUpdated(waveTimer);
+
+                int displayedSecond = Mathf.CeilToInt(waveTimer);
+                if (displayedSecond != lastDisplayedSecond)
+                {
+                    lastDisplayedSecond = displayedSecond;
+                    GameEvents.RaiseWaveTimerUpdated(waveTimer);
+                }
+
                 yield return null;
             }
 
@@ -110,8 +123,7 @@ public class WaveManager : MonoBehaviour
         return allWaves[nextIndex];
     }
 
-    [ContextMenu("Active Wave Manager")]
-    public void ActivateWaveManager()
+    private void ActivateWaveManager()
     {
         if (bIsWaveManagerActive)
         {
@@ -128,5 +140,13 @@ public class WaveManager : MonoBehaviour
         {
             Debug.LogError("Wave Data is not registered in WaveManager");
         }
+    }
+
+    private void HandleLevelStarted() => StartCoroutine(CoActivateAfterDelay());
+
+    private IEnumerator CoActivateAfterDelay()
+    {
+        yield return startDelay;
+        ActivateWaveManager();
     }
 }

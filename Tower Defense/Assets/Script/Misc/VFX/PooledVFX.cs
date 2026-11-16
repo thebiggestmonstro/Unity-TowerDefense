@@ -6,6 +6,7 @@ public class PooledVFX : MonoBehaviour
 {
     private ParticleSystem[] particleSystems;
     private Action<PooledVFX> release;
+    private static readonly WaitForSeconds checkWait = new WaitForSeconds(0.2f);
 
     public void Initialize(Action<PooledVFX> releaseAction)
     {
@@ -30,11 +31,11 @@ public class PooledVFX : MonoBehaviour
 
     private IEnumerator CoWaitAndRelease()
     {
-        yield return 0.2f;
+        yield return checkWait;
 
         while (particleSystems[0].IsAlive(true))
         {
-            yield return 0.2f;
+            yield return checkWait;
         }
 
         release(this);

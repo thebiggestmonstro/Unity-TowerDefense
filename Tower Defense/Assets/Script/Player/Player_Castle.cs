@@ -4,7 +4,7 @@ public class Player_Castle : MonoBehaviour, IUnitInterface
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.CompareTag("Enemy"))
         {
             other.GetComponent<Enemy_Base>().DestroyEnemy();
             GameEvents.RaiseEnemyReachedCastle();

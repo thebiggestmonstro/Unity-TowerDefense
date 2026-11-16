@@ -89,37 +89,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1381461496177734503
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7404433077561351220}
-  m_Layer: 12
-  m_Name: links_parent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7404433077561351220
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381461496177734503}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3386498854142971486}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2468184776058338410
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +706,6 @@ Transform:
   m_Children:
   - {fileID: 181209707685756660}
   - {fileID: 442647829786590125}
-  - {fileID: 7404433077561351220}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6968127849415423594
@@ -834,7 +802,6 @@ MonoBehaviour:
   startPoint: {fileID: 2379040090866464517}
   endPoint: {fileID: 0}
   chainLinkPrefab: {fileID: 7578621076062113118, guid: 72fec68eecf291f45a07c7d2e4c78ffe, type: 3}
-  linksParent: {fileID: 7404433077561351220}
   linkDistance: 0.1
   maxLinks: 100
   onElectroVFX: {fileID: 163848037019604659, guid: 01da9d4fb34d4db45a8dab9944c2dbd3, type: 3}

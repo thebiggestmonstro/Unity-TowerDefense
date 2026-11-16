@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_TowerHammer : Player_TowerBase
@@ -32,9 +31,15 @@ public class Player_TowerHammer : Player_TowerBase
         base.Attack();
         hammerParts.PlayerHammerAttackVFX();
 
-        foreach (var enemy in GetValidTargets())
+        int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, overlapBuffer, enemyLayerMask);
+        for (int i = 0; i < count; i++)
         {
-            enemy.SetSpeed(slowMultiplier, slowDuration);
+            Enemy_Base target = overlapBuffer[i].GetComponentInParent<Enemy_Base>();
+            
+            if (target != null && !target.IsStealthed)
+            {
+                target.SetSpeed(slowMultiplier, slowDuration);
+            }
         }
     }
 
@@ -44,23 +49,4 @@ public class Player_TowerHammer : Player_TowerBase
     }
 
     private bool IsAnyEnemyInRange() => Physics.OverlapSphereNonAlloc(transform.position, attackRange, overlapBuffer, enemyLayerMask) > 0;
-
-    private List<Enemy_Base> GetValidTargets()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange, enemyLayerMask);
-
-        List<Enemy_Base> targets = new List<Enemy_Base>(colliders.Length);
-
-        foreach (Collider col in colliders)
-        {
-            Enemy_Base target = col.GetComponentInParent<Enemy_Base>();
-
-            if (target != null && !target.IsStealthed)
-            {
-                targets.Add(target);
-            }
-        }
-
-        return targets;
-    }
 }
