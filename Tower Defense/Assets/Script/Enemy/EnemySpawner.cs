@@ -98,9 +98,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void RemoveActiveEnemy(GameObject enemyToRemove)
+    public void RemoveActiveEnemy(GameObject enemyToRemove, bool bIsKilled = false)
     {
-        if (activeEnemies.Remove(enemyToRemove))
+        if (activeEnemies.Remove(enemyToRemove) && bIsKilled)
         {
             totalEliminatedEnemyCount++;
         }

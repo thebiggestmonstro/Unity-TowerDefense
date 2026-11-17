@@ -200,7 +200,7 @@ public class Enemy_Base : MonoBehaviour, IDamageable
 
     protected virtual void Die()
     {
-        GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject);
+        GameServices.Get<EnemySpawner>().RemoveActiveEnemy(gameObject, true);
         GameEvents.RaiseEnemyDefeated(100);
         CreateOnDeathVFX();
         Destroy(gameObject);

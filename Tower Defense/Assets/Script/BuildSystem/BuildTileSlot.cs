@@ -134,6 +134,11 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void SetBuildTileBlocked()
     {
+        if (!buildTileCollider.enabled)
+        {
+            return;
+        }
+
         bBuildTileAvailable = false;
         transform.position += new Vector3(0, 0.1f);
         meshRenderer.material.color = Color.red;

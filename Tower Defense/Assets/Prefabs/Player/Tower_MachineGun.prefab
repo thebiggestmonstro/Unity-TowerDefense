@@ -11373,8 +11373,8 @@ MonoBehaviour:
   - {fileID: 3132860407909287851}
   - {fileID: 9197296817065656885}
   projectilePool: {fileID: -4949444259126219120}
-  damage: 6
-  projectileSpeed: 15
+  damage: 1
+  projectileSpeed: 10
   machineGunVisualParts: {fileID: 478621919993497898}
 --- !u!114 &478621919993497898
 MonoBehaviour:

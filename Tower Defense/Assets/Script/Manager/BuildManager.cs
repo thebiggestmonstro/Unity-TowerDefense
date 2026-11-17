@@ -94,38 +94,50 @@ public class BuildManager : MonoBehaviour
 
     public void MakeBuildTileAvaliablityFalse(GridBuilder currentGrid)
     {
-        WaveData nextWave = GameServices.Get<WaveManager>().GetNextWaveData();
-        if (nextWave == null || nextWave.currentWaveGrid == null)
-        {
-            return;
-        }
-
         List<GameObject> grid = currentGrid.GetCreatedTiles();
-        List<GameObject> nextGrid = nextWave.currentWaveGrid.GetCreatedTiles();
-        if (grid == null || nextGrid == null)
+        if (grid == null)
         {
             return;
         }
 
-        for (int i = 0; i < grid.Count; i++)
+        if (GameServices.Get<WaveManager>() == null)
         {
-            TileSlot currentTile = grid[i].GetComponent<TileSlot>();
-            TileSlot nextTile = nextGrid[i].GetComponent<TileSlot>();
+            return;
+        }
 
-            bool tileNotSame = currentTile.GetMesh() != nextTile.GetMesh() ||
-                               currentTile.GetMaterial() != nextTile.GetMaterial() ||
-                               currentTile.GetAllChildren().Count != nextTile.GetAllChildren().Count;
-
-            if (tileNotSame == false)
+        foreach (WaveData upcomingWave in GameServices.Get<WaveManager>().GetUpcomingWaveData())
+        {
+            if (upcomingWave.currentWaveGrid == null)
             {
                 continue;
             }
 
-            BuildTileSlot buildTileSlot = grid[i].GetComponent<BuildTileSlot>();
-
-            if (buildTileSlot != null)
+            List<GameObject> nextGrid = upcomingWave.currentWaveGrid.GetCreatedTiles();
+            if (nextGrid == null)
             {
-                buildTileSlot.SetBuildTileBlocked();
+                continue;
+            }
+
+            for (int i = 0; i < grid.Count; i++)
+            {
+                TileSlot currentTile = grid[i].GetComponent<TileSlot>();
+                TileSlot nextTile = nextGrid[i].GetComponent<TileSlot>();
+
+                bool tileNotSame = currentTile.GetMesh() != nextTile.GetMesh() ||
+                                   currentTile.GetMaterial() != nextTile.GetMaterial() ||
+                                   currentTile.GetAllChildren().Count != nextTile.GetAllChildren().Count;
+
+                if (tileNotSame == false)
+                {
+                    continue;
+                }
+
+                BuildTileSlot buildTileSlot = grid[i].GetComponent<BuildTileSlot>();
+
+                if (buildTileSlot != null)
+                {
+                    buildTileSlot.SetBuildTileBlocked();
+                }
             }
         }
     }

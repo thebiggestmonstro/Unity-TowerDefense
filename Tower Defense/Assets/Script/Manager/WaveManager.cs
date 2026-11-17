@@ -112,15 +112,16 @@ public class WaveManager : MonoBehaviour
         return allWaves[currentWaveIndex];
     }
 
-    public WaveData GetNextWaveData()
+    public List<WaveData> GetUpcomingWaveData()
     {
         int nextIndex = currentWaveIndex + 1;
+
         if (nextIndex >= allWaves.Count)
         {
-            return null;
+            return new List<WaveData>();
         }
 
-        return allWaves[nextIndex];
+        return allWaves.GetRange(nextIndex, allWaves.Count - nextIndex);
     }
 
     private void ActivateWaveManager()

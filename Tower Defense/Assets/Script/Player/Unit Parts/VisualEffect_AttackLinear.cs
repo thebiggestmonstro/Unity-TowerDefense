@@ -10,6 +10,12 @@ public class VisualEffect_AttackLinear : MonoBehaviour
     [SerializeField]
     private float attackRange;
 
+    private void Awake()
+    {
+        attackRange = GetComponent<Player_TowerBase>().GetAttackRange();
+        UpdateLines();
+    }
+
     public void CreateLines(bool showLines, float newRange)
     {
         leftLine.enabled = showLines;
