@@ -31,12 +31,27 @@ public class LevelTransitionHandler : MonoBehaviour
             return;
         }
 
+        GridBuilder newGridInstance = Instantiate(nextGridPrefab, Vector3.zero, Quaternion.identity);
+
         if (currentGrid != null)
         {
+            var oldTiles = currentGrid.GetCreatedTiles();
+            var newTiles = newGridInstance.GetCreatedTiles();
+
+            for (int i = 0; i < oldTiles.Count; i++)
+            {
+                BuildTileSlot oldSlot = oldTiles[i].GetComponent<BuildTileSlot>();
+                BuildTileSlot newSlot = newTiles[i].GetComponent<BuildTileSlot>();
+
+                if (oldSlot != null && newSlot != null && !oldSlot.IsBuildTileAvailable())
+                {
+                    newSlot.SetBuildTileAvailability(false);
+                }
+            }
+
             Destroy(currentGrid.gameObject);
         }
 
-        GridBuilder newGridInstance = Instantiate(nextGridPrefab, Vector3.zero, Quaternion.identity);
         currentGrid = newGridInstance;
         buildManager.currentGrid = currentGrid;
     }

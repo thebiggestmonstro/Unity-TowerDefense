@@ -27,15 +27,6 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             bBuildTileAvailable = true;
         }
-
-        if (!bBuildTileAvailable)
-        {
-            transform.position += new Vector3(0, 0.1f);
-            material = meshRenderer.material;
-            material.color = Color.red;
-            meshRenderer.material = material;
-            buildTileCollider.enabled = bBuildTileAvailable;
-        }
     }
 
     private bool CanInteractWithTile(out GridVisibilityController gridVisibility)
@@ -140,4 +131,14 @@ public class BuildTileSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Vector3 GetBuildPosition(float yOffset) => defaultPosition + new Vector3(0, yOffset);
 
     public void SetBuildTileAvailability(bool bValue) => bBuildTileAvailable = bValue;
+
+    public void SetBuildTileBlocked()
+    {
+        bBuildTileAvailable = false;
+        transform.position += new Vector3(0, 0.1f);
+        meshRenderer.material.color = Color.red;
+        buildTileCollider.enabled = false;
+    }
+
+    public bool IsBuildTileAvailable() => bBuildTileAvailable;
 }

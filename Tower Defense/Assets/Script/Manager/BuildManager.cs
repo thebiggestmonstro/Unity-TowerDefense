@@ -125,7 +125,7 @@ public class BuildManager : MonoBehaviour
 
             if (buildTileSlot != null)
             {
-                buildTileSlot.SetBuildTileAvailability(false);
+                buildTileSlot.SetBuildTileBlocked();
             }
         }
     }
